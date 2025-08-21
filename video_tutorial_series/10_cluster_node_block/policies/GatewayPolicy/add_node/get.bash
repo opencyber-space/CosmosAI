@@ -1,0 +1,1 @@
+curl -X GET http://MANAGEMENTMASTER:30102/policy/gateway_add_node_policy:1.0.0-stable | json_pp

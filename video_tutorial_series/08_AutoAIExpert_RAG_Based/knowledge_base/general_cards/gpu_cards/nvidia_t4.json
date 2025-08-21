@@ -1,0 +1,90 @@
+{
+  "componentId": "nvidia_t4",
+  "componentType": "node.hardware.gpu",
+  "gpu_id": "nvidia_t4",
+  "name": "NVIDIA T4",
+  "manufacturer": "NVIDIA",
+  "architecture": "Turing",
+  "release_date": "2018-09-12",
+  "specifications": {
+    "cuda_cores": 2560,
+    "tensor_cores": 320,
+    "memory": {
+      "capacity_gb": 16,
+      "type": "GDDR6",
+      "bandwidth_gbps": 320,
+      "bus_width": 256
+    },
+    "compute_capability": "7.5",
+    "tdp_watts": 70,
+    "form_factor": "PCIe",
+    "cooling": "Passive"
+  },
+  "inference_performance": {
+    "int8_tops": 130,
+    "fp16_tflops": 65,
+    "fp32_tflops": 8.1,
+    "model_benchmarks": [
+      {
+        "model": "YOLOv8n",
+        "batch_size": 1,
+        "resolution": "640x640",
+        "fps": 130,
+        "precision": "FP16"
+      },
+      {
+        "model": "YOLOv8n",
+        "batch_size": 4,
+        "resolution": "640x640",
+        "fps": 210,
+        "precision": "FP16"
+      },
+      {
+        "model": "YOLOv8x",
+        "batch_size": 1,
+        "resolution": "640x640",
+        "fps": 62,
+        "precision": "FP16"
+      },
+      {
+        "model": "Mask R-CNN",
+        "batch_size": 1,
+        "resolution": "1280x720",
+        "fps": 18,
+        "precision": "FP16"
+      }
+    ]
+  },
+  "deployment_characteristics": {
+    "typical_environments": ["cloud", "data_center", "edge_server"],
+    "typical_uses": ["inference", "video_processing", "computer_vision"],
+    "cloud_availability": {
+      "aws": "Available as g4dn instances",
+      "gcp": "Available as T4 instances",
+      "azure": "Available as NC T4_v3"
+    },
+    "pricing": {
+      "msrp_usd": 2299,
+      "cloud_hourly_usd": "~$0.50-$0.75"
+    }
+  },
+  "compatibility": {
+    "recommended_driver": ">=450.80.02",
+    "cuda_support": ">=10.1",
+    "tensorrt_support": ">=7.0",
+    "frameworks": ["PyTorch", "TensorFlow", "ONNX", "OpenVINO", "TensorRT"],
+    "multi_instance_gpu": false
+  },
+  "power_efficiency": {
+    "watts_per_inference": {
+      "YOLOv8n": 0.55,
+      "ResNet50": 0.42
+    },
+    "perf_per_watt_ranking": "Excellent for inference workloads"
+  },
+  "limitations": [
+    "Limited performance for training large models",
+    "Lacks multi-instance GPU support found in newer cards",
+    "Peak performance requires TensorRT optimization"
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "componentId": "class_filter",
+  "componentType": "node.algorithm.policy",
+  "id": "pol-class-filter",
+  "label": "Policy",
+  "name": "Class Filter",
+  "category": "class_filter",
+  "framework": "Python",
+  "license": "MIT",
+  "repo_url": "https://github.com/aios/policies",
+
+  "modelDetails": {
+    "description": "Filtering policy that keeps only objects belonging to specified classes and passes them to the next stage",
+    "intended_use": "Filter detection results to focus on specific object classes of interest",
+    "limitations": ["Only supports exact class name matching", "Case-sensitive filtering"],
+    "ethical_considerations": "Ensure class filtering does not introduce demographic or behavioral bias"
+  },
+
+  "parameters": {
+    "computational_complexity": "O(n) where n=number of objects",
+    "dependencies": ["python-stdlib"],
+    "memory_footprint": "Minimal",
+    "processing_type": "list_filtering"
+  },
+
+  "configuration": {
+    "allowed_classes": {
+      "description": "List of class names to keep in the pipeline",
+      "type": "list",
+      "required": true,
+      "example": ["person", "vehicle", "bicycle"]
+    },
+    "case_sensitive": {
+      "description": "Whether class matching should be case sensitive",
+      "type": "boolean",
+      "default": true
+    },
+    "pass_unknown": {
+      "description": "Whether to pass objects with unknown/unrecognized classes",
+      "type": "boolean", 
+      "default": false
+    }
+  },
+
+  "dynamic_parameters": {
+    "supports_runtime_updates": true,
+    "updateable_parameters": ["allowed_classes", "case_sensitive", "pass_unknown"],
+    "update_latency_ms": 5,
+    "api_endpoints": {
+      "update_parameters": "/api/v1/policies/class_filter/update_parameters"
+    }
+  },
+
+  "runtime": {
+    "cpu_intensive": false,
+    "gpu_required": false,
+    "min_ram_mb": 50,
+    "recommended_cpu": "Any CPU",
+    "python_version": "3.6+",
+    "dependencies": {}
+  },
+
+  "benchmarks": {
+    "throughput": {
+      "objects_per_second": 100000,
+      "latency_ms": 0.01,
+      "memory_per_object_bytes": 8
+    },
+    "filtering_accuracy": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "edge_cases": "handles empty lists and null values"
+    }
+  },
+
+  "produces": ["filtered_detections"],
+  "consumes": ["classified_detections"],
+  
+  "input_formats": ["OD1"],
+  "output_formats": ["OD1"],
+
+  "sources": [
+    {
+      "title": "Python List Comprehensions",
+      "url": "https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions"
+    }
+  ],
+
+  "notes": "Extremely fast and lightweight. Essential component for pipeline optimization. Can significantly reduce downstream processing load."
+}

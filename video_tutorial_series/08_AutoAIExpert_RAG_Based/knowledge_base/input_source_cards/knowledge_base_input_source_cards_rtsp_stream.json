@@ -1,0 +1,255 @@
+{
+  "componentId": "rtsp_stream",
+  "componentType": "node.algorithm.source",
+  "source_id": "rtsp_stream",
+  "name": "RTSP Camera Stream",
+  "type": "input_source",
+  "description": "Real-time streaming protocol (RTSP) camera input for live video processing",
+  "version": "2.1.0",
+  "source_characteristics": {
+    "data_type": "video_stream",
+    "protocol": "RTSP",
+    "real_time": true,
+    "continuous": true,
+    "typical_formats": ["H.264", "H.265", "MJPEG"],
+    "typical_resolutions": ["640x480", "1280x720", "1920x1080", "2560x1440", "3840x2160"],
+    "typical_frame_rates": [10, 15, 25, 30]
+  },
+  "preprocessing_requirements": {
+    "common_challenges": [
+      {
+        "challenge": "variable_lighting",
+        "description": "Cameras often experience changing lighting conditions throughout the day",
+        "recommended_preprocessing": ["adaptive_histogram_equalization", "auto_contrast_adjustment"],
+        "severity": "moderate_to_high"
+      },
+      {
+        "challenge": "compression_artifacts",
+        "description": "Video compression can introduce blocky artifacts and noise",
+        "recommended_preprocessing": ["gaussian_blur", "bilateral_filtering"],
+        "severity": "moderate"
+      },
+      {
+        "challenge": "connection_instability",
+        "description": "Network issues can cause frame drops or connection loss",
+        "recommended_preprocessing": ["frame_buffering", "error_handling"],
+        "severity": "high"
+      },
+      {
+        "challenge": "camera_noise",
+        "description": "Low-light conditions often introduce sensor noise",
+        "recommended_preprocessing": ["noise_reduction", "temporal_averaging"],
+        "severity": "moderate_to_high"
+      }
+    ],
+    "resolution_handling": {
+      "description": "Input resolution may need adjustment before processing",
+      "options": [
+        {
+          "name": "resize_fixed",
+          "description": "Resize to fixed dimensions required by model",
+          "use_case": "Most detection models with fixed input size"
+        },
+        {
+          "name": "resize_preserve_aspect",
+          "description": "Resize while preserving aspect ratio with padding",
+          "use_case": "When original aspect ratio contains important information"
+        },
+        {
+          "name": "crop_center",
+          "description": "Crop center portion of frame to target size",
+          "use_case": "When central region contains most relevant information"
+        }
+      ]
+    },
+    "common_pipelines": [
+      {
+        "name": "basic_preprocessing",
+        "steps": [
+          "decode_frame",
+          "resize_to_model_input",
+          "normalize_pixels"
+        ]
+      },
+      {
+        "name": "enhanced_preprocessing",
+        "steps": [
+          "decode_frame",
+          "denoise",
+          "histogram_equalization",
+          "resize_to_model_input",
+          "normalize_pixels" 
+        ]
+      },
+      {
+        "name": "low_light_optimization",
+        "steps": [
+          "decode_frame",
+          "gamma_correction",
+          "contrast_enhancement",
+          "denoise",
+          "resize_to_model_input",
+          "normalize_pixels"
+        ]
+      }
+    ]
+  },
+  "performance_considerations": {
+    "cpu_impact": {
+      "decoding": "moderate_to_high",
+      "preprocessing": "moderate",
+      "scaling_behavior": "Linear with resolution and frame rate"
+    },
+    "memory_usage": {
+      "buffer_requirements": "Variable based on resolution and frame rate",
+      "typical_range_mb": "50-200 per stream",
+      "scaling_factor": "Approximately quadratic with resolution"
+    },
+    "latency_factors": [
+      "Network conditions between camera and processing system",
+      "Frame buffer size",
+      "Decoding efficiency",
+      "Preprocessing complexity"
+    ],
+    "throughput_optimizations": [
+      {
+        "name": "frame_dropping",
+        "description": "Process only every N frames when system is under load",
+        "tradeoffs": "Lower effective frame rate but maintains real-time processing"
+      },
+      {
+        "name": "resolution_downscaling",
+        "description": "Request lower resolution stream from camera or downscale after receiving",
+        "tradeoffs": "Lower detection accuracy for small objects but faster processing"
+      },
+      {
+        "name": "parallel_stream_processing",
+        "description": "Process multiple streams in parallel using worker pools",
+        "tradeoffs": "Higher resource utilization but improved throughput"
+      }
+    ],
+    "hardware_acceleration": {
+      "options": ["NVIDIA NVDEC", "Intel QuickSync", "VAAPI", "CUDA"],
+      "benefits": "50-90% reduction in CPU usage for decoding",
+      "requirements": "Compatible GPU and software libraries"
+    }
+  },
+  "connection_parameters": {
+    "url_format": "rtsp://[username:password@]ip_address[:port]/stream_path",
+    "authentication": {
+      "methods": ["Basic", "Digest"],
+      "security_considerations": "Credentials sent in cleartext with Basic auth; use Digest when possible"
+    },
+    "connection_timeout": {
+      "recommended_seconds": 5,
+      "reconnect_strategy": "Exponential backoff with maximum retry count"
+    },
+    "stream_selection": {
+      "main_stream": "Typically highest quality, full resolution",
+      "sub_stream": "Lower resolution/bitrate for bandwidth-constrained scenarios"
+    }
+  },
+  "implementation": {
+    "libraries": [
+      {
+        "name": "OpenCV",
+        "implementation": "cv2.VideoCapture('rtsp://...')",
+        "pros": ["Widely used", "Simple API", "Cross-platform"],
+        "cons": ["Limited reconnection handling", "Basic RTSP feature support"]
+      },
+      {
+        "name": "GStreamer",
+        "implementation": "pipeline with rtspsrc element",
+        "pros": ["Robust", "Extensive features", "Hardware acceleration"],
+        "cons": ["More complex setup", "Dependency management"]
+      },
+      {
+        "name": "FFmpeg",
+        "implementation": "Command-line or library API",
+        "pros": ["Comprehensive codec support", "Highly configurable"],
+        "cons": ["Complex API", "More resource intensive"]
+      }
+    ],
+    "pipeline_integration": {
+      "threading_model": "Typically separate thread for stream ingestion",
+      "frame_queue": "Producer-consumer pattern with frame buffer",
+      "error_handling": "Automatic reconnection with backoff strategy"
+    }
+  },
+  "sample_code": {
+    "python": "import cv2\nimport numpy as np\nfrom threading import Thread\nfrom queue import Queue\n\nclass RTSPStream:\n    def __init__(self, rtsp_url, buffer_size=30):\n        self.rtsp_url = rtsp_url\n        self.frame_queue = Queue(maxsize=buffer_size)\n        self.running = False\n        \n    def start(self):\n        self.running = True\n        self.thread = Thread(target=self._capture_frames, daemon=True)\n        self.thread.start()\n        \n    def _capture_frames(self):\n        cap = cv2.VideoCapture(self.rtsp_url)\n        while self.running:\n            ret, frame = cap.read()\n            if not ret:\n                # Connection lost, attempt to reconnect\n                print(\"Connection lost, reconnecting...\")\n                cap.release()\n                cap = cv2.VideoCapture(self.rtsp_url)\n                continue\n                \n            # Apply basic preprocessing\n            frame = cv2.resize(frame, (640, 640))\n            \n            # Put in queue, discard if queue full (maintain real-time)\n            if not self.frame_queue.full():\n                self.frame_queue.put(frame)\n        \n        cap.release()\n        \n    def read(self):\n        if self.frame_queue.empty():\n            return False, None\n        return True, self.frame_queue.get()\n        \n    def stop(self):\n        self.running = False\n        if hasattr(self, 'thread'):\n            self.thread.join(timeout=1.0)\n\n# Usage example\nstream = RTSPStream('rtsp://username:password@192.168.1.100:554/stream1')\nstream.start()\n\n# In main processing loop\nwhile True:\n    ret, frame = stream.read()\n    if ret:\n        # Process frame with CV pipeline\n        results = model(frame)\n        # Further processing...\n    \n    # Exit condition\n    if cv2.waitKey(1) == 27:  # ESC key\n        break\n        \nstream.stop()"
+  },
+  "monitoring_metrics": [
+    {
+      "name": "frames_received_per_second",
+      "description": "Actual frame rate being received",
+      "importance": "high",
+      "expected_range": "Should match source frame rate"
+    },
+    {
+      "name": "dropped_frame_rate",
+      "description": "Percentage of frames dropped due to processing constraints",
+      "importance": "high",
+      "acceptable_range": "<5% for critical applications"
+    },
+    {
+      "name": "connection_stability",
+      "description": "Time between disconnections",
+      "importance": "high",
+      "monitoring_approach": "Track reconnection events"
+    },
+    {
+      "name": "decode_latency",
+      "description": "Time to decode a single frame",
+      "importance": "medium",
+      "expected_range": "1-15ms depending on resolution and hardware"
+    },
+    {
+      "name": "frame_jitter",
+      "description": "Variation in frame arrival times",
+      "importance": "medium",
+      "impact": "High jitter can affect temporal analysis algorithms"
+    }
+  ],
+  "compatible_with": [
+    {
+      "component_id": "YOLOv8n",
+      "relationship": "PROVIDES_INPUT_TO",
+      "compatibility_score": 0.98,
+      "notes": "Direct integration with proper resizing"
+    },
+    {
+      "component_id": "ContrastEnhancer",
+      "relationship": "ENHANCED_BY",
+      "compatibility_score": 0.85,
+      "notes": "Helps with variable lighting conditions in RTSP streams"
+    }
+  ],
+  "environment_specific_configurations": [
+    {
+      "environment": "low_light",
+      "recommended_preprocessing": ["gamma_correction", "noise_reduction"],
+      "recommended_camera_settings": {
+        "exposure": "Increased",
+        "gain": "Moderate increase, balance with noise",
+        "ir_cut_filter": "Remove for IR sensitivity"
+      }
+    },
+    {
+      "environment": "high_contrast",
+      "recommended_preprocessing": ["wide_dynamic_range", "histogram_equalization"],
+      "recommended_camera_settings": {
+        "wdr": "Enabled",
+        "backlight_compensation": "Enabled"
+      }
+    },
+    {
+      "environment": "outdoor_variable",
+      "recommended_preprocessing": ["adaptive_contrast", "weather_filters"],
+      "recommended_camera_settings": {
+        "auto_white_balance": "Enabled",
+        "auto_exposure": "Enabled but limited range"
+      }
+    }
+  ]
+}

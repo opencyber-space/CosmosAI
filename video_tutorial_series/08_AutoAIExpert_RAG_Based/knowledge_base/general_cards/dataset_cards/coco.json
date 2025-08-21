@@ -1,0 +1,111 @@
+{
+  "componentId": "coco_2017",
+  "componentType": "node.reference.dataset",
+  "dataset_id": "coco_2017",
+  "name": "COCO (Common Objects in Context) 2017",
+  "version": "2017",
+  "description": "Large-scale object detection, segmentation, and captioning dataset with 80 object categories",
+  "url": "https://cocodataset.org/",
+  "citation": "Lin, T.Y., et al. (2014). Microsoft COCO: Common Objects in Context. ECCV 2014.",
+  "license": "CC BY 4.0",
+  "statistics": {
+    "train_images": 118287,
+    "val_images": 5000,
+    "test_images": 40670,
+    "total_object_instances": 896782,
+    "average_objects_per_image": 7.3,
+    "categories": 80,
+    "supercategories": 12
+  },
+  "data_format": {
+    "images": {
+      "format": "JPG",
+      "resolution": "various (avg: 640x480)",
+      "color_space": "RGB"
+    },
+    "annotations": {
+      "format": "JSON",
+      "types": ["object_detection", "instance_segmentation", "keypoint_detection", "captioning"],
+      "structure": "Hierarchical JSON with image, category, and annotation objects"
+    }
+  },
+  "categories": {
+    "common": ["person", "car", "chair", "bottle", "dog", "cat"],
+    "distribution": {
+      "person": 0.302,
+      "car": 0.098,
+      "chair": 0.084,
+      "others": 0.516
+    },
+    "full_list_url": "https://cocodataset.org/#explore"
+  },
+  "dataset_characteristics": {
+    "image_diversity": {
+      "indoor": 0.35,
+      "outdoor": 0.65,
+      "urban": 0.48,
+      "rural": 0.17,
+      "studio": 0
+    },
+    "object_size_distribution": {
+      "small": 0.41,
+      "medium": 0.34,
+      "large": 0.25
+    },
+    "lighting_conditions": {
+      "well_lit": 0.87,
+      "low_light": 0.09,
+      "challenging": 0.04
+    },
+    "occlusion_levels": {
+      "none": 0.31,
+      "partial": 0.54,
+      "heavy": 0.15
+    }
+  },
+  "benchmark_results": {
+    "state_of_the_art": {
+      "object_detection": {
+        "model": "DINO-DETA",
+        "mAP": 0.637,
+        "paper_url": "https://arxiv.org/abs/2304.04742"
+      },
+      "instance_segmentation": {
+        "model": "InternImage-VIT-G-Mask DINO",
+        "mAP": 0.580,
+        "paper_url": "https://arxiv.org/abs/2303.12074"
+      }
+    },
+    "common_models": [
+      {
+        "model": "YOLOv8x",
+        "task": "object_detection",
+        "mAP50": 0.531,
+        "mAP50_95": 0.373
+      },
+      {
+        "model": "Mask R-CNN",
+        "task": "instance_segmentation",
+        "mAP50": 0.553,
+        "mAP50_95": 0.337
+      }
+    ]
+  },
+  "known_limitations": [
+    "Urban bias with more urban environments than rural",
+    "Geographic bias toward Western countries",
+    "Limited low-light and adverse weather images",
+    "Inconsistent annotation quality for some categories",
+    "Class imbalance with person category overrepresented"
+  ],
+  "common_use_cases": [
+    "General object detection model training",
+    "Transfer learning base for specialized detectors",
+    "Benchmarking new object detection architectures",
+    "Multi-task learning with different annotation types"
+  ],
+  "preprocessing_recommendations": {
+    "augmentation": ["random_flip", "color_jitter", "mosaic", "mixup"],
+    "normalization": "Mean: [0.485, 0.456, 0.406], Std: [0.229, 0.224, 0.225]"
+  }
+}

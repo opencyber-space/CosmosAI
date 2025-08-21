@@ -1,0 +1,16 @@
+// aios_packet.proto
+syntax = "proto3";
+
+message AIOSPacket {
+    string session_id = 1;      // Unique identifier for the session, enables stateful logic or graph routing
+    uint64 seq_no = 2;          // Monotonically increasing sequence number for this session
+    string data = 4;            // JSON-encoded input payload; format depends on block logic or upstream source
+    double ts = 5;              // Optional Unix timestamp (used for latency metrics or ordering)
+    string output_ptr = 6;      // JSON-encoded pointer to downstream blocks; defines the output routing
+    repeated FileInfo files = 7;// Optional array of attached files
+}
+
+message FileInfo {
+    string metadata = 1;        // JSON string containing metadata for the file
+    bytes file_data = 2;        // Raw file content as byte array
+}

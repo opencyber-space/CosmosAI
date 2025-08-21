@@ -1,0 +1,1 @@
+This table shows observed CPU (in millicores) and memory usage (in GB) for the `trackerlitefast_960x540` block at different event rates (events received per 60-second tick).  It also includes the `podname`, `instanceQueue`, and the time of the update.  This data is specifically for scaling estimations of the `trackerlitefast_960x540` block and should not be used for other blocks.

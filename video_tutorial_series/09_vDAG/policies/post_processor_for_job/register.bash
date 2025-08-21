@@ -1,0 +1,1 @@
+curl -X POST -H "Content-Type: application/json" -d @./post_processor.json http://MANAGEMENTMASTER:30102/policy | json_pp

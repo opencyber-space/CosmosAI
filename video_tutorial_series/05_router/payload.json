@@ -1,0 +1,67 @@
+{
+"header": {
+        "templateUri": "Parser/V1"
+    },
+    "body": {
+        "values": {
+            "matchType": "block",
+            "rankingPolicyRule": {
+                "values": {
+                    "policyRuleURI": "attributebasedrouter:2.0-stable",
+                    "parameters": {
+                        "filterRule": {
+                            "matchType": "block",
+                            "filter": {
+                                "blockQuery": {
+                                    "logicalOperator": "AND",
+                                    "conditions": [
+                                        {
+                                            "variable": "component.componentMetadata.usecase",
+                                            "operator": "LIKE",
+                                            "value": "*chat-completion*"
+                                        },
+                                        {
+                                            "variable": "component.componentMetadata.capabilities.supportsStreaming",
+                                            "operator": "==",
+                                            "value": true
+                                        },
+                                        {
+                                            "variable": "component.componentMetadata.evaluation.benchmarks.MMLU.value",
+                                            "operator": ">=",
+                                            "value": 80
+                                        }
+                                    ]
+                                },
+                                "blockMetricsQuery": {
+                                    "logicalOperator": "AND",
+                                    "conditions": [
+                                      {
+                                        "aggOperator": "avg",
+                                        "target": "instances.uptime_hours",
+                                        "operator": ">",
+                                        "value": 10
+                                      },
+                                      {
+                                        "aggOperator": "avg",
+                                        "target": "instances.llm_tokens_per_second",
+                                        "operator": ">",
+                                        "value": 10
+                                      }
+                                    ]
+                                }
+                            }
+                        },
+                        "user_query": "Find a reliable and high-performing chat model",
+                        "METRICS_BASE_URL": "http://MANAGEMENTMASTER:30201/block/",
+                        "selection_query":{
+                            "optimization_goals": [
+                                {"name": "Fast_Generator", "weight": 0.7},
+                                {"name": "Free_Block", "weight": 0.3}
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

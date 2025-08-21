@@ -1,0 +1,222 @@
+{
+   "componentId" : {
+      "name" : "reidbaseline",
+      "release" : "stable",
+      "version" : "v0.0.1"
+   },
+	"componentType" : "node.algorithm.reid",
+   "containerImage" : "reidbaseline:latest",
+   "requiresGPU" : true,
+   "componentConfig" : {
+      "batchSize" : 8,
+      "supportsBatching" : true,
+      "frameSize" : [
+         {
+            "height" : 1080,
+            "width" : 1920
+         }
+      ],
+      "inputs" : [
+         "input_0"
+      ],
+      "outputs" : [
+         "output_0"
+      ],
+      "parameters" : [
+         {
+            "default" : true,
+            "options" : [
+               true,
+               false
+            ],
+            "name" : "log_features",
+            "type" : "bool"
+         }
+      ],
+      "requireFrames" : true,
+      "settings" : [
+         {
+            "default" : true,
+            "options" : [
+               true,
+               false
+            ],
+            "name" : "log_features",
+            "type" : "bool"
+         },
+         {
+            "default" : true,
+            "name" : "use_fp16",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "name": "enable_batching",
+            "type": "bool",
+            "default": true,
+            "options" : [
+              true,
+              false
+            ]
+         },
+         {
+            "default" : true,
+            "name" : "use_cuda",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "default" : 8,
+            "max" : 8,
+            "min" : 1,
+            "name" : "batch_size",
+            "type" : "int"
+         },
+         {
+            "default" : 1,
+            "max" : 4,
+            "min" : 1,
+            "name" : "roiBatchSize",
+            "type" : "int"
+         },
+         {
+            "default" : "DALI",
+            "name" : "decoderType",
+            "options" : [
+               "TURBO",
+               "DALI"
+            ],
+            "type" : "String"
+         },
+         {
+            "default" : "INTERP_GAUSSIAN",
+            "name" : "interpolationType",
+            "options" : [
+               "INTERP_NN",
+               "INTERP_LINEAR",
+               "INTERP_CUBIC",
+               "INTERP_TRIANGULAR",
+               "INTERP_GAUSSIAN",
+               "INTERP_LANCZOS3"
+            ],
+            "type" : "String"
+         }
+      ]
+   },
+   "componentMetadata" : {
+      "author" : {
+         "authorEmail" : "poc@ai.org",
+         "authorLinks" : {
+            "linkName" : "github",
+            "url" : "https://github.com/poc.org"
+         },
+         "authorName" : "poc"
+      },
+      "description" : "Person re-identification model for extracting discriminative features from person crops",
+      "license" : "closed",
+      "tags" : [
+         "reid",
+         "person_reidentification",
+         "feature_extraction"
+      ]
+   },
+   "modelDetails": {
+      "id": "mdl-reid-baseline",
+      "label": "Module",
+      "name": "Person Re-Identification Baseline",
+      "category": "reid",
+      "framework": "PyTorch",
+      "license": "closed",
+      "repo_url": "https://github.com/poc.org"
+   },
+   "parameters": {
+      "total_params_m": 25.5,
+      "backbone": "ResNet50",
+      "embedding_size": 2048,
+      "distance_metric": "cosine",
+      "triplet_loss": "enabled"
+   },
+   "training": {
+      "pretrained": true,
+      "input_resolution": [256, 128],
+      "trained_on": {
+         "dataset": "Market-1501 + DukeMTMC-reID + MSMT17 + Custom ReID Dataset",
+         "type": "person_reidentification",
+         "scenarios": ["surveillance", "multi_camera", "crowd"],
+         "notes": "Trained on diverse camera viewpoints and lighting conditions"
+      }
+   },
+   "runtime": {
+      "gpu_required": true,
+      "min_gpu_mem_gb": 3,
+      "recommended_gpu": "NVIDIA T4",
+      "cpu_cores": 4,
+      "ram_gb": 6,
+      "docker_image": "reidbaseline:latest",
+      "env": {
+         "python": "3.8",
+         "pytorch": "1.9",
+         "cuda": "11.0",
+         "cudnn": "8.0",
+         "os": "ubuntu-20.04"
+      }
+   },
+   "benchmarks": {
+      "hardware": "NVIDIA T4",
+      "test_conditions": {
+         "input_resolution": [256, 128],
+         "decoder": "DALI",
+         "interpolation": "INTERP_GAUSSIAN",
+         "precision": "FP16",
+         "batch_size": 8
+      },
+      "reid_performance": {
+         "rank1_accuracy": 0.887,
+         "rank5_accuracy": 0.963,
+         "rank10_accuracy": 0.978,
+         "map": 0.741,
+         "dataset": "Market-1501"
+      },
+      "throughput_fps": {
+         "batch_8_256x128": 95,
+         "batch_16_256x128": 140,
+         "batch_32_256x128": 180
+      },
+      "gpu_utilization_percent": {
+         "batch_8": 55,
+         "batch_16": 75,
+         "batch_32": 90
+      },
+      "gpu_memory_mb": {
+         "batch_8": 2200,
+         "batch_16": 3400,
+         "batch_32": 4800
+      },
+      "latency_ms": {
+         "single_crop": 10.5,
+         "batch_8": 5.3,
+         "batch_16": 4.1
+      }
+   },
+   "produces": ["person_features", "similarity_scores", "reid_embeddings"],
+   "consumes": ["person_crops", "person_bboxes"],
+   "input_formats": ["OD1"],
+   "output_formats": ["OD1"],
+   "sources": [
+      {
+         "title": "Bag of Tricks and A Strong Baseline for Deep Person Re-identification",
+         "url": "https://arxiv.org/abs/1903.07071"
+      },
+      {
+         "title": "Internal ReID performance benchmarks",
+         "url": "internal://benchmark-data/reid-baseline.txt"
+      }
+   ],
+   "notes": "Person re-identification model for extracting discriminative features from person crops. Optimized for multi-camera tracking scenarios. Supports batch processing for improved throughput. Compatible with various tracking algorithms requiring ReID features."
+}

@@ -1,0 +1,113 @@
+{
+    "head": {
+        "templateUri": "Parser/V1",
+        "parameters": {}
+    },
+    "body": {
+        "spec": {
+            "values": {
+                "mode": "allocate",
+                "blockId": "magistral-small-2506-2",
+                "blockComponentURI": "model.magistral-small-2506-llama_cpp2:1.0.0-stable",
+                "minInstances": 1,
+                "maxInstances": 3,
+                "blockInitData": {
+                    "model_name": "mistralai/Magistral-Small-2506_gguf/Magistral-Small-2506_Q8_0.gguf",
+                    "system_message": "You are a usefull assistant"
+                },
+                "initSettings": {
+                    "use_gpu": true,
+                    "gpu_id": 0,
+                    "enable_metrics": true,
+                    "model_config": {
+                        "n_gpu_layers": -1,
+                        "n_threads": -1,
+                        "n_ctx": 8192,
+                        "seed": 3407,
+                        "verbose": true
+                    },
+                    "cleanup_enabled":  true,
+                    "cleanup_check_interval": 60,
+                    "cleanup_session_timeout": 600
+                },
+                "initParameters": {
+                    "temperature": 0.7,
+                    "max_tokens": 4096,
+                    "top_p": 0.95
+                },
+                "policyRulesSpec": [
+                    {
+                        "values": {
+                            "name": "clusterAllocator",
+                            "policyRuleURI": "cluster-selector:2.0-stable",
+                            "parameters": {
+                                "filter": {
+                                    "clusterQuery": {
+                                        "variable": "id",
+                                        "operator": "==",
+                                        "value": "gcp-cluster-2"
+                                    }
+                                }
+                            },
+                            "settings": {
+                                "max_candidates": 2
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "resourceAllocator",
+                            "policyRuleURI": "allocator:2.0-stable",
+                            "parameters": {
+                                "allocation_data": {
+                                    "node_id": "wc-gpu-node2",
+                                    "gpus": [0,1]
+                                }
+                            },
+                            "settings": {
+                                "selection_mode": "balanced"
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "loadBalancer",
+                            "policyRuleURI": "load_balancer:2.0-stable",
+                            "parameters": {
+                                "cache_sessions": true
+                            },
+                            "settings": {
+                                "session_cache_size": 2000
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "stabilityChecker",
+                            "policyRuleURI": "health_checker:2.0-stable",
+                            "parameters": {
+                                "unhealthy_threshold": 2
+                            },
+                            "settings": {
+                                "check_interval_sec": 10
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "autoscaler",
+                            "policyRuleURI": "autoscaler:2.0-stable",
+                            "parameters": {
+                                "target_gpu_utilization": 0.8
+                            },
+                            "settings": {
+                                "scale_up_cooldown": 45,
+                                "scale_down_cooldown": 90
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

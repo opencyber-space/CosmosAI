@@ -1,0 +1,332 @@
+{
+  "_id": {
+    "$oid": "676eb7907365a521fc586f8b"
+  },
+  "clusterId": "cluster-123",
+  "cluster": {
+    "memory": {
+      "averageUtil": 20.3,
+      "freeMem": 50996.45703125,
+      "freeSwap": 1951.9921875,
+      "pageFaultsPerSec": 0,
+      "usedMem": 11436.609375,
+      "usedSwap": 0
+    },
+    "network": {
+      "ifaces.rxBytesTotal": 883380305,
+      "ifaces.rxBytes_15m": 0,
+      "ifaces.rxBytes_1m": 0,
+      "ifaces.rxBytes_5m": 0,
+      "ifaces.txBytesTotal": 277374452,
+      "ifaces.txBytes_15m": 0,
+      "ifaces.txBytes_1m": 0,
+      "ifaces.txBytes_5m": 0,
+      "rxBytesTotal": 883380305,
+      "rxBytes_15m": 0,
+      "rxBytes_1m": 0,
+      "rxBytes_5m": 0,
+      "txBytesTotal": 277374452,
+      "txBytes_15m": 0,
+      "txBytes_1m": 0,
+      "txBytes_5m": 0
+    },
+    "storage": {
+      "disks.iops.active": 2558688,
+      "disks.iops.blocksPerSec": 4532070,
+      "disks.iops.readBytes": {
+        "$numberLong": "32192593920"
+      },
+      "disks.iops.response": 2558688,
+      "disks.iops.total": 4532070,
+      "disks.iops.writeBytes": {
+        "$numberLong": "54188382208"
+      },
+      "disks.memory.freeMem": 65518.328125,
+      "disks.memory.maxDisk": 476680.078125,
+      "disks.memory.minDisk": 0.125,
+      "disks.memory.usedMem": 839270.234375,
+      "freeMem": 65518.328125,
+      "usedMem": 839270.234375
+    },
+    "vcpu": {
+      "load_15m": 0.99,
+      "load_1m": 0.82,
+      "load_5m": 1.1800000000000002,
+      "runningProcesses": 887,
+      "runningThreads": 4295,
+      "totalProcesses": 887,
+      "totalThreads": 4295
+    }
+  },
+  "node_metrics": [
+    {
+      "node_id": "node-0",
+      "memory": {
+        "averageUtil": 24.3,
+        "freeMem": 24222.5859375,
+        "freeSwap": 975.99609375,
+        "pageFaultsPerSec": 0,
+        "usedMem": 6868.4296875,
+        "usedSwap": 0
+      },
+      "network": {
+        "ifaces": {
+          "rxBytesTotal": 458492923,
+          "rxBytes_15m": 0,
+          "rxBytes_1m": 0,
+          "rxBytes_5m": 0,
+          "txBytesTotal": 243918531,
+          "txBytes_15m": 0,
+          "txBytes_1m": 0,
+          "txBytes_5m": 0
+        },
+        "rxBytesTotal": 458492923,
+        "rxBytes_15m": 0,
+        "rxBytes_1m": 0,
+        "rxBytes_5m": 0,
+        "txBytesTotal": 243918531,
+        "txBytes_15m": 0,
+        "txBytes_1m": 0,
+        "txBytes_5m": 0
+      },
+      "storage": {
+        "disks": {
+          "iops": {
+            "active": 2124688,
+            "blocksPerSec": 3415726,
+            "readBytes": {
+              "$numberLong": "14653957632"
+            },
+            "response": 2124688,
+            "total": 3415726,
+            "writeBytes": {
+              "$numberLong": "38061802496"
+            }
+          },
+          "memory": {
+            "freeMem": 33459.25,
+            "maxDisk": 476680.078125,
+            "minDisk": 0.125,
+            "usedMem": 418935.03125
+          }
+        },
+        "freeMem": 33459.25,
+        "usedMem": 418935.03125
+      },
+      "vcpu": {
+        "load_15m": 0.74,
+        "load_1m": 0.43,
+        "load_5m": 0.76,
+        "runningProcesses": 462,
+        "runningThreads": 2345,
+        "totalProcesses": 462,
+        "totalThreads": 2345
+      },
+      "gpu": {
+        "avgCudaUtilization": 0,
+        "avgMemUtilization": 0,
+        "avgPowerUtilization": 0,
+        "avgTemperature": 0,
+        "count": 0,
+        "totalFreeMem": 0,
+        "totalMem": 0,
+        "totalUsedMem": 0
+      },
+      "gpus":[
+
+      ]
+    },
+    {
+      "node_id": "node-1",
+      "memory": {
+        "averageUtil": 16.3,
+        "freeMem": 26773.87109375,
+        "freeSwap": 975.99609375,
+        "pageFaultsPerSec": 0,
+        "usedMem": 4568.1796875,
+        "usedSwap": 0
+      },
+      "network": {
+        "ifaces": {
+          "rxBytesTotal": 424887382,
+          "rxBytes_15m": 0,
+          "rxBytes_1m": 0,
+          "rxBytes_5m": 0,
+          "txBytesTotal": 33455921,
+          "txBytes_15m": 0,
+          "txBytes_1m": 0,
+          "txBytes_5m": 0
+        },
+        "rxBytesTotal": 424887382,
+        "rxBytes_15m": 0,
+        "rxBytes_1m": 0,
+        "rxBytes_5m": 0,
+        "txBytesTotal": 33455921,
+        "txBytes_15m": 0,
+        "txBytes_1m": 0,
+        "txBytes_5m": 0
+      },
+      "storage": {
+        "disks": {
+          "iops": {
+            "active": 434000,
+            "blocksPerSec": 1116344,
+            "readBytes": {
+              "$numberLong": "17538636288"
+            },
+            "response": 434000,
+            "total": 1116344,
+            "writeBytes": {
+              "$numberLong": "16126579712"
+            }
+          },
+          "memory": {
+            "freeMem": 32059.078125,
+            "maxDisk": 476680.078125,
+            "minDisk": 0.125,
+            "usedMem": 420335.203125
+          }
+        },
+        "freeMem": 32059.078125,
+        "usedMem": 420335.203125
+      },
+      "vcpu": {
+        "load_15m": 1.24,
+        "load_1m": 1.21,
+        "load_5m": 1.6,
+        "runningProcesses": 425,
+        "runningThreads": 1950,
+        "totalProcesses": 425,
+        "totalThreads": 1950
+      },
+      "gpu": {
+        "avgCudaUtilization": 0,
+        "avgMemUtilization": 2.84271240234375,
+        "avgPowerUtilization": 0,
+        "avgTemperature": 50,
+        "count": 1,
+        "totalFreeMem": 7959.125,
+        "totalMem": 8192,
+        "totalUsedMem": 232.875
+      },
+      "gpus":[
+        {
+          "avgCudaUtilization": 1,
+          "avgMemUtilization": 0.01421356201171875,
+          "avgPowerUtilization": 1,
+          "avgTemperature": 50,
+          "count": 1,
+          "totalFreeMem": 16151.125,
+          "totalMem": 16384,
+          "totalUsedMem": 232.875
+        }
+      ]
+    },
+    {
+      "node_id": "node-2",
+      "memory": {
+        "averageUtil": 16.3,
+        "freeMem": 26773.87109375,
+        "freeSwap": 975.99609375,
+        "pageFaultsPerSec": 0,
+        "usedMem": 4568.1796875,
+        "usedSwap": 0
+      },
+      "network": {
+        "ifaces": {
+          "rxBytesTotal": 424887382,
+          "rxBytes_15m": 0,
+          "rxBytes_1m": 0,
+          "rxBytes_5m": 0,
+          "txBytesTotal": 33455921,
+          "txBytes_15m": 0,
+          "txBytes_1m": 0,
+          "txBytes_5m": 0
+        },
+        "rxBytesTotal": 424887382,
+        "rxBytes_15m": 0,
+        "rxBytes_1m": 0,
+        "rxBytes_5m": 0,
+        "txBytesTotal": 33455921,
+        "txBytes_15m": 0,
+        "txBytes_1m": 0,
+        "txBytes_5m": 0
+      },
+      "storage": {
+        "disks": {
+          "iops": {
+            "active": 434000,
+            "blocksPerSec": 1116344,
+            "readBytes": {
+              "$numberLong": "17538636288"
+            },
+            "response": 434000,
+            "total": 1116344,
+            "writeBytes": {
+              "$numberLong": "16126579712"
+            }
+          },
+          "memory": {
+            "freeMem": 32059.078125,
+            "maxDisk": 476680.078125,
+            "minDisk": 0.125,
+            "usedMem": 420335.203125
+          }
+        },
+        "freeMem": 32059.078125,
+        "usedMem": 420335.203125
+      },
+      "vcpu": {
+        "load_15m": 1.24,
+        "load_1m": 1.21,
+        "load_5m": 1.6,
+        "runningProcesses": 425,
+        "runningThreads": 1950,
+        "totalProcesses": 425,
+        "totalThreads": 1950
+      },
+      "gpu": {
+        "avgCudaUtilization": 0,
+        "avgMemUtilization": 2.84271240234375,
+        "avgPowerUtilization": 0,
+        "avgTemperature": 50,
+        "count": 1,
+        "totalFreeMem": 7959.125,
+        "totalMem": 8192,
+        "totalUsedMem": 232.875
+      },
+      "gpus":[
+        {
+          "avgCudaUtilization": 100,
+          "avgMemUtilization":0.9765625,
+          "avgPowerUtilization": 1,
+          "avgTemperature": 70,
+          "count": 1,
+          "totalFreeMem": 16151.125,
+          "totalMem": 16384,
+          "totalUsedMem": 16000
+        },
+        {
+          "avgCudaUtilization": 2,
+          "avgMemUtilization": 0.01421356201171875,
+          "avgPowerUtilization": 1,
+          "avgTemperature": 50,
+          "count": 1,
+          "totalFreeMem": 16151.125,
+          "totalMem": 16384,
+          "totalUsedMem": 232.875
+        },
+        {
+          "avgCudaUtilization": 1,
+          "avgMemUtilization": 0.01454,
+          "avgPowerUtilization": 1,
+          "avgTemperature": 50,
+          "count": 1,
+          "totalFreeMem": 15767.125,
+          "totalMem": 16000,
+          "totalUsedMem": 232.875
+        }
+      ]
+    }
+  ]
+}

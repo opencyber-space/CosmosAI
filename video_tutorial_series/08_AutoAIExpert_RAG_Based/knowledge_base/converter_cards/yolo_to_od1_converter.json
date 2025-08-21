@@ -1,0 +1,59 @@
+{
+  "componentId": "yolo_to_od1_converter",
+  "componentType": "node.algorithm.converter",
+  "id": "cnv-yolo-to-od1",
+  "label": "Converter",
+  "name": "YOLO to OD1 Format Converter",
+  "category": "format_converter",
+  "description": "Converts YOLO detection format to OD1 format with zone assignment capabilities",
+  
+  "consumes": ["yolo_format"],
+  "produces": ["od1_format"],
+  
+  "input_formats": ["yolo_format"],
+  "output_formats": ["od1_format"],
+  
+  "conversion_mapping": {
+    "from": "yolo_format",
+    "to": "od1_format",
+    "transform": "bbox + confidence + class_id -> bbox + confidence + zone_name"
+  },
+  
+  "capabilities": [
+    "format_conversion",
+    "zone_assignment", 
+    "confidence_filtering",
+    "class_filtering"
+  ],
+  
+  "use_cases": [
+    "Converting YOLO detections for zone-based analysis",
+    "Preparing detections for tracking systems that expect OD1 format",
+    "Adding spatial context (zones) to raw detection outputs"
+  ],
+  
+  "parameters": {
+    "confidence_threshold": {
+      "type": "float",
+      "default": 0.25,
+      "description": "Minimum confidence score to include detection"
+    },
+    "class_filter": {
+      "type": "list",
+      "default": [],
+      "description": "List of class IDs to include (empty = all classes)"
+    },
+    "zones": {
+      "type": "dict",
+      "description": "Zone definitions with polygon coordinates"
+    }
+  },
+  
+  "runtime": {
+    "latency_ms": 1.5,
+    "memory_mb": 10,
+    "cpu_usage": "low"
+  },
+  
+  "notes": "Essential converter for bridging YOLO-based detectors with zone-aware tracking and analysis systems"
+}

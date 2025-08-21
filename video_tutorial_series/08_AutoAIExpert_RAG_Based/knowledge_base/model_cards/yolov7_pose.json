@@ -1,0 +1,253 @@
+{
+   "componentId" : {
+      "name" : "pose7Estimation_1080h_1920",
+      "release" : "stable",
+      "version" : "v0.0.1"
+   },
+	"componentType" : "node.algorithm.objdet",
+   "containerImage" : "pose-estimation:latest",
+   "requiresGPU" : true,
+   "componentConfig" : {
+      "batchSize" : 8,
+      "supportsBatching" : true,
+      "frameSize" : [
+         {
+            "height" : 1080,
+            "width" : 1920
+         }
+      ],
+      "inputs" : [
+         "input_0"
+      ],
+      "outputs" : [
+         "output_0"
+      ],
+      "parameters" : [
+         {
+            "default" : 0.4,
+            "max" : 1,
+            "min" : 0.0,
+            "name" : "conf",
+            "type" : "float"
+         },
+         {
+            "default" : 0.4,
+            "max" : 1,
+            "min" : 0.1,
+            "name" : "nms_iou",
+            "type" : "float"
+         }
+      ],
+      "requireFrames" : true,
+      "settings" : [
+         {
+            "default" : true,
+            "name" : "use_fp16",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "name": "enable_batching",
+            "type": "bool",
+            "default": true,
+            "options" : [
+              true,
+              false
+            ]
+         },
+         {
+            "default" : true,
+            "name" : "use_cuda",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "default" : 1920,
+            "max" : 1921,
+            "min" : 270,
+            "name" : "decoder_width",
+            "type" : "int"
+         },
+         {
+            "default" : 1080,
+            "max" : 1081,
+            "min" : 270,
+            "name" : "decoder_height",
+            "type" : "int"
+         },
+         {
+            "default" : true,
+            "name" : "stretch_image",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "default" : false,
+            "name" : "blockRoiEnabled",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "default" : 8,
+            "max" : 8,
+            "min" : 1,
+            "name" : "batch_size",
+            "type" : "int"
+         },
+         {
+            "default" : 1,
+            "max" : 4,
+            "min" : 1,
+            "name" : "roiBatchSize",
+            "type" : "int"
+         },
+         {
+            "default" : "TURBO",
+            "name" : "decoderType",
+            "options" : [
+               "TURBO",
+               "DALI"
+            ],
+            "type" : "String"
+         },
+         {
+            "default" : "INTERP_GAUSSIAN",
+            "name" : "interpolationType",
+            "options" : [
+               "INTERP_NN",
+               "INTERP_LINEAR",
+               "INTERP_CUBIC",
+               "INTERP_TRIANGULAR",
+               "INTERP_GAUSSIAN",
+               "INTERP_LANCZOS3"
+            ],
+            "type" : "String"
+         },
+         {
+            "default" : true,
+            "name" : "FullImage",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         }
+      ]
+   },
+   "componentMetadata" : {
+      "author" : {
+         "authorEmail" : "poc@ai.org",
+         "authorLinks" : {
+            "linkName" : "github",
+            "url" : "https://github.com/poc.org"
+         },
+         "authorName" : "poc"
+      },
+      "description" : "A human pose estimation container using YOLOv7 for detecting people and their keypoints",
+      "license" : "closed",
+      "tags" : [
+         "alert"
+      ]
+   },
+   "modelDetails" : {
+      "id" : "mdl-yolov7-pose",
+      "label" : "Module",
+      "name" : "YOLOv7 Pose Estimation",
+      "category" : "pose_estimator",
+      "framework" : "PyTorch",
+      "license" : "closed",
+      "repo_url" : "https://github.com/poc.org"
+   },
+   "parameters" : {
+      "total_params_m" : 51.8,
+      "backbone" : "E-ELAN",
+      "neck" : "FPN-PANet",
+      "head" : "Pose Detection Head",
+      "keypoints" : 17,
+      "pose_format" : "COCO"
+   },
+   "training" : {
+      "pretrained" : true,
+      "input_resolution" : [576, 960],
+      "trained_on" : {
+         "dataset" : "COCO Pose + Custom Surveillance Data",
+         "type" : "pose_estimation",
+         "keypoints" : [
+            "nose", "left_eye", "right_eye", "left_ear", "right_ear", "left_shoulder", 
+            "right_shoulder", "left_elbow", "right_elbow", "left_wrist", "right_wrist",
+            "left_hip", "right_hip", "left_knee", "right_knee", "left_ankle", "right_ankle"
+         ],
+         "categories" : 1,
+         "notes" : "Specialized for human pose estimation with 17 keypoints in surveillance scenarios"
+      }
+   },
+   "runtime" : {
+      "gpu_required" : true,
+      "min_gpu_mem_gb" : 3,
+      "recommended_gpu" : "NVIDIA T4",
+      "cpu_cores" : 4,
+      "ram_gb" : 8,
+      "docker_image" : "pose-estimation:latest",
+      "env" : {
+         "python" : "3.8",
+         "cuda" : "11.0",
+         "cudnn" : "8.0",
+         "os" : "ubuntu-20.04"
+      }
+   },
+   "benchmarks" : {
+      "hardware" : "NVIDIA T4",
+      "test_conditions" : {
+         "input_resolution" : [576, 960],
+         "decoder" : "DALI",
+         "confidence_threshold" : 0.3,
+         "nms_threshold" : 0.5,
+         "precision" : "FP16",
+         "test_scenario" : "2 different images, 7-9 people detected"
+      },
+      "throughput_fps" : {
+         "batch_size_4" : 33.3,
+         "batch_size_8" : 27.27
+      },
+      "gpu_utilization_percent" : {
+         "batch_size_4" : 57,
+         "batch_size_8" : 73
+      },
+      "gpu_memory_mb" : {
+         "batch_size_4" : 2959,
+         "batch_size_8" : 3067
+      },
+      "pose_accuracy" : {
+         "ap" : 0.68,
+         "keypoint_accuracy" : 0.85,
+         "person_detection_rate" : 0.92
+      }
+   },
+   "produces" : ["person_bboxes", "pose_keypoints", "pose_confidence"],
+   "consumes" : ["rgb_frames"],
+   "input_formats": ["OD1"],
+   "output_formats": ["OD1"],
+   "sources" : [
+      {
+         "title" : "YOLOv7: Trainable bag-of-freebies sets new state-of-the-art",
+         "url" : "https://arxiv.org/abs/2207.02696"
+      },
+      {
+         "title" : "Internal pose estimation benchmark results",
+         "url" : "internal://benchmark-data/yolov7-pose.txt"
+      }
+   ],
+   "notes" : "Human pose estimation model detecting people and their 17 keypoints. Optimized for surveillance scenarios with batch processing capabilities. Best performance at batch size 4 with 33.3 FPS on T4 GPU."
+}

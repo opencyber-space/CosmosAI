@@ -1,0 +1,103 @@
+{
+  "componentId": "od1_input_format",
+  "componentType": "node.algorithm.format",
+  "component_id": "fmt-od1-in",
+  "component_type": "input_format_cards",
+  "name": "OD1 Bounding-Box Input",
+  "description": "Standard OD1 list-of-lists schema used as INPUT to CV modules (detectors, filters, etc.).",
+  "domain": "generic_vision",
+  "schema_version": "1.1",
+  "structure": [
+    "class",
+    "score",
+    "zone",
+    "path",
+    "id",
+    "roi",
+    "polygon",
+    "timestamp",
+    "props"
+  ],
+  "field_specs": {
+    "class":     "str   — label (e.g. \"car\", \"person\")",
+    "score":     "float — confidence 0-1",
+    "zone":      "str   — CURRENT ROI/zone name",
+    "path":      "str   — comma-separated lineage of zones/streams (e.g. \"cam01,rtsp://…\")",
+    "id":        "str   — tracker-ID; **empty string if not yet assigned**",
+    "roi":       "list  — [x1,y1,x2,y2] bounding box",
+    "polygon":   "list  — [[x,y], …] polygon of ROI",
+    "timestamp": "float — epoch-ms",
+    "props":     "dict  — arbitrary key/vals (see props_specifications below)"
+  },
+  "props_specifications": {
+    "pose_keypoints": {
+      "format": "list of [x, y, confidence] for each keypoint",
+      "keypoint_order": ["nose", "left_eye", "right_eye", "left_ear", "right_ear", "left_shoulder", "right_shoulder", "left_elbow", "right_elbow", "left_wrist", "right_wrist", "left_hip", "right_hip", "left_knee", "right_knee", "left_ankle", "right_ankle"],
+      "example": "[[320, 240, 0.9], [315, 235, 0.8], ...]",
+      "use_cases": ["pose_analysis", "interaction_detection", "activity_recognition"]
+    },
+    "dwell_time": {
+      "format": "float - seconds spent in current zone",
+      "example": "45.2",
+      "use_cases": ["loitering_detection", "dwell_analysis"]
+    },
+    "color": {
+      "format": "dict with dominant colors",
+      "example": "{\"shirt\": \"blue\", \"pants\": \"black\"}",
+      "use_cases": ["person_reidentification", "appearance_matching"]
+    },
+    "age": {
+      "format": "dict with age estimation",
+      "example": "{\"estimated_age\": 25, \"age_range\": \"20-30\", \"confidence\": 0.8}",
+      "use_cases": ["demographic_analysis", "age_verification"]
+    },
+    "gender": {
+      "format": "dict with gender classification",
+      "example": "{\"gender\": \"female\", \"confidence\": 0.9}",
+      "use_cases": ["demographic_analysis", "gender_specific_policies"]
+    },
+    "actions": {
+      "format": "list of detected actions",
+      "example": "[\"walking\", \"waving\"]",
+      "use_cases": ["activity_recognition", "behavior_analysis"]
+    },
+    "speed_kph": {
+      "format": "float - speed in kilometers per hour",
+      "example": "18.5",
+      "use_cases": ["speed_monitoring", "traffic_analysis"]
+    },
+    "direction": {
+      "format": "dict with movement direction",
+      "example": "{\"angle\": 45, \"direction\": \"northeast\"}",
+      "use_cases": ["flow_analysis", "directional_filtering"]
+    },
+    "facial_features": {
+      "format": "dict with facial analysis results",
+      "example": "{\"emotion\": \"happy\", \"mask_wearing\": true, \"facial_landmarks\": [[x1,y1], ...]}",
+      "use_cases": ["emotion_detection", "mask_compliance", "face_recognition"]
+    }
+  },
+  "example": [
+    [
+      "person",
+      0.92,
+      "entrance_zone",
+      "cam01,rtsp://surveillance_stream",
+      "person_001",
+      [150, 200, 300, 500],
+      [[150,200],[300,200],[300,500],[150,500]],
+      1718263400.123,
+      { 
+        "pose_keypoints": [[250, 220, 0.9], [245, 215, 0.8], [255, 215, 0.85], [240, 210, 0.7], [260, 210, 0.75], [230, 250, 0.95], [270, 250, 0.93], [220, 280, 0.88], [280, 280, 0.90], [210, 310, 0.85], [290, 310, 0.87], [240, 350, 0.92], [260, 350, 0.94], [235, 420, 0.89], [265, 420, 0.91], [230, 480, 0.86], [270, 480, 0.88]],
+        "dwell_time": 12.5,
+        "gender": {"gender": "male", "confidence": 0.87},
+        "age": {"estimated_age": 35, "age_range": "30-40", "confidence": 0.82},
+        "actions": ["standing", "looking_around"],
+        "color": {"shirt": "blue", "pants": "black"}
+      }
+    ]
+  ],
+  "produces": [],
+  "consumes": ["od1_list"],
+  "notes": "Modules that *consume* this format should declare `consumes:[\"od1_list\"]` so compatibility edges can be generated automatically."
+}

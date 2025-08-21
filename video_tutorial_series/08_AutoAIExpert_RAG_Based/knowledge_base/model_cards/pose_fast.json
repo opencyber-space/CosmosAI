@@ -1,0 +1,236 @@
+{
+   "componentId" : {
+      "name" : "pose-estimation-rt",
+      "release" : "stable",
+      "version" : "v0.0.1"
+   },
+	"componentType" : "node.algorithm.posekey",
+   "containerImage" : "pose-estimation-rt:latest",
+   "requiresGPU" : true,
+   "componentConfig" : {
+      "batchSize" : 4,
+      "supportsBatching" : true,
+      "frameSize" : [
+         {
+            "height" : 640,
+            "width" : 640
+         }
+      ],
+      "inputs" : [
+         "input_0"
+      ],
+      "outputs" : [
+         "output_0"
+      ],
+      "parameters" : [
+         {
+            "default" : 0.4,
+            "max" : 1,
+            "min" : 0.04,
+            "name" : "conf",
+            "type" : "float"
+         }
+      ],
+      "requireFrames" : true,
+      "settings" : [
+         {
+            "default" : true,
+            "name" : "use_fp16",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "name": "enable_batching",
+            "type": "bool",
+            "default": true,
+            "options" : [
+              true,
+              false
+            ]
+         },
+         {
+            "default" : true,
+            "name" : "use_cuda",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "default" : 640,
+            "max" : 1280,
+            "min" : 639,
+            "name" : "decoder_width",
+            "type" : "int"
+         },
+         {
+            "default" : 640,
+            "max" : 1280,
+            "min" : 639,
+            "name" : "decoder_height",
+            "type" : "int"
+         },
+         {
+            "default" : false,
+            "name" : "blockRoiEnabled",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "default" : 4,
+            "max" : 4,
+            "min" : 1,
+            "name" : "batch_size",
+            "type" : "int"
+         },
+         {
+            "default" : "model_large",
+            "name" : "modeltype",
+            "options" : [
+               "model_large","model_medium","model_small"
+            ],
+            "type" : "String"
+         },
+         {
+            "default" : "DALI",
+            "name" : "decoderType",
+            "options" : [
+               "TURBO",
+               "DALI"
+            ],
+            "type" : "String"
+         },
+         {
+            "default" : "INTERP_GAUSSIAN",
+            "name" : "interpolationType",
+            "options" : [
+               "INTERP_NN",
+               "INTERP_LINEAR",
+               "INTERP_CUBIC",
+               "INTERP_TRIANGULAR",
+               "INTERP_GAUSSIAN",
+               "INTERP_LANCZOS3"
+            ],
+            "type" : "String"
+         }
+      ]
+   },
+   "componentMetadata" : {
+      "author" : {
+         "authorEmail" : "poc@ai.org",
+         "authorLinks" : {
+            "linkName" : "github",
+            "url" : "https://github.com/poc.org"
+         },
+         "authorName" : "poc"
+      },
+      "description" : "people pose estimation container with real time performance",
+      "license" : "closed",
+      "tags" : [
+         "pose_estimation",
+         "keypoints",
+         "real_time"
+      ]
+   },
+   "modelDetails": {
+      "id": "mdl-pose-estimation-rt",
+      "label": "Module",
+      "name": "Real-Time Pose Estimation",
+      "category": "pose_estimation",
+      "framework": "PyTorch",
+      "license": "closed",
+      "repo_url": "https://github.com/poc.org"
+   },
+   "parameters": {
+      "total_params_m": 25.2,
+      "backbone": "HRNet-W32",
+      "head": "SimpleBaseline",
+      "keypoints": 17,
+      "pose_format": "COCO"
+   },
+   "training": {
+      "pretrained": true,
+      "input_resolution": [640, 640],
+      "trained_on": {
+         "dataset": "COCO + MPII + Custom Pose Dataset",
+         "type": "human_pose_estimation",
+         "scenarios": ["single_person", "multi_person", "surveillance"],
+         "keypoint_format": "COCO 17 keypoints",
+         "notes": "Trained on diverse poses and camera angles"
+      }
+   },
+   "runtime": {
+      "gpu_required": true,
+      "min_gpu_mem_gb": 4,
+      "recommended_gpu": "NVIDIA T4",
+      "cpu_cores": 4,
+      "ram_gb": 8,
+      "docker_image": "pose-estimation-rt:latest",
+      "env": {
+         "python": "3.8",
+         "pytorch": "1.9",
+         "cuda": "11.0",
+         "cudnn": "8.0",
+         "os": "ubuntu-20.04"
+      }
+   },
+   "benchmarks": {
+      "hardware": "NVIDIA T4",
+      "test_conditions": {
+         "input_resolution": [640, 640],
+         "decoder": "DALI",
+         "interpolation": "INTERP_GAUSSIAN",
+         "precision": "FP16",
+         "batch_size": 4
+      },
+      "pose_performance": {
+         "ap": 0.72,
+         "ap_50": 0.89,
+         "ap_75": 0.79,
+         "ar": 0.78,
+         "oks_threshold": 0.5
+      },
+      "throughput_fps": {
+         "single_person_640x640": 45,
+         "multi_person_640x640": 35,
+         "batch_4_640x640": 33.3
+      },
+      "gpu_utilization_percent": {
+         "single_person": 55,
+         "multi_person": 70,
+         "batch_4": 75
+      },
+      "gpu_memory_mb": {
+         "single_person": 2400,
+         "multi_person": 3200,
+         "batch_4": 4000
+      },
+      "latency_ms": {
+         "single_inference": 22.2,
+         "preprocessing": 2.1,
+         "postprocessing": 3.8
+      }
+   },
+   "produces": ["keypoint_coordinates", "pose_confidence", "person_bboxes"],
+   "consumes": ["rgb_frames", "person_detections"],
+   "input_formats": ["OD1"],
+   "output_formats": ["OD1"],
+   "sources": [
+      {
+         "title": "Deep High-Resolution Representation Learning for Human Pose Estimation",
+         "url": "https://arxiv.org/abs/1902.09212"
+      },
+      {
+         "title": "Internal pose estimation performance benchmarks",
+         "url": "internal://benchmark-data/pose-estimation-rt.txt"
+      }
+   ],
+   "notes": "Real-time human pose estimation model supporting COCO 17 keypoints format. Optimized for surveillance and activity recognition applications. Supports both single and multi-person pose detection with configurable batch processing for throughput optimization."
+}

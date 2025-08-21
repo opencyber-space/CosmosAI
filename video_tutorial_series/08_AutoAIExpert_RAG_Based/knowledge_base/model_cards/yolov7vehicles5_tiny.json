@@ -1,0 +1,245 @@
+{
+   "componentType" : "node.algorithm.objdet",
+   "containerImage" : "vehicles5fastdetection:latest",
+   "requiresGPU" : true,
+   "componentId" : {
+      "name" : "vehicles5FastDetection",
+      "release" : "stable",
+      "version" : "v0.0.1"
+   },
+   "componentMetadata" : {
+      "author" : {
+         "authorEmail" : "poc@ai.org",
+         "authorLinks" : {
+            "linkName" : "github",
+            "url" : "https://github.com/poc.org"
+         },
+         "authorName" : "poc"
+      },
+      "description" : "A lightweight YOLOv7-Tiny based vehicle detection container optimized for speed",
+      "license" : "closed",
+      "tags" : [
+         "alert"
+      ]
+   },
+   "componentConfig" : {
+      "batchSize" : 8,
+      "frameSize" : [
+         {
+            "height" : 1080,
+            "width" : 1920
+         }
+      ],
+      "inputs" : [
+         "input_0"
+      ],
+      "outputs" : [
+         "output_0"
+      ],
+      "parameters" : [
+         {
+            "default" : 0.4,
+            "max" : 1,
+            "min" : 0.1,
+            "name" : "conf",
+            "type" : "float"
+         },
+         {
+            "default" : 0.4,
+            "max" : 1,
+            "min" : 0.1,
+            "name" : "nms_iou",
+            "type" : "float"
+         }
+      ],
+      "requireFrames" : true,
+      "settings" : [
+         {
+            "default" : true,
+            "name" : "use_fp16",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "name": "enable_batching",
+            "type": "bool",
+            "default": true,
+            "options" : [
+              true,
+              false
+            ]
+         },
+         {
+            "default" : true,
+            "name" : "use_cuda",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "default" : 640,
+            "max" : 1280,
+            "min" : 416,
+            "name" : "width",
+            "type" : "int"
+         },
+         {
+            "default" : 640,
+            "max" : 1280,
+            "min" : 416,
+            "name" : "height",
+            "type" : "int"
+         },
+         {
+            "default" : 4,
+            "max" : 8,
+            "min" : 1,
+            "name" : "batch_size",
+            "type" : "int"
+         },
+         {
+            "default" : 2,
+            "max" : 4,
+            "min" : 1,
+            "name" : "roiBatchSize",
+            "type" : "int"
+         },
+         {
+            "default" : "TURBO",
+            "name" : "decoderType",
+            "options" : [
+               "TURBO",
+               "DALI"
+            ],
+            "type" : "String"
+         },
+         {
+            "default" : "INTERP_GAUSSIAN",
+            "name" : "interpolationType",
+            "options" : [
+               "INTERP_NN",
+               "INTERP_LINEAR",
+               "INTERP_CUBIC",
+               "INTERP_TRIANGULAR",
+               "INTERP_GAUSSIAN",
+               "INTERP_LANCZOS3"
+            ],
+            "type" : "String"
+         },
+         {
+            "default" : true,
+            "name" : "FullImage",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         }
+      ],
+      "supportsBatching" : true
+   },
+   "modelDetails" : {
+      "id" : "mdl-yolov7-vehicles5-tiny",
+      "label" : "Module",
+      "name" : "YOLOv7-Tiny Vehicles5",
+      "category" : "object_detector",
+      "framework" : "PyTorch",
+      "license" : "closed",
+      "repo_url" : "https://github.com/poc.org"
+   },
+   "parameters" : {
+      "total_params_m" : 6.2,
+      "backbone" : "E-ELAN-Tiny",
+      "neck" : "FPN-PANet-Tiny",
+      "head" : "Detect(V7-Tiny)",
+      "anchor_config" : "[[12,16],[19,36],[40,28],[36,75],[76,55],[72,146],[142,110],[192,243],[459,401]]"
+   },
+   "training" : {
+      "pretrained" : true,
+      "input_resolution" : [416, 416],
+      "trained_on" : {
+         "dataset" : "Custom Vehicles Dataset optimized for lightweight inference",
+         "classes" : [
+            "car",
+            "bus",
+            "truck",
+            "motorbike",
+            "autorickshaw"
+         ],
+         "type" : "vehicle_detection",
+         "categories" : 5,
+         "notes" : "Lightweight version optimized for high-speed vehicle detection with reduced accuracy"
+      }
+   },
+   "runtime" : {
+      "gpu_required" : true,
+      "min_gpu_mem_gb" : 1.5,
+      "recommended_gpu" : "NVIDIA T4",
+      "cpu_cores" : 2,
+      "ram_gb" : 4,
+      "docker_image" : "vehicles5fastdetection:latest",
+      "env" : {
+         "python" : "3.8",
+         "cuda" : "11.0",
+         "cudnn" : "8.0",
+         "os" : "ubuntu-20.04"
+      }
+   },
+   "benchmarks" : {
+      "hardware" : "NVIDIA T4",
+      "test_conditions" : {
+         "input_resolution" : [416, 416],
+         "decoder" : "DALI",
+         "confidence_threshold" : 0.25,
+         "nms_threshold" : 0.45,
+         "precision" : "FP16",
+         "test_objects" : "11 objects total"
+      },
+      "throughput_fps" : {
+         "batch_size_4" : 211,
+         "batch_size_8" : 276,
+         "batch_size_16" : 305,
+         "batch_size_32" : 349,
+         "batch_size_64" : 370
+      },
+      "gpu_utilization_percent" : {
+         "batch_size_4" : 7,
+         "batch_size_8" : 16,
+         "batch_size_16" : 32,
+         "batch_size_32" : 53,
+         "batch_size_64" : 44
+      },
+      "gpu_memory_mb" : {
+         "batch_size_4" : 1438,
+         "batch_size_8" : 1542,
+         "batch_size_16" : 1666,
+         "batch_size_32" : 1912,
+         "batch_size_64" : 2348
+      },
+      "optimal_batch_size" : {
+         "performance" : 64,
+         "efficiency" : 32,
+         "memory_constrained" : 16
+      }
+   },
+   "produces" : ["vehicle_bboxes", "vehicle_classifications"],
+   "consumes" : ["rgb_frames"],
+   "input_formats": ["OD1"],
+   "output_formats": ["OD1"],
+   "sources" : [
+      {
+         "title" : "YOLOv7: Trainable bag-of-freebies sets new state-of-the-art",
+         "url" : "https://arxiv.org/abs/2207.02696"
+      },
+      {
+         "title" : "Internal Vehicles5 Tiny benchmark results",
+         "url" : "internal://benchmark-data/vehicles5-yolov7-tiny.txt"
+      }
+   ],
+   "notes" : "Lightweight YOLOv7-Tiny vehicle detector optimized for maximum speed. Achieves 370 FPS at batch size 64 on T4 GPU with minimal GPU utilization. Ideal for high-throughput applications where speed is prioritized over accuracy."
+}

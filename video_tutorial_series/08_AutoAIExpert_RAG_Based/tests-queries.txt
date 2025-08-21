@@ -1,0 +1,11 @@
+
+
+1st:
+Build a pipeline for Crowd Estimation and Parking Violation(with auto_rickshaw as well) usecases separately and call it as AppLayout. Then get its models and their requirements and their usage data and throughput's for best accuracy.I need just the pipeline details and models in it and models parameters and usecase parameters.No other extra explanations are needed.
+
+
+2nd:
+With the AppLayout you decided(with models and pipeline and its FPS requirement),ignore the FPS from app layout. I want a optimised deployment plan to be estimated. Following is the data i have for this task..Number  of server:2 GPUs Per Server: 3 GPU Type: Nvidia Tesla T4, 16GB vCPU Per Server: 64 RAM per Server: 128GB Cameras/Streams: 20(FullHD, H265, 15FPS) Camera Vs Usecase Matrix:	camera_1 has Crowd Estimation,	camera_2 has Crowd Estimation,	camera_3 has Crowd Estimation,	camera_4 has Crowd Estimation,	camera_5 has Crowd Estimation,	camera_6 has Crowd Estimation,	camera_7 has Crowd Estimation and Parking Violation,	camera_8 has Crowd Estimation and Parking Violation,	camera_9 has Crowd Estimation and Parking Violation,	camera_10 has Crowd Estimation and Parking Violation,	camera_11 has Parking Violation,	camera_12 has Parking Violation,	camera_13 has Parking Violation,	camera_14 has Parking Violation,	camera_15 has Parking Violation,	camera_16 has Parking Violation,	camera_17 has Parking Violation,	camera_18 has Crowd Estimation and Parking Violation,	camera_19 has Crowd Estimation and Parking Violation,	camera_20 has Crowd Estimation and Parking Violation,	Required:	From AppLoyout understanding, Come up with plan where to deploy what usecase, group the camera accordingly , make sure you follow rules set by Scalelayout.
+
+3rd:
+Can you run few more iterations to optimise this deployment plan with GPU RAM, CPU RAM, CPU Core into considerations for previously finalised FPS from scalelayout. Think about clubbing the sets you prepared already in different combinations, and when clubbed see models and other components of pipeline also can be reused from the sets to reduce number of components.

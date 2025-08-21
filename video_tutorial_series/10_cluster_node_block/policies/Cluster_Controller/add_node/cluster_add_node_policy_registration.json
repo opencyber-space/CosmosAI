@@ -1,0 +1,187 @@
+{
+    "name": "demo_cluster_controller_add_node_policy",
+    "version": "1.0.0",
+    "release_tag": "stable",
+    "metadata": {
+        "author_name": "srikanthcognitifAI",
+        "author_email": "srikanth@openvision.ai",
+        "organization": "openvision.ai",
+        "country": "US",
+        "license": "MIT",
+        "category": "cluster_management",
+        "use_case": "Control node addition to Clusters by validating hardware specifications, cluster requirements",
+        "geographic_scope": "Global",
+        "audience": ["cluster_admins"],
+        "integration_notes": "Policy requires access to cluster metrics and node specifications. Compatible with major cloud providers (AWS, Azure, GCP).",
+        "tested_environments": ["Kubernetes 1.24+", "EKS", "AKS", "GKE"],
+        "execution_environment": "Python 3.10+",
+        "compliance_tags": ["ISO27001", "SOC2", "HIPAA"]
+    },
+    "tags": "kubernetes,node-management,cluster,infrastructure,gpu",
+    "code": "http://MANAGEMENTMASTER:32555/add_node_cluster_policy.zip",
+    "code_type": "zip",
+    "type": "policy",
+    "policy_input_schema": {
+        "node_data": {
+            "type": "object",
+            "description": "Specifications of the node being added",
+            "properties": {
+                "clusterId": {"type": "string"},
+                "id": {"type": "string"},
+                "gpus": {
+                    "type": "object",
+                    "properties": {
+                        "count": {"type": "integer"},
+                        "memory": {"type": "integer"},
+                        "modelNames": {"type": "array", "items": {"type": "string"}}
+                    }
+                },
+                "vcpus": {"type": "object"},
+                "memory": {"type": "integer"},
+                "storage": {"type": "object"},
+                "network": {"type": "object"},
+                "tags": {"type": "array"}
+            }
+        },
+        "cluster_data": {
+            "type": "object",
+            "description": "Current cluster state data"
+        },
+        "cluster_metrics": {
+            "type": "object",
+            "description": "Current cluster metrics"
+        }
+    },
+    "policy_output_schema": {
+        "allowed": {
+            "type": "boolean",
+            "description": "Whether node addition is allowed"
+        },
+        "input_data": {
+            "type": "object",
+            "description": "Modified input data or error information"
+        }
+    },
+    "policy_settings_schema": {
+    },
+    "policy_parameters_schema": {
+        "allowed_tags": {
+            "type": "array",
+            "description": "List of allowed node tags",
+            "items": {"type": "string"}
+        },
+        "min_node_cpu": {
+            "type": "integer",
+            "description": "Minimum required CPU cores"
+        },
+        "min_node_memory": {
+            "type": "integer",
+            "description": "Minimum required memory in MB"
+        },
+        "min_node_storage": {
+            "type": "integer",
+            "description": "Minimum required storage in MB"
+        },
+        "required_gpu_models": {
+            "type": "array",
+            "description": "List of required GPU models",
+            "items": {"type": "string"}
+        },
+        "min_gpu_memory": {
+            "type": "integer",
+            "description": "Minimum of GPU Memory in MB"
+        },
+        "max_nodes_per_cluster": {
+            "type": "integer",
+            "description": "Maximum node in Cluster"
+        },
+        "max_gpus_per_cluster": {
+            "type": "integer",
+            "description": "Maximum GPUs in Cluster"
+        },
+        "min_network_interfaces": {
+            "type": "integer",
+            "description": "Minimum of Network interfaces"
+        },
+        "min_tx_bandwidth": {
+            "type": "integer",
+            "description": "Minimum of Upload bandwidth"
+        },
+        "min_rx_bandwidth": {
+            "type": "integer",
+            "description": "Minimum of Download bandwidth"
+        },
+        "threshold_cluster_vcpu_utilization_for_add_node":{
+            "type": "number",
+            "description": "Allow add_node only when vCPU utilization is beyond this threshold for cluster"
+        }
+    },
+    "policy_settings": {
+    },
+    "policy_parameters": {
+        "min_node_cpu": 4,
+        "min_node_memory": 6000,
+        "required_gpu_models": ["Tesla T4","NVIDIA L4"],
+        "allowed_tags": ["gpu", "demo", "development"],
+        "min_node_storage": 24000,
+        "min_gpu_memory": 4096,
+        "min_network_interfaces": 1,
+        "min_tx_bandwidth": 10,
+        "min_rx_bandwidth": 10,
+        "max_nodes_per_cluster": 5,
+        "max_gpus_per_cluster": 10,
+        "threshold_cluster_vcpu_utilization_for_add_node": 0.5
+    },
+    "management_commands_schema": [
+        {
+            "name": "update_min_resources",
+            "description": "Update minimum resource requirements",
+            "schema": {
+                "min_node_cpu": {"type": "integer"},
+                "min_node_memory": {"type": "integer"},
+                "min_node_storage": {"type": "integer"},
+                "min_network_interfaces": {"type": "integer"},
+                "min_tx_bandwidth": {"type": "integer"},
+                "min_rx_bandwidth": {"type": "integer"}
+            }
+        },
+        {
+            "name": "update_cluster_limits",
+            "description": "Update cluster capacity limits",
+            "schema": {
+                "max_nodes_per_cluster": {"type": "integer"},
+                "max_gpus_per_cluster": {"type": "integer"},
+                "threshold_cluster_vcpu_utilization_for_add_node": {"type": "number"}
+            }
+        },
+        {
+            "name": "update_gpu_requirements",
+            "description": "Update GPU requirements",
+            "schema": {
+                "required_gpu_models": {"type": "array", "items": {"type": "string"}},
+                "min_gpu_memory": {"type": "integer"}
+            }
+        },
+        {
+            "name": "update_tags",
+            "description": "Update Tags requirements",
+            "schema": {
+                "allowed_tags": {"type": "array", "items": {"type": "string"}}
+            }
+        },
+        {
+            "name": "update_network_requirements",
+            "description": "Update netowrk requirements",
+            "schema": {
+                "min_network_interfaces": {"type": "integer"},
+                "min_tx_bandwidth": {"type": "integer"},
+                "min_rx_bandwidth": {"type": "integer"}
+            }
+        }
+    ],
+    "description": "Policy that validates node addition requests based on hardware specifications, cluster capacity, and cloud provider requirements.",
+    "created_at": "2025-05-21 06:28:18",
+    "created_by": "srikanthcognitifAI",
+    "functionality_data": {},
+    "resource_estimates": {}
+}

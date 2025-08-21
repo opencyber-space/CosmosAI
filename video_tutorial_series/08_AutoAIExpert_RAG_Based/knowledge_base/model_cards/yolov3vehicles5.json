@@ -1,0 +1,118 @@
+{
+    "componentId": {
+        "name": "vehicles5",
+        "version": "v0.0.1",
+        "release": "stable"
+    },
+    "componentMetadata": {
+        "description": "A YOLOv3-based vehicle detection container specialized for 5 vehicle types",
+        "tags": [
+            "alert"
+        ],
+        "license": "closed",
+        "author": {
+            "authorName": "poc",
+            "authorEmail": "poc@ai.org",
+            "authorLinks": {
+                "linkName": "github",
+                "url": "https://github.com/poc.org"
+            }
+        }
+    },
+    "modelDetails": {
+        "id": "mdl-yolov3-vehicles5",
+        "label": "Module",
+        "name": "YOLOv3 Vehicles5",
+        "category": "object_detector",
+        "framework": "PyTorch",
+        "license": "closed",
+        "repo_url": "https://github.com/poc.org"
+    },
+    "parameters": {
+        "total_params_m": 61.9,
+        "backbone": "Darknet-53",
+        "neck": "FPN",
+        "head": "YOLOv3 Head",
+        "anchor_config": "[[10,13],[16,30],[33,23],[30,61],[62,45],[59,119],[116,90],[156,198],[373,326]]"
+    },
+    "training": {
+        "pretrained": true,
+        "input_resolution": [416, 416],
+        "trained_on": {
+            "dataset": "Custom Vehicles Dataset for surveillance applications",
+            "classes": [
+                "car",
+                "bus", 
+                "truck",
+                "motorbike",
+                "autorickshaw"
+            ],
+            "type": "vehicle_detection",
+            "categories": 5,
+            "notes": "Optimized for vehicle detection in surveillance scenarios with 5 vehicle categories"
+        }
+    },
+    "runtime": {
+        "gpu_required": true,
+        "min_gpu_mem_gb": 2,
+        "recommended_gpu": "NVIDIA T4",
+        "cpu_cores": 4,
+        "ram_gb": 8,
+        "docker_image": "yolov3vehicles5docker:latest",
+        "env": {
+            "python": "3.8",
+            "cuda": "11.0",
+            "cudnn": "8.0",
+            "os": "ubuntu-20.04"
+        }
+    },
+    "benchmarks": {
+        "hardware": "NVIDIA T4",
+        "test_conditions": {
+            "input_resolution": [416, 416],
+            "decoder": "DALI",
+            "confidence_threshold": 0.25,
+            "nms_threshold": 0.45,
+            "precision": "FP16",
+            "test_objects": "11 objects total"
+        },
+        "throughput_fps": {
+            "batch_size_4": 117,
+            "batch_size_8": 125,
+            "batch_size_16": 129,
+            "batch_size_32": 107
+        },
+        "gpu_utilization_percent": {
+            "batch_size_4": 68,
+            "batch_size_8": 69,
+            "batch_size_16": 73,
+            "batch_size_32": 63
+        },
+        "gpu_memory_mb": {
+            "batch_size_4": 1363,
+            "batch_size_8": 1663,
+            "batch_size_16": 2306,
+            "batch_size_32": 3594
+        },
+        "optimal_batch_size": {
+            "performance": 16,
+            "efficiency": 8,
+            "memory_constrained": 4
+        }
+    },
+    "produces": ["vehicle_bboxes", "vehicle_classifications"],
+    "consumes": ["rgb_frames"],
+    "input_formats": ["OD1"],
+    "output_formats": ["OD1"],
+    "sources": [
+        {
+            "title": "YOLOv3: An Incremental Improvement",
+            "url": "https://arxiv.org/abs/1804.02767"
+        },
+        {
+            "title": "Internal Vehicles5 YOLOv3 benchmark results",
+            "url": "internal://benchmark-data/yolov3-vehicles5.txt"
+        }
+    ],
+    "notes": "YOLOv3-based vehicle detector for 5 vehicle classes. Best performance at batch size 16 with 129 FPS on T4 GPU. Good alternative to YOLOv7 with higher memory usage but consistent performance across batch sizes."
+}

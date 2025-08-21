@@ -1,0 +1,114 @@
+{
+    "head": {
+        "templateUri": "Parser/V1",
+        "parameters": {}
+    },
+    "body": {
+        "spec": {
+            "values": {
+                "mode": "allocate",
+                "blockId": "gemma3-27b-block2",
+                "blockComponentURI": "model.gemma3-27b:1.0.0-stable",
+                "minInstances": 1,
+                "maxInstances": 3,
+                "blockInitData": {
+                    "model_name": "gemma-3-27b-it-UD-Q8_K_XL/gemma-3-27b-it-UD-Q8_K_XL.gguf",
+                    "clip_model_name": "gemma-3-27b-it-UD-Q8_K_XL/mmproj-F16.gguf"
+                },
+                "initSettings": {
+                    "tensor_parallel": true,
+                    "device": "cuda",
+                    "quantization_type": "fp16",
+                    "cleanup_enabled":  true,
+                    "cleanup_check_interval": 60,
+                    "cleanup_session_timeout": 120,
+                    "gen_params": {
+                        "max_new_tokens": 2048,
+                        "temperature": 0.2,
+                        "top_k": 50,
+                        "top_p": 0.95,
+                        "repetition_penalty": 1.1,
+                        "do_sample": true
+                    }
+                },
+                "policyRulesSpec": [
+                    {
+                        "values": {
+                            "name": "clusterAllocator",
+                            "policyRuleURI": "cluster-selector:2.0-stable",
+                            "parameters": {
+                                "filter": {
+                                    "clusterQuery": {
+                                        "variable": "id",
+                                        "operator": "==",
+                                        "value": "gcp-cluster-2"
+                                    }
+                                }
+                            },
+                            "settings": {
+                                "max_candidates": 2
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "resourceAllocator",
+                            "policyRuleURI": "allocator:2.0-stable",
+                            "parameters": {
+                                "allocation_data": {
+                                    "node_id": "wc-gpu-node2",
+                                    "gpus": [0,1]
+                                }
+                            },
+                            "settings": {
+                                "selection_mode": "balanced"
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "loadBalancer",
+                            "policyRuleURI": "token-based-lb:1.0-stable",
+                            "parameters": {
+                                "output_token_weight": 0.75,
+                                "input_token_weight":0.25
+                            },
+                            "settings": {
+                                "session_cache_size": 2000
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "stabilityChecker",
+                            "policyRuleURI": "health_checker:2.0-stable",
+                            "parameters": {
+                                "unhealthy_threshold": 2
+                            },
+                            "settings": {
+                                "check_interval_sec": 10
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "autoscaler",
+                            "policyRuleURI": "tokenautoscaler:2.0-stable",
+                            "parameters": {
+                                "input_tokens_up_threshold": 1500,
+                                "output_tokens_up_threshold": 1300,
+                                "input_tokens_down_threshold": 500,
+                                "output_tokens_down_threshold":300,
+                                "averaging_period": "average_1m"
+                            },
+                            "settings": {
+                                "scale_up_cooldown": 45,
+                                "scale_down_cooldown": 90
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

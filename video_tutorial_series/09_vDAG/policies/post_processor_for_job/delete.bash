@@ -1,0 +1,1 @@
+curl -X DELETE http://MANAGEMENTMASTER:30102/policy/post_processor_for_job_caller:0.0.1-stable | json_pp

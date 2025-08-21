@@ -1,0 +1,103 @@
+{
+    "name": "post_processor_for_job_caller",
+    "version": "0.0.1",
+    "release_tag": "stable",
+    "metadata": {
+      "author_name": "Shridhar",
+      "author_email": "shridhar.kini@openvision.ai",
+      "organization": "openvision.ai",
+      "country": "US",
+      "license": "MIT",
+      "category": "Caller for external Function for EVAL",
+      "use_case": "Use this whenever you want to call exteranl Functions deployed as service for EVAL of python code",
+      "geographic_scope": "Global",
+      "audience": ["vdag_users"],
+      "integration_notes": "",
+      "tested_environments": [],
+      "execution_environment": "Python 3.10+",
+      "compliance_tags": ["ISO/IEC 27001"]
+   },
+    "tags": "fucntion, caller for evaler, post_processor",
+    "code": "http://MANAGEMENTMASTER:32555/post_processor_for_job.zip",
+    "code_type": "zip",
+    "type": "policy",
+    "policy_input_schema": {
+        "input_data": {
+            "type": "object",
+            "description": "Reply from previous LLM Blocks Analysis"
+        }
+    },
+    "policy_output_schema": {
+        "input_data": {
+            "type": "object",
+            "description": "Original input data(List with String for IP address)"
+        }
+    },
+    "policy_settings_schema": {
+        "job_policy_name": {
+            "type": "string",
+            "description": "Object with Credentials for Sender mail"
+        },
+        "classification_patterns": {
+            "type": "array",
+            "description": "Regex Pattern for search Alert Classification."
+        },
+        "zip_store_url": {
+            "type": "string",
+            "description": "Place where Zip file be stored and needed in registration.json file"
+        },
+        "BASE_URI": {
+            "type": "string",
+            "description": "3rd party URL for hitting"
+        },
+        "pusher_url": {
+            "type": "string",
+            "description": "URL for pushing the zip file"
+        },
+        "policy_registration_url": {
+            "type": "string",
+            "description": "URL for registering the policy"
+        },
+        "job_deployment_url":{
+            "type": "string",
+            "description": "URL for deploying the job"
+        }
+
+    },
+    "policy_parameters_schema": {
+    },
+    "policy_settings": {
+        "job_policy_name": "alerter:1.0.0-stable",
+        "classification_patterns": [
+            "(?:\\*\\*)?Classification(?:\\*\\*)?\\s*:\\s*`?Alert(?:able)?`?",
+            "(?:\\*\\*)?Classification:(?:\\*\\*)?\\s*Alertable",
+            "(?:\\*\\*)?Classification:(?:\\*\\*)?\\s*Alert",
+            "(?:\\*\\*)?Classification:(?:\\*\\*)?\\s*`Alertable",
+            "(?:\\*\\*)?Classification:(?:\\*\\*)?\\s*`Alert",
+            "(?:\\*\\*)?Classification(?:\\*\\*)?:\\s*`Alertable`",
+            "(?:\\*\\*)?Classification(?:\\*\\*)?:\\s*`Alert`",
+            "(?:\\*\\*)?Classification(?:\\*\\*)?:\\s*Alertable",
+            "(?:\\*\\*)?Classification(?:\\*\\*)?:\\s*Alert"
+        ],
+        "zip_store_url" : "http://MANAGEMENTMASTER:32555",
+        "BASE_URI": "http://10.138.0.5:5000/receive",
+        "pusher_url": "http://POLICYSTORESERVER:30186/upload",
+        "policy_registration_url": "http://MANAGEMENTMASTER:30102/policy",
+        "job_deployment_url": "http://MANAGEMENTMASTER:30102/jobs/submit/executor-001"
+    },
+    "policy_parameters": {
+    },
+    "management_commands_schema": [
+        {
+            "name": "update",
+            "description": "Update the POLICY_DB_URL",
+            "schema": {
+                "POLICY_DB_URL": {"type": "string"},
+                "function_name": {"type": "string"}
+            }
+        }
+    ],
+    "description": "Policy for communicating external functions",
+    "functionality_data": {},
+    "resource_estimates": {}
+}

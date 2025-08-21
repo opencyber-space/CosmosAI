@@ -1,0 +1,47 @@
+{
+  "componentId": "mit_license",
+  "componentType": "node.reference.license",
+  "license_id": "mit",
+  "name": "MIT License",
+  "spdx_identifier": "MIT",
+  "full_name": "Massachusetts Institute of Technology License",
+  "category": "permissive",
+  "url": "https://opensource.org/licenses/MIT",
+  "summary": "A short and simple permissive license with conditions only requiring preservation of copyright and license notices.",
+  "permissions": [
+    "commercial_use",
+    "modification",
+    "distribution",
+    "private_use"
+  ],
+  "conditions": [
+    "include_copyright",
+    "include_license"
+  ],
+  "limitations": [
+    "liability",
+    "warranty"
+  ],
+  "compatibility": {
+    "gpl_compatible": true,
+    "apache_2_compatible": true,
+    "can_be_used_in_proprietary": true
+  },
+  "commercial_considerations": {
+    "requires_royalties": false,
+    "requires_disclosure_of_source": false,
+    "requires_reciprocal_licensing": false,
+    "patent_grant": "implicit"
+  },
+  "common_models": [
+    "PyTorch",
+    "TensorFlow",
+    "Hugging Face Transformers",
+    "OpenCV"
+  ],
+  "usage_instructions": {
+    "required_notices": "Include the license and copyright notice in all copies or substantial portions of the software",
+    "attribution_format": "Copyright (c) [YEAR] [COPYRIGHT HOLDER]"
+  },
+  "full_text": "MIT License\n\nCopyright (c) [year] [copyright holder]\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+}

@@ -1,0 +1,223 @@
+{
+   "componentId" : {
+      "name" : "luggage7Detection",
+      "release" : "stable",
+      "version" : "v0.0.1"
+   },
+	"componentType" : "node.algorithm.objdet",
+   "containerImage" : "luggagedetection:latest",
+   "requiresGPU" : true,
+   "componentConfig" : {
+      "batchSize" : 8,
+      "supportsBatching" : true,
+      "frameSize" : [
+         {
+            "height" : 1080,
+            "width" : 1920
+         }
+      ],
+      "inputs" : [
+         "input_0"
+      ],
+      "outputs" : [
+         "output_0"
+      ],
+      "parameters" : [
+         {
+            "default" : 0.4,
+            "max" : 1,
+            "min" : 0.1,
+            "name" : "conf",
+            "type" : "float"
+         },
+         {
+            "default" : 0.4,
+            "max" : 1,
+            "min" : 0.1,
+            "name" : "nms_iou",
+            "type" : "float"
+         }
+      ],
+      "requireFrames" : true,
+      "settings" : [
+         {
+            "default" : true,
+            "name" : "use_fp16",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "name": "enable_batching",
+            "type": "bool",
+            "default": true,
+            "options" : [
+              true,
+              false
+            ]
+         },
+         {
+            "default" : true,
+            "name" : "use_cuda",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "default" : 640,
+            "max" : 1280,
+            "min" : 416,
+            "name" : "width",
+            "type" : "int"
+         },
+         {
+            "default" : 640,
+            "max" : 1280,
+            "min" : 416,
+            "name" : "height",
+            "type" : "int"
+         },
+         {
+            "default" : 8,
+            "max" : 8,
+            "min" : 1,
+            "name" : "batch_size",
+            "type" : "int"
+         },
+         {
+            "default" : 1,
+            "max" : 4,
+            "min" : 1,
+            "name" : "roiBatchSize",
+            "type" : "int"
+         },
+         {
+            "default" : "TURBO",
+            "name" : "decoderType",
+            "options" : [
+               "TURBO",
+               "DALI"
+            ],
+            "type" : "String"
+         },
+         {
+            "default" : "INTERP_GAUSSIAN",
+            "name" : "interpolationType",
+            "options" : [
+               "INTERP_NN",
+               "INTERP_LINEAR",
+               "INTERP_CUBIC",
+               "INTERP_TRIANGULAR",
+               "INTERP_GAUSSIAN",
+               "INTERP_LANCZOS3"
+            ],
+            "type" : "String"
+         },
+         {
+            "default" : true,
+            "name" : "FullImage",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         }
+      ]
+   },
+   "componentMetadata" : {
+      "author" : {
+         "authorEmail" : "poc@ai.org",
+         "authorLinks" : {
+            "linkName" : "github",
+            "url" : "https://github.com/poc.org"
+         },
+         "authorName" : "poc"
+      },
+      "description" : "A deep learning container for luggage and baggage detection in surveillance scenarios",
+      "license" : "closed",
+      "tags" : [
+         "alert"
+      ]
+   },
+   "modelDetails" : {
+      "id" : "mdl-yolov7-luggage",
+      "label" : "Module",
+      "name" : "YOLOv7 Luggage Detection",
+      "category" : "object_detector",
+      "framework" : "PyTorch",
+      "license" : "closed",
+      "repo_url" : "https://github.com/poc.org"
+   },
+   "parameters" : {
+      "total_params_m" : 37.2,
+      "backbone" : "E-ELAN",
+      "neck" : "FPN-PANet",
+      "head" : "Detect(V7)",
+      "anchor_config" : "[[12,16],[19,36],[40,28],[36,75],[76,55],[72,146],[142,110],[192,243],[459,401]]"
+   },
+   "training" : {
+      "pretrained" : true,
+      "input_resolution" : [640, 640],
+      "trained_on" : {
+         "dataset" : "Custom Luggage Dataset from airports and transportation hubs",
+         "classes" : [
+            "suitcase",
+            "backpack",
+            "bag",
+            "luggage"
+         ],
+         "type" : "luggage_detection",
+         "categories" : 4,
+         "notes" : "Specialized for luggage and baggage detection in security surveillance"
+      }
+   },
+   "runtime" : {
+      "gpu_required" : true,
+      "min_gpu_mem_gb" : 4,
+      "recommended_gpu" : "NVIDIA T4",
+      "cpu_cores" : 4,
+      "ram_gb" : 8,
+      "docker_image" : "luggagedetection:latest",
+      "env" : {
+         "python" : "3.8",
+         "cuda" : "11.0",
+         "cudnn" : "8.0",
+         "os" : "ubuntu-20.04"
+      }
+   },
+   "benchmarks" : {
+      "hardware" : "NVIDIA T4",
+      "test_conditions" : {
+         "input_resolution" : [640, 640],
+         "decoder" : "TURBO",
+         "confidence_threshold" : 0.4,
+         "nms_threshold" : 0.4,
+         "precision" : "FP16"
+      },
+      "throughput_fps" : {
+         "batch_size_1" : 45,
+         "batch_size_4" : 120,
+         "batch_size_8" : 140
+      },
+      "accuracy" : {
+         "map50" : 0.82,
+         "precision" : 0.85,
+         "recall" : 0.78
+      }
+   },
+   "produces" : ["luggage_bboxes", "luggage_classifications"],
+   "consumes" : ["rgb_frames"],
+   "input_formats": ["OD1"],
+   "output_formats": ["OD1"],
+   "sources" : [
+      {
+         "title" : "YOLOv7: Trainable bag-of-freebies sets new state-of-the-art",
+         "url" : "https://arxiv.org/abs/2207.02696"
+      }
+   ],
+   "notes" : "Optimized for luggage and baggage detection in airports, transportation hubs, and security checkpoints. Trained on diverse luggage types for robust detection in surveillance scenarios."
+}

@@ -1,0 +1,62 @@
+{
+  "componentId": "cv_pipeline_best_practices",
+  "componentType": "node.algorithm.guide",
+  "card_id": "cv_pipeline_best_practices",
+  "type": "general_info",
+  "name": "Computer Vision Pipeline Best Practices",
+  "description": "General guidelines and best practices for constructing CV pipelines",
+  "version": "2.1",
+  "last_updated": "2025-01-10T09:15:00Z",
+  "content": {
+    "pipeline_construction_principles": [
+      {
+        "principle": "Start with simpler models",
+        "explanation": "Begin with lightweight models and only increase complexity if performance requirements aren't met. Simpler models are easier to deploy, debug, and often provide adequate performance for many use cases."
+      },
+      {
+        "principle": "Consider end-to-end latency",
+        "explanation": "The entire pipeline's latency is more important than individual component speed. A faster detector with a slower tracker might have worse overall performance than a slightly slower detector with an efficient tracker."
+      },
+      {
+        "principle": "Match resolutions across components",
+        "explanation": "Ensure consistent resolution handling across pipeline components to prevent unnecessary resizing operations which can degrade both performance and accuracy."
+      },
+      {
+        "principle": "Test with representative data",
+        "explanation": "Always validate pipelines with data that closely resembles the target deployment environment, including lighting conditions, camera angles, and object densities."
+      }
+    ],
+    "common_bottlenecks": [
+      "Pre-processing operations, especially resizing large images",
+      "Data transfer between CPU and GPU",
+      "Post-processing operations like NMS on large numbers of detections",
+      "Cross-component format conversions"
+    ],
+    "optimization_strategies": {
+      "batching": "Process multiple frames simultaneously when possible",
+      "precision_reduction": "Use FP16 or INT8 quantization for inference",
+      "pipeline_parallelism": "Run different pipeline stages concurrently",
+      "stream_processing": "Process frames as they become available rather than in lockstep"
+    },
+    "monitoring_recommendations": [
+      "Track per-component latency to identify bottlenecks",
+      "Monitor memory usage patterns over time",
+      "Log accuracy metrics on representative samples",
+      "Implement heartbeat mechanisms for long-running pipelines"
+    ]
+  },
+  "references": [
+    {
+      "title": "Efficient Real-time Object Detection in Production Environments",
+      "authors": "Zhang et al.",
+      "year": 2024,
+      "url": "https://example.com/paper1"
+    },
+    {
+      "title": "Computer Vision Pipeline Design Patterns",
+      "authors": "Patel and Johnson",
+      "year": 2023,
+      "url": "https://example.com/paper2"
+    }
+  ]
+}

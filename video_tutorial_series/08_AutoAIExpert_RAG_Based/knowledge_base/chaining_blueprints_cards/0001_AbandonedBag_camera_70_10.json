@@ -1,0 +1,676 @@
+{
+    "parser_version": "Parser/V1",
+    "body": {
+        "header": {
+            "uid": {
+                "id": "abandonedBag_camera_100_100",
+                "version": "v0.0.1",
+                "releaseTag": "stable"
+            }
+        },
+        "spec": {
+            "@templateType": "template.vdag.app-layout.sample-vdag:v0.0.1-beta",
+            "values": {
+                "masterDAG": {
+                    "runtimeID": "default-mdag",
+                    "db_location": "framequeues-6"
+                },
+                "source": {
+                    "assignmentType": "source",
+                    "id": "camera_100_100",
+                    "settings": {
+                        "controller_node": "framequeues-6"
+                    },
+                    "parameters": {
+                        "fps": "4/1",
+                        "actuation_frequency": 1,
+                        "gpu_id": 0,
+                        "use_gpu": true,
+                        "allocation_node": "framequeues-6",
+                        "mode": "memory",
+                        "loop_video": true,
+                        "as_live": true,
+                        "frame_quality": 90,
+                        "color_format": "BGR",
+                        "camera_retry_interval": 30
+                    }
+                },
+                "settings": {
+                    "alert_url": "http://test-alerts.io",
+                    "test": {
+                        "x": "hello",
+                        "y": "world",
+                        "z": [
+                            {
+                                "a": "hello",
+                                "b": "world"
+                            },
+                            {
+                                "c": "hello",
+                                "d": "world"
+                            }
+                        ]
+                    },
+                    "ALERTIDURL": "http://serverip:serverport/getalertid"
+                },
+                "nodes": [
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "obj-det-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.algorithm.objdet.general7Detection_1080_1920:v0.0.1-stable",
+                                "settings": {
+                                    "use_fp16": true,
+                                    "use_cuda": true,
+                                    "batch_size": 8,
+                                    "decoderType": "DALI",
+                                    "interpolationType": "INTERP_GAUSSIAN",
+                                    "width": 896,
+                                    "height": 896,
+                                    "FullImage": true,
+                                    "enable_batching": true,
+                                    "decoder_width": 1920,
+                                    "decoder_height": 1080,
+                                    "stretch_image": false,
+                                    "blockRoiEnabled": false,
+                                    "roiBatchSize": 1
+                                },
+                                "parameters": {
+                                    "mjpeg": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": true,
+                                                "arrow": true,
+                                                "alertHighlight": true,
+                                                "caliberation": false
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "conf": 0.4,
+                                    "nms_iou": 0.4
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.allocation.allocation-sample:v0.0.1-beta",
+                            "values": {
+                                "clusterID": "registry.k8s.clusters.default-cluster",
+                                "machineID": "framequeues-6",
+                                "gpuID": 0,
+                                "configurations": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.drawing.drawing:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    }
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "luggage-det-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.algorithm.objdet.luggage7Detection_1080_1920:v0.0.1-stable",
+                                "settings": {
+                                    "use_fp16": true,
+                                    "use_cuda": true,
+                                    "batch_size": 8,
+                                    "decoderType": "DALI",
+                                    "interpolationType": "INTERP_GAUSSIAN",
+                                    "width": 896,
+                                    "height": 896,
+                                    "FullImage": true,
+                                    "enable_batching": true,
+                                    "decoder_width": 1920,
+                                    "decoder_height": 1080,
+                                    "stretch_image": false,
+                                    "blockRoiEnabled": false,
+                                    "roiBatchSize": 1
+                                },
+                                "parameters": {
+                                    "mjpeg": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": true,
+                                                "arrow": true,
+                                                "alertHighlight": true,
+                                                "caliberation": false
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "conf": 0.7,
+                                    "nms_iou": 0.4
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.allocation.allocation-sample:v0.0.1-beta",
+                            "values": {
+                                "clusterID": "registry.k8s.clusters.default-cluster",
+                                "machineID": "framequeues-6",
+                                "gpuID": 0,
+                                "configurations": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.drawing.drawing:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    }
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "policy-obj-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.utils.policy.policy_mux:v0.0.1-stable",
+                                "settings": {},
+                                "parameters": {
+                                    "mjpeg": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": true,
+                                                "caliberation": false
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "policies": {
+                                        "filters": [
+                                            {
+                                                "key": "class_conf_filter",
+                                                "params": {
+                                                    "score": 0.1,
+                                                    "allowed_classes": [
+                                                        "person",
+                                                        "luggage",
+                                                        "suitcase",
+                                                        "backpack",
+                                                        "handbag"
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "key": "inside_zone",
+                                                "params": {
+                                                    "zone": [
+                                                        "ZoneAbandoned"
+                                                    ],
+                                                    "pivotPoint": "bottomPoint"
+                                                }
+                                            },
+                                            {
+                                                "key": "class_replacer",
+                                                "params": {
+                                                    "class_replace_tuples": [
+                                                        [
+                                                            "suitcase",
+                                                            "luggage"
+                                                        ],
+                                                        [
+                                                            "backpack",
+                                                            "luggage"
+                                                        ],
+                                                        [
+                                                            "handbag",
+                                                            "luggage"
+                                                        ]
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "key": "associate",
+                                                "params": {
+                                                    "type": "pixel2d",
+                                                    "sort": "descending",
+                                                    "preprocess": {},
+                                                    "selection": [
+                                                        "many"
+                                                    ],
+                                                    "comparisons": [
+                                                        [
+                                                            "person",
+                                                            "luggage"
+                                                        ]
+                                                    ],
+                                                    "dist2d_threshold": 250,
+                                                    "postprocess": {
+                                                        "primary": "person",
+                                                        "policy": "group"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "key": "associate",
+                                                "params": {
+                                                    "type": "pixel2d",
+                                                    "sort": "descending",
+                                                    "preprocess": {},
+                                                    "selection": [
+                                                        "many",
+                                                        "many"
+                                                    ],
+                                                    "comparisons": [
+                                                        [
+                                                            "luggage",
+                                                            "luggage"
+                                                        ],
+                                                        [
+                                                            "person",
+                                                            "person"
+                                                        ]
+                                                    ],
+                                                    "dist2d_threshold": 5,
+                                                    "postprocess": {
+                                                        "primary": [
+                                                            "luggage",
+                                                            "person"
+                                                        ],
+                                                        "policy": "Keep1"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.allocation.allocation-sample:v0.0.1-beta",
+                            "values": {
+                                "clusterID": "registry.k8s.clusters.default-cluster",
+                                "machineID": "framequeues-6",
+                                "gpuID": 0,
+                                "configurations": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.drawing.drawing:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    }
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "tracker-det-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.algorithm.tracker.trackerlite:v0.0.1-stable",
+                                "settings": {
+                                    "ttl": 4,
+                                    "tracker_type": "NONE",
+                                    "keep_upper_height_ratio": 1.0,
+                                    "decoderType": "DALI",
+                                    "interpolationType": "INTERP_GAUSSIAN",
+                                    "batch_size": 16,
+                                    "enable_batching": true
+                                },
+                                "parameters": {
+                                    "mjpeg": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": true,
+                                                "arrow": true,
+                                                "alertHighlight": true,
+                                                "caliberation": true
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "iou": 0.45,
+                                    "sigma_iou": 0.3,
+                                    "sigma_h": 0.15,
+                                    "sigma_l": 0.1,
+                                    "t_min": 2
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.allocation.allocation-sample:v0.0.1-beta",
+                            "values": {
+                                "clusterID": "registry.k8s.clusters.default-cluster",
+                                "machineID": "framequeues-6",
+                                "gpuID": 0,
+                                "configurations": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.drawing.drawing:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    }
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "usecase-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.utils.usecase.usecase:v0.0.1-stable",
+                                "settings": {},
+                                "parameters": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": true,
+                                                "caliberation": false
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "cl_data": true,
+                                        "enabled": true,
+                                        "drawingParams": [
+                                            {
+                                                "zone": false,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": true,
+                                                "caliberation": false
+                                            }
+                                        ],
+                                        "storageParams": [
+                                            {
+                                                "MINIO": {
+                                                    "endpoint": "serverip:port417",
+                                                    "access_key": "secretAccess",
+                                                    "secret_key": "secretKey",
+                                                    "MINIOURLREPLACEMENT": ""
+                                                }
+                                            }
+                                        ],
+                                        "dbParams": [
+                                            {
+                                                "MONGO": {
+                                                    "host": "mongodURI",
+                                                    "dbname": "PROJECT_ALERT",
+                                                    "collection": "alerts"
+                                                }
+                                            }
+                                        ],
+                                        "dataPushParams": [
+                                            {
+                                                "REDIS": {
+                                                    "host": "serverip:port7",
+                                                    "port": 6379,
+                                                    "password": "pass",
+                                                    "db": 0
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "usecase": {
+                                        "filters": [
+                                            {
+                                                "key": "abandonedObjectDetection",
+                                                "params": {
+                                                    "alert_interval": 300,
+                                                    "severity": "medium",
+                                                    "timeThreshold": 60,
+                                                    "selected_objects": [
+                                                        "luggage"
+                                                    ],
+                                                    "distance_ratio": 2,
+                                                    "resetSeconds": 5
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.allocation.allocation-sample:v0.0.1-beta",
+                            "values": {
+                                "clusterID": "registry.k8s.clusters.default-cluster",
+                                "machineID": "framequeues-6",
+                                "gpuID": 0,
+                                "configurations": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.drawing.drawing:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "alerts": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.alert.alert:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    },
+                                    {
+                                        "name": "input_1",
+                                        "reference": "input_1"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    }
+                ],
+                "graph": {
+                    "input": [
+                        {
+                            "nodeLabel": "obj-det-1",
+                            "inputNames": [
+                                "input_0"
+                            ]
+                        },
+                        {
+                            "nodeLabel": "luggage-det-1",
+                            "inputNames": [
+                                "input_0"
+                            ]
+                        }
+                    ],
+                    "output": [
+                        {
+                            "nodeLabel": "usecase-1",
+                            "outputNames": [
+                                "output_0"
+                            ]
+                        }
+                    ],
+                    "connections": [
+                        {
+                            "nodeLabel": "policy-obj-1",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "obj-det-1",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                },
+                                {
+                                    "nodeLabel": "luggage-det-1",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "nodeLabel": "tracker-det-1",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "policy-obj-1",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "nodeLabel": "usecase-1",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "tracker-det-1",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

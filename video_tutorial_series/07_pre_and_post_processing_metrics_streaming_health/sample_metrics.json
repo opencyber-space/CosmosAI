@@ -1,0 +1,168 @@
+{
+  "data": [
+    {
+      "blockId": "gemma3-27b-block",
+      "instances": [
+        {
+          "blockId": "gemma3-27b-block",
+          "instanceId": "executor",
+          "latency": {
+            "latency": 9.441375732421875e-05
+          },
+          "nodeKey": "executor__gemma3-27b-block",
+          "tasks_processed": {
+            "tasks_processed_created": 1753467161.254785,
+            "tasks_processed_total": 22.0
+          },
+          "type": "app",
+          "uptime": 396649.0954554081,
+          "uptime_hours": 110.18030429316892,
+          "uptime_minutes": 6610.818257590135
+        },
+        {
+          "blockId": "gemma3-27b-block",
+          "end_to_end_count_total": 50.0,
+          "end_to_end_fps": 0.08508429144609037,
+          "end_to_end_latency": 11.753050804138184,
+          "fps": {
+            "average_15m": 0,
+            "average_1m": 0,
+            "average_5m": 0,
+            "current": 0
+          },
+          "hardware": {
+            "cpu": {
+              "load15m": 1.78,
+              "load1m": 1.9,
+              "load5m": 1.86,
+              "percent": 0.12
+            },
+            "gpus": [
+              {
+                "freeMem": 45764.75,
+                "id": 0,
+                "powerUtilization": 79.19,
+                "totalMem": 81920.0,
+                "usedMem": 36155.25,
+                "utilization": 0
+              }
+            ],
+            "memory": {
+              "averageUtil": 0.51,
+              "totalMem": 171051.25,
+              "usedMem": 871.41
+            }
+          },
+          "instanceId": "in-vkkv",
+          "latency": {
+            "average_15m": 0,
+            "average_1m": 0,
+            "average_5m": 0,
+            "current": 0
+          },
+          "llm_active_sessions": 0.0,
+          "llm_active_sessions_rolling": {
+            "average_15m": 0,
+            "average_1m": 0,
+            "average_5m": 0,
+            "current": 0
+          },
+          "llm_cpu_utilization": 2.3,
+          "llm_cpu_utilization_rolling": {
+            "average_15m": 0,
+            "average_1m": 0,
+            "average_5m": 0,
+            "current": 0
+          },
+          "llm_gpu_utilization": 81.0,
+          "llm_gpu_utilization_rolling": {
+            "average_15m": 0,
+            "average_1m": 0,
+            "average_5m": 0,
+            "current": 0
+          },
+          "llm_inference_duration_rolling": {
+            "average_15m": 0,
+            "average_1m": 0,
+            "average_5m": 0,
+            "current": 0
+          },
+          "llm_inference_duration_seconds_bucket": 21.0,
+          "llm_inference_duration_seconds_count": 21.0,
+          "llm_inference_duration_seconds_sum": 163.45441899999997,
+          "llm_inference_errors_total": 0.0,
+          "llm_input_tokens_per_minute_rolling": {
+            "average_15m": 0,
+            "average_1m": 0,
+            "average_5m": 0,
+            "current": 0
+          },
+          "llm_memory_usage_bytes": 3958632448.0,
+          "llm_memory_usage_rolling": {
+            "average_15m": 0,
+            "average_1m": 0,
+            "average_5m": 0,
+            "current": 0
+          },
+          "llm_output_tokens_per_minute_rolling": {
+            "average_15m": 0,
+            "average_1m": 0,
+            "average_5m": 0,
+            "current": 0
+          },
+          "llm_prompt_tokens_total": 8220.0,
+          "llm_prompts_total": 21.0,
+          "llm_time_per_output_token_seconds_bucket": 21.0,
+          "llm_time_per_output_token_seconds_count": 21.0,
+          "llm_time_per_output_token_seconds_sum": 0.954993698822632,
+          "llm_time_to_first_token_seconds_bucket": 21.0,
+          "llm_time_to_first_token_seconds_count": 21.0,
+          "llm_time_to_first_token_seconds_sum": 21.355726957321167,
+          "llm_tokens_generated_total": 5195.0,
+          "llm_tokens_per_second": 27.443431834560357,
+          "llm_tpot_rolling": {
+            "average_15m": 0,
+            "average_1m": 0,
+            "average_5m": 0,
+            "current": 0
+          },
+          "llm_tps_rolling": {
+            "average_15m": 0,
+            "average_1m": 0,
+            "average_5m": 0,
+            "current": 0
+          },
+          "llm_ttft_rolling": {
+            "average_15m": 0,
+            "average_1m": 0,
+            "average_5m": 0,
+            "current": 0
+          },
+          "nodeId": "wc-gpu-node1",
+          "nodeKey": "in-vkkv__gemma3-27b-block",
+          "on_data_count_total": 21.0,
+          "on_data_fps": 0.08510028577136874,
+          "on_data_latency": 11.750841856002808,
+          "on_preprocess_count_total": 25.0,
+          "on_preprocess_fps": 18315.737991266375,
+          "on_preprocess_latency": 5.459785461425781e-05,
+          "queue_length": {
+            "average_15m": 0.0,
+            "average_1m": 0.0,
+            "average_5m": 0.0,
+            "current": 0
+          },
+          "tasks_processed": {
+            "average_15m": 0,
+            "average_1m": 0,
+            "average_5m": 0,
+            "current": 0
+          },
+          "timestamp": 1753863802.7724543,
+          "type": "app"
+        }
+      ]
+    }
+  ],
+  "success": true
+}

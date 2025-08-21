@@ -1,0 +1,113 @@
+{
+  "name": "preprocessing_policy_for_summarization",
+  "version": "0.0.1",
+  "release_tag": "stable",
+  "metadata": {
+    "author_name": "Shridhar",
+    "author_email": "shridhar.kini@openvision.ai",
+    "organization": "openvision.ai",
+    "country": "US",
+    "license": "MIT",
+    "category": "Preprocessing policy",
+    "use_case": "Summarize recent session turns before passing to blocks",
+    "geographic_scope": "Global",
+    "audience": ["vdag_users"],
+    "integration_notes": "Relies on external LLM endpoint; ensure settings.external_llm_addr and settings.external_llm_model_id are set.",
+    "tested_environments": [],
+    "execution_environment": "Python 3.10+",
+    "compliance_tags": ["ISO/IEC 27001"]
+  },
+  "tags": "preprocessor, summarization, policy",
+  "code": "http://MANAGEMENTMASTER:32555/preprocessing_policy_for_summarization.zip",
+  "code_type": "zip",
+  "type": "policy",
+  "policy_input_schema": {
+    "input_data": {
+      "type": "object",
+      "description": "Packet with data field stringified JSON. Ingests minimal turns (reply, prev_role|role) and summarizes recent session history from a ring buffer."
+    }
+  },
+  "policy_output_schema": {
+    "input_data": {
+      "type": "object",
+      "description": "Same packet with _summary, _summarized, _original_token_count set when summarization occurs. May also include _summary_marker and optional _recent_appendix when not summarizing."
+    }
+  },
+  "policy_settings_schema": {
+    "external_llm_addr": {"type": "string"},
+    "external_llm_model_id": {"type": "string"},
+    "summarize_prompt": {"type": "string"},
+    "enable_summarization": {"type": "boolean"},
+    "min_tokens_for_summarization": {"type": "number"},
+    "history_max_messages": {"type": "number"},
+    "tokenizer_encoding": {"type": "string"},
+    "enable_session_state": {"type": "boolean"},
+    "normalize_session_ids": {"type": "boolean"},
+    "summarize_every_n_messages": {"type": "number"},
+    "emit_marker": {"type": "boolean"},
+    "marker_field_name": {"type": "string"},
+    "emit_recent_appendix": {"type": "boolean"},
+    "recent_appendix_field": {"type": "string"},
+    "session_ttl_seconds": {"type": "number"},
+    "max_sessions": {"type": "number"},
+    "respect_under_review_flag": {"type": "boolean"},
+    "under_review_field_name": {"type": "string"},
+    "under_review_true_values": {"type": "array"},
+    "use_seq_no_guard": {"type": "boolean"}
+  },
+  "policy_parameters_schema": {},
+  "policy_settings": {
+    "external_llm_addr": "CLUSTER1MASTER:31504",
+    "external_llm_model_id": "qwen3-32b-llama-cpp-block",
+    "summarize_prompt": "You are a neutral judge-summarizer. You will receive input that may include:\n- 'Previous summary:' (the last running summary)\n- 'Recent turns:' (the latest A/B messages)\n\nTask: Produce an updated, self-contained summary that:\n- Incorporates new information from Recent turns while preserving still-valid points from the Previous summary\n- Merges repeated points; preserve key claims and cited evidence; do not invent information\n- Remains neutral and balanced\n- Provides no chain-of-thought or analysis; output the final answer only\n\nFormat:\n- Concise bullet points labeled 'A:' and 'B:' reflecting the order they appear in Recent turns; merge repeats\n- Then add one neutral takeaway line\n\nIf 'Previous summary' is absent, summarize Recent turns alone",
+    "enable_summarization": true,
+    "min_tokens_for_summarization": 300,
+    "history_max_messages": 3,
+    "tokenizer_encoding": "cl100k_base",
+    "enable_session_state": true,
+    "normalize_session_ids": false,
+    "summarize_every_n_messages": 3,
+    "emit_marker": true,
+    "marker_field_name": "_summary_marker",
+    "emit_recent_appendix": false,
+    "recent_appendix_field": "_recent_appendix",
+    "session_ttl_seconds": 3600,
+    "max_sessions": 10000,
+    "respect_under_review_flag": true,
+    "under_review_field_name": "under_review",
+    "under_review_true_values": [true, "true", "1", 1, "yes", "y", "review", "under_review"],
+    "use_seq_no_guard": false
+  },
+  "policy_parameters": {},
+  "management_commands_schema": [
+    {
+      "name": "update",
+      "description": "Update summarization configuration",
+      "schema": {
+        "external_llm_addr": {"type": "string"},
+        "external_llm_model_id": {"type": "string"},
+        "summarize_prompt": {"type": "string"},
+        "enable_summarization": {"type": "boolean"},
+        "min_tokens_for_summarization": {"type": "number"},
+        "history_max_messages": {"type": "number"},
+        "tokenizer_encoding": {"type": "string"},
+        "enable_session_state": {"type": "boolean"},
+        "normalize_session_ids": {"type": "boolean"},
+        "summarize_every_n_messages": {"type": "number"},
+        "emit_marker": {"type": "boolean"},
+        "marker_field_name": {"type": "string"},
+        "emit_recent_appendix": {"type": "boolean"},
+        "recent_appendix_field": {"type": "string"},
+        "session_ttl_seconds": {"type": "number"},
+        "max_sessions": {"type": "number"},
+        "respect_under_review_flag": {"type": "boolean"},
+        "under_review_field_name": {"type": "string"},
+        "under_review_true_values": {"type": "array"},
+        "use_seq_no_guard": {"type": "boolean"}
+      }
+    }
+  ],
+  "description": "Preprocessing policy that summarizes recent turns using an external LLM and a per-session ring buffer.",
+  "functionality_data": {},
+  "resource_estimates": {}
+}

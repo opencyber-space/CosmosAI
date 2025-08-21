@@ -1,0 +1,95 @@
+{
+  "componentId": "confidence_filter",
+  "componentType": "node.algorithm.policy",
+  "id": "pol-conf-filter",
+  "label": "Policy",
+  "name": "Confidence Filter", 
+  "category": "confidence_filter",
+  "framework": "Python",
+  "license": "MIT",
+  "repo_url": "https://github.com/aios/policies",
+
+  "modelDetails": {
+    "description": "Filtering policy that keeps only objects with detection confidence scores above a specified threshold",
+    "intended_use": "Filter out low-confidence detections to improve pipeline precision and reduce false positives",
+    "limitations": ["Threshold is global across all classes", "May remove valid detections with inherently lower confidence"],
+    "ethical_considerations": "Confidence thresholds may affect detection rates differently across demographic groups"
+  },
+
+  "parameters": {
+    "computational_complexity": "O(n) where n=number of objects", 
+    "dependencies": ["python-stdlib"],
+    "memory_footprint": "Minimal",
+    "processing_type": "numerical_filtering"
+  },
+
+  "configuration": {
+    "score": {
+      "description": "Minimum detection confidence score threshold",
+      "type": "float",
+      "required": true,
+      "range": [0.0, 1.0],
+      "default": 0.5
+    },
+    "inclusive": {
+      "description": "Whether to include objects with score equal to threshold",
+      "type": "boolean",
+      "default": true
+    },
+    "normalize_scores": {
+      "description": "Whether to normalize scores to [0,1] range before filtering",
+      "type": "boolean",
+      "default": false
+    }
+  },
+
+  "dynamic_parameters": {
+    "supports_runtime_updates": true,
+    "updateable_parameters": ["score", "inclusive", "normalize_scores"],
+    "update_latency_ms": 5,
+    "api_endpoints": {
+      "update_parameters": "/api/v1/policies/confidence_filter/update_parameters"
+    }
+  },
+
+  "runtime": {
+    "cpu_intensive": false,
+    "gpu_required": false,
+    "min_ram_mb": 50,
+    "recommended_cpu": "Any CPU",
+    "python_version": "3.6+",
+    "dependencies": {}
+  },
+
+  "benchmarks": {
+    "throughput": {
+      "objects_per_second": 150000,
+      "latency_ms": 0.007,
+      "memory_per_object_bytes": 4
+    },
+    "filtering_effectiveness": {
+      "false_positive_reduction": "30-70%",
+      "precision_improvement": "10-40%",
+      "recall_trade_off": "5-20% reduction"
+    }
+  },
+
+  "produces": ["high_confidence_detections"],
+  "consumes": ["scored_detections"],
+  
+  "input_formats": ["OD1"],
+  "output_formats": ["OD1"],
+
+  "sources": [
+    {
+      "title": "Object Detection Confidence Scores",
+      "url": "https://arxiv.org/abs/1708.02002"
+    },
+    {
+      "title": "Precision-Recall Trade-offs",
+      "url": "https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html"
+    }
+  ],
+
+  "notes": "Critical for production deployments. Threshold should be tuned based on specific use case requirements. Lower thresholds increase recall but reduce precision."
+}

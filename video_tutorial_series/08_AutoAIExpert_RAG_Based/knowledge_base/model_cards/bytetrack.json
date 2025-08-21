@@ -1,0 +1,187 @@
+{
+  "componentId": {
+    "name": "bytetrack",
+    "release": "stable",
+    "version": "v0.0.1"
+  },
+  "componentType": "node.algorithm.tracker",
+  "containerImage": "bytetrack:latest",
+  "requiresGPU": true,
+  "componentConfig": {
+    "batchSize": 4,
+    "supportsBatching": true,
+    "frameSize": [
+      {
+        "height": 1080,
+        "width": 1920
+      }
+    ],
+    "inputs": [
+      "input_0"
+    ],
+    "outputs": [
+      "output_0"
+    ],
+    "parameters": [
+      {
+        "default": 0.5,
+        "max": 1.0,
+        "min": 0.1,
+        "name": "track_thresh",
+        "type": "float"
+      },
+      {
+        "default": 30,
+        "max": 120,
+        "min": 10,
+        "name": "track_buffer",
+        "type": "int"
+      },
+      {
+        "default": 0.8,
+        "max": 1.0,
+        "min": 0.1,
+        "name": "match_thresh",
+        "type": "float"
+      }
+    ],
+    "requireFrames": true,
+    "settings": [
+      {
+        "default": true,
+        "name": "use_fp16",
+        "options": [
+          true,
+          false
+        ],
+        "type": "bool"
+      },
+      {
+        "default": true,
+        "name": "enable_batching",
+        "options": [
+          true,
+          false
+        ],
+        "type": "bool"
+      },
+      {
+        "default": "DALI",
+        "name": "decoderType",
+        "options": [
+          "TURBO",
+          "DALI"
+        ],
+        "type": "String"
+      }
+    ]
+  },
+  "componentMetadata": {
+    "author": {
+      "authorEmail": "poc@ai.org",
+      "authorLinks": {
+        "linkName": "github",
+        "url": "https://github.com/poc.org"
+      },
+      "authorName": "poc"
+    },
+    "description": "High-performance multi-object tracker based on ByteTrack algorithm optimized for real-time tracking",
+    "license": "closed",
+    "tags": [
+      "tracking",
+      "mot",
+      "real-time"
+    ]
+  },
+  "modelDetails": {
+    "id": "mdl-bytetrack",
+    "label": "Module",
+    "name": "ByteTrack Multi-Object Tracker",
+    "category": "tracker",
+    "framework": "PyTorch",
+    "license": "closed",
+    "repo_url": "https://github.com/poc.org"
+  },
+  "parameters": {
+    "total_params_m": 1.8,
+    "backbone": "ResNet50",
+    "tracking_algorithm": "ByteTrack",
+    "kalman_filter": "enabled",
+    "association_method": "IoU + Re-ID"
+  },
+  "training": {
+    "pretrained": true,
+    "input_resolution": [1920, 1080],
+    "trained_on": {
+      "dataset": "MOT17 + MOT20 + Custom Data",
+      "type": "multi_object_tracking",
+      "scenarios": ["general", "crowd", "surveillance"],
+      "notes": "Trained on diverse tracking scenarios with data association focus"
+    }
+  },
+  "runtime": {
+    "gpu_required": true,
+    "min_gpu_mem_gb": 3,
+    "recommended_gpu": "NVIDIA T4",
+    "cpu_cores": 4,
+    "ram_gb": 6,
+    "docker_image": "bytetrack:latest",
+    "env": {
+      "python": "3.8",
+      "cuda": "11.0",
+      "cudnn": "8.0",
+      "os": "ubuntu-20.04"
+    }
+  },
+  "benchmarks": {
+    "hardware": "NVIDIA T4",
+    "test_conditions": {
+      "input_resolution": [1920, 1080],
+      "decoder": "DALI",
+      "interpolation": "INTERP_GAUSSIAN",
+      "track_buffer": 30,
+      "precision": "FP16"
+    },
+    "tracking_performance": {
+      "mota": 0.763,
+      "motp": 0.85,
+      "id_switches": "Very Low",
+      "false_positives": "Minimal",
+      "false_negatives": "Low"
+    },
+    "throughput_fps": {
+      "1080p_general": 35,
+      "1080p_crowd": 28,
+      "720p_general": 50,
+      "720p_crowd": 40
+    },
+    "gpu_utilization_percent": {
+      "1080p_tracking": 60,
+      "720p_tracking": 40
+    },
+    "gpu_memory_mb": {
+      "1080p_tracking": 2800,
+      "720p_tracking": 2000
+    },
+    "tracking_accuracy": {
+      "id_consistency": 0.94,
+      "occlusion_handling": 0.88,
+      "re_identification": 0.90
+    }
+  },
+  "produces": ["od1_list", "tracking_metadata"],
+  "consumes": ["od1_list", "rgb_frames"],
+  "input_formats": ["OD1"],
+  "output_formats": ["OD1"],
+  "sources": [
+    {
+      "title": "ByteTrack: Multi-Object Tracking by Associating Every Detection Box",
+      "url": "https://arxiv.org/abs/2110.06864"
+    },
+    {
+      "title": "Internal ByteTrack performance benchmarks",
+      "url": "internal://benchmark-data/bytetrack.txt"
+    }
+  ],
+  "notes": "ByteTrack is a simple yet effective multi-object tracker that associates almost every detection box instead of only the high score ones. Achieves SOTA performance on MOT17 and MOT20 datasets. Optimized for real-time applications with excellent balance between accuracy and speed."
+}

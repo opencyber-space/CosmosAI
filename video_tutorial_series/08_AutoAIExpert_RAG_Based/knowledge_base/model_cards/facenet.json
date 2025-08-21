@@ -1,0 +1,171 @@
+{
+  "componentId": {
+    "name": "facenet",
+    "release": "stable",
+    "version": "v0.0.1"
+  },
+  "componentType": "node.algorithm.reid",
+  "containerImage": "facenet:latest",
+  "requiresGPU": true,
+  "componentConfig": {
+    "batchSize": 8,
+    "supportsBatching": true,
+    "frameSize": [
+      {
+        "height": 160,
+        "width": 160
+      }
+    ],
+    "inputs": [
+      "input_0"
+    ],
+    "outputs": [
+      "output_0"
+    ],
+    "parameters": [
+      {
+        "default": 0.6,
+        "max": 1.0,
+        "min": 0.1,
+        "name": "distance_threshold",
+        "type": "float"
+      }
+    ],
+    "requireFrames": true,
+    "settings": [
+      {
+        "default": true,
+        "name": "use_fp16",
+        "options": [
+          true,
+          false
+        ],
+        "type": "bool"
+      },
+      {
+        "default": true,
+        "name": "enable_batching",
+        "options": [
+          true,
+          false
+        ],
+        "type": "bool"
+      },
+      {
+        "default": 160,
+        "max": 224,
+        "min": 112,
+        "name": "input_size",
+        "type": "int"
+      }
+    ]
+  },
+  "componentMetadata": {
+    "author": {
+      "authorEmail": "poc@ai.org",
+      "authorLinks": {
+        "linkName": "github",
+        "url": "https://github.com/poc.org"
+      },
+      "authorName": "poc"
+    },
+    "description": "FaceNet-based face recognition and embedding extraction model for face re-identification",
+    "license": "closed",
+    "tags": [
+      "face_recognition",
+      "reid",
+      "embedding"
+    ]
+  },
+  "modelDetails": {
+    "id": "mdl-facenet",
+    "label": "Module",
+    "name": "FaceNet Face Recognition",
+    "category": "reid",
+    "framework": "TensorFlow",
+    "license": "closed",
+    "repo_url": "https://github.com/poc.org"
+  },
+  "parameters": {
+    "total_params_m": 23.6,
+    "backbone": "InceptionResNetV1",
+    "embedding_size": 512,
+    "distance_metric": "euclidean",
+    "triplet_loss": "enabled"
+  },
+  "training": {
+    "pretrained": true,
+    "input_resolution": [160, 160],
+    "trained_on": {
+      "dataset": "VGGFace2 + MS-Celeb-1M + Custom Face Dataset",
+      "type": "face_recognition",
+      "scenarios": ["identity_verification", "face_clustering", "surveillance"],
+      "notes": "Trained on diverse ethnicities and lighting conditions"
+    }
+  },
+  "runtime": {
+    "gpu_required": true,
+    "min_gpu_mem_gb": 2,
+    "recommended_gpu": "NVIDIA T4",
+    "cpu_cores": 2,
+    "ram_gb": 4,
+    "docker_image": "facenet:latest",
+    "env": {
+      "python": "3.8",
+      "tensorflow": "2.8",
+      "cuda": "11.0",
+      "cudnn": "8.0",
+      "os": "ubuntu-20.04"
+    }
+  },
+  "benchmarks": {
+    "hardware": "NVIDIA T4",
+    "test_conditions": {
+      "input_resolution": [160, 160],
+      "batch_size": 8,
+      "precision": "FP16"
+    },
+    "recognition_performance": {
+      "accuracy": 0.9965,
+      "verification_accuracy": 0.995,
+      "identification_accuracy": 0.992,
+      "false_acceptance_rate": 0.001,
+      "false_rejection_rate": 0.005
+    },
+    "throughput_fps": {
+      "batch_8_160x160": 120,
+      "batch_16_160x160": 180,
+      "batch_32_160x160": 220
+    },
+    "gpu_utilization_percent": {
+      "batch_8": 45,
+      "batch_16": 65,
+      "batch_32": 85
+    },
+    "gpu_memory_mb": {
+      "batch_8": 1200,
+      "batch_16": 1800,
+      "batch_32": 2400
+    },
+    "latency_ms": {
+      "single_face": 8.3,
+      "batch_8": 4.2,
+      "batch_16": 3.1
+    }
+  },
+  "produces": ["face_embeddings", "face_identities", "similarity_scores"],
+  "consumes": ["face_crops", "rgb_images"],
+  "input_formats": ["OD1"],
+  "output_formats": ["OD1"],
+  "sources": [
+    {
+      "title": "FaceNet: A Unified Embedding for Face Recognition and Clustering",
+      "url": "https://arxiv.org/abs/1503.03832"
+    },
+    {
+      "title": "Internal FaceNet performance benchmarks",
+      "url": "internal://benchmark-data/facenet.txt"
+    }
+  ],
+  "notes": "FaceNet implementation for face recognition and re-identification. Produces 512-dimensional embeddings for face matching. Optimized for surveillance and access control applications. Supports both verification (1:1) and identification (1:N) modes."
+}

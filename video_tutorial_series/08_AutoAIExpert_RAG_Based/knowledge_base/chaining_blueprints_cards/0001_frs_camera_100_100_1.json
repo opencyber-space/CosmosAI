@@ -1,0 +1,1090 @@
+{
+    "parser_version": "Parser/V1",
+    "body": {
+        "header": {
+            "uid": {
+                "id": "frs_camera_100_100_1",
+                "version": "v0.0.1",
+                "releaseTag": "stable"
+            }
+        },
+        "spec": {
+            "@templateType": "template.vdag.app-layout.sample-vdag:v0.0.1-beta",
+            "values": {
+                "masterDAG": {
+                    "runtimeID": "default-mdag",
+                    "db_location": "framequeues-11"
+                },
+                "source": {
+                    "assignmentType": "source",
+                    "id": "camera_100_100_1",
+                    "settings": {
+                        "controller_node": "framequeues-11"
+                    },
+                    "parameters": {
+                        "fps": "5/1",
+                        "actuation_frequency": 1,
+                        "gpu_id": 0,
+                        "use_gpu": true,
+                        "allocation_node": "framequeues-11",
+                        "mode": "memory",
+                        "loop_video": true,
+                        "as_live": true,
+                        "frame_quality": 90,
+                        "color_format": "BGR"
+                    }
+                },
+                "settings": {
+                    "alert_url": "http://test-alerts.io",
+                    "test": {
+                        "x": "hello",
+                        "y": "world",
+                        "z": [
+                            {
+                                "a": "hello",
+                                "b": "world"
+                            },
+                            {
+                                "c": "hello",
+                                "d": "world"
+                            }
+                        ]
+                    },
+                    "ALERTIDURL": "http://serverip:serverport/getalertid"
+                },
+                "nodes": [
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "obj-det-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.algorithm.objdet.general7Detection_360h_640:v0.0.1-stable",
+                                "settings": {
+                                    "use_fp16": true,
+                                    "use_cuda": true,
+                                    "batch_size": 8,
+                                    "decoderType": "DALI",
+                                    "interpolationType": "INTERP_GAUSSIAN",
+                                    "width": 416,
+                                    "height": 416,
+                                    "FullImage": true,
+                                    "enable_batching": true,
+                                    "decoder_width": 640,
+                                    "decoder_height": 360,
+                                    "stretch_image": false,
+                                    "blockRoiEnabled": false,
+                                    "roiBatchSize": 1
+                                },
+                                "parameters": {
+                                    "mjpeg": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": true,
+                                                "caliberation": false
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "conf": 0.25,
+                                    "iou": 0.45,
+                                    "max_dets": 300
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.allocation.allocation-sample:v0.0.1-beta",
+                            "values": {
+                                "clusterID": "registry.k8s.clusters.default-cluster",
+                                "machineID": "framequeues-11",
+                                "gpuID": 0,
+                                "configurations": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.drawing.drawing:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    }
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "face-det-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.algorithm.objdet.facedetector3:v0.0.1-stable",
+                                "settings": {
+                                    "enable_batching": true,
+                                    "batch_size": 4,
+                                    "decoderType": "DALI",
+                                    "interpolationType": "INTERP_GAUSSIAN",
+                                    "nmsThresh": 0.45,
+                                    "MODEL": "10G_KPS",
+                                    "computeType": "GPU"
+                                },
+                                "parameters": {
+                                    "log_level": "info",
+                                    "mjpeg": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": false,
+                                                "caliberation": false,
+                                                "drawKeyPoints": true
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "conf": 0.6,
+                                    "pixel_hthresh": 50,
+                                    "pixel_wthresh": 50
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.allocation.allocation-sample:v0.0.1-beta",
+                            "values": {
+                                "clusterID": "registry.k8s.clusters.default-cluster",
+                                "machineID": "framequeues-11",
+                                "gpuID": 0,
+                                "configurations": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.drawing.drawing:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    }
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "policy-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.utils.policy.policy:v0.0.1-stable",
+                                "settings": {},
+                                "parameters": {
+                                    "mjpeg": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": true,
+                                                "caliberation": false
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "policies": {
+                                        "filters": [
+                                            {
+                                                "key": "class_filter",
+                                                "params": {
+                                                    "allowed_classes": [
+                                                        "person"
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "key": "inside_zone",
+                                                "params": {
+                                                    "zone": [
+                                                        "frsZone"
+                                                    ],
+                                                    "pivotPoint": "bottomPoint"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.allocation.allocation-sample:v0.0.1-beta",
+                            "values": {
+                                "clusterID": "registry.k8s.clusters.default-cluster",
+                                "machineID": "framequeues-11",
+                                "gpuID": 0,
+                                "configurations": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.drawing.drawing:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    }
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "tracker-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.algorithm.tracker.trackerlite:v0.0.1-stable",
+                                "settings": {
+                                    "ttl": 4,
+                                    "tracker_type": "NONE",
+                                    "keep_upper_height_ratio": 1.0,
+                                    "decoderType": "DALI",
+                                    "interpolationType": "INTERP_GAUSSIAN",
+                                    "batch_size": 16,
+                                    "enable_batching": true
+                                },
+                                "parameters": {
+                                    "mjpeg": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": true,
+                                                "arrow": true,
+                                                "alertHighlight": true,
+                                                "caliberation": true
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "iou": 0.45,
+                                    "sigma_iou": 0.3,
+                                    "sigma_h": 0.3,
+                                    "sigma_l": 0.1,
+                                    "t_min": 2
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.allocation.allocation-sample:v0.0.1-beta",
+                            "values": {
+                                "clusterID": "registry.k8s.clusters.default-cluster",
+                                "machineID": "framequeues-11",
+                                "gpuID": 0,
+                                "configurations": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.drawing.drawing:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    }
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "frs-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.algorithm.frs.frs-web:v0.0.1-stable",
+                                "settings": {
+                                    "log_features": false,
+                                    "decoderType": "DALI",
+                                    "interpolationType": "INTERP_GAUSSIAN",
+                                    "batch_size": 4,
+                                    "roiBatchSize": 2,
+                                    "modelcode": "default_model",
+                                    "classification_type": "classifier",
+                                    "enable_batching": true
+                                },
+                                "parameters": {
+                                    "recog_allowed_h": 50,
+                                    "recog_allowed_w": 50,
+                                    "topks": 3,
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": true,
+                                                "arrow": true,
+                                                "alertHighlight": true,
+                                                "caliberation": true
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "log_features": false,
+                                    "logging": {
+                                        "enabled": false,
+                                        "imgurl": false,
+                                        "dbData": [
+                                            "cameraID",
+                                            "face_embedding",
+                                            "roi",
+                                            "imageurl",
+                                            "timestamp"
+                                        ],
+                                        "storageParams": [
+                                            {
+                                                "MINIO": {
+                                                    "endpoint": "serverip:port",
+                                                    "access_key": "secretAccess",
+                                                    "secret_key": "secretKey",
+                                                    "MINIOURLREPLACEMENT": ""
+                                                }
+                                            }
+                                        ],
+                                        "dbParams": [
+                                            {
+                                                "FILE": ""
+                                            }
+                                        ]
+                                    }
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.allocation.allocation-sample:v0.0.1-beta",
+                            "values": {
+                                "clusterID": "registry.k8s.clusters.default-cluster",
+                                "machineID": "framequeues-11",
+                                "gpuID": 0,
+                                "configurations": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.drawing.drawing:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "logging": {
+                                        "enabled": false,
+                                        "componentURI": "node.utils.logging.logger:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "policy-2",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.utils.policy.policy:v0.0.1-stable",
+                                "settings": {},
+                                "parameters": {
+                                    "mjpeg": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": true,
+                                                "caliberation": false
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "policies": {
+                                        "filters": [
+                                            {
+                                                "key": "class_filter",
+                                                "params": {
+                                                    "allowed_classes": [
+                                                        "face"
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "key": "inside_zone",
+                                                "params": {
+                                                    "zone": [
+                                                        "frsZone"
+                                                    ],
+                                                    "pivotPoint": "midPoint"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.allocation.allocation-sample:v0.0.1-beta",
+                            "values": {
+                                "clusterID": "registry.k8s.clusters.default-cluster",
+                                "machineID": "framequeues-11",
+                                "gpuID": 0,
+                                "configurations": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.drawing.drawing:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    }
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "policy-3",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.utils.policy.policy:v0.0.1-stable",
+                                "settings": {},
+                                "parameters": {
+                                    "mjpeg": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": true,
+                                                "caliberation": false
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "policies": {
+                                        "filters": [
+                                            {
+                                                "key": "scale_filter",
+                                                "params": {
+                                                    "frame_h_obj_h": {
+                                                        "value": 21.6,
+                                                        "op": "<"
+                                                    },
+                                                    "frame_w_obj_w": {
+                                                        "value": 38.4,
+                                                        "op": "<"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.allocation.allocation-sample:v0.0.1-beta",
+                            "values": {
+                                "clusterID": "registry.k8s.clusters.default-cluster",
+                                "machineID": "framequeues-11",
+                                "gpuID": 0,
+                                "configurations": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.drawing.drawing:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    }
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "policy-4",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.utils.policy.policy_mux:v0.0.1-stable",
+                                "settings": {},
+                                "parameters": {
+                                    "log_level": "info",
+                                    "mjpeg": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": true,
+                                                "caliberation": false
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "policies": {
+                                        "filters": [
+                                            {
+                                                "key": "associate",
+                                                "params": {
+                                                    "type": "pixel2d",
+                                                    "sort": "descending",
+                                                    "preprocess": {
+                                                        "roi": {
+                                                            "Keep": {
+                                                                "person": {
+                                                                    "top": "20"
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "selection": [
+                                                        "exclusive"
+                                                    ],
+                                                    "comparisons": [
+                                                        [
+                                                            "person",
+                                                            "face"
+                                                        ]
+                                                    ],
+                                                    "dist2d_threshold": 1,
+                                                    "postprocess": {
+                                                        "primary": "person",
+                                                        "policy": "group"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.allocation.allocation-sample:v0.0.1-beta",
+                            "values": {
+                                "clusterID": "registry.k8s.clusters.default-cluster",
+                                "machineID": "framequeues-11",
+                                "gpuID": 0,
+                                "configurations": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.drawing.drawing:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    }
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "usecase-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.utils.usecase.usecase:v0.0.1-stable",
+                                "settings": {},
+                                "parameters": {
+                                    "log_level": "info",
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": true,
+                                                "caliberation": false,
+                                                "drawKeyPoints": true
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "cl_data": true,
+                                        "enabled": true,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": true,
+                                                "caliberation": false
+                                            }
+                                        ],
+                                        "storageParams": [
+                                            {
+                                                "MINIO": {
+                                                    "endpoint": "serverip:port",
+                                                    "access_key": "secretAccess",
+                                                    "secret_key": "secretKey",
+                                                    "MINIOURLREPLACEMENT": ""
+                                                }
+                                            }
+                                        ],
+                                        "dbParams": [
+                                            {
+                                                "MONGO": {
+                                                    "host": "mongodURI",
+                                                    "dbname": "PROJECT_ALERT",
+                                                    "collection": "alerts"
+                                                }
+                                            }
+                                        ],
+                                        "dataPushParams": [
+                                            {
+                                                "REDIS": {
+                                                    "host": "serverip:port7",
+                                                    "port": 6379,
+                                                    "password": "pass",
+                                                    "db": 0
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "logging": {
+                                        "enabled": true,
+                                        "imgurl": true,
+                                        "dbData": [
+                                            "cameraID",
+                                            "category",
+                                            "id",
+                                            "imageurl",
+                                            "zone",
+                                            "conf",
+                                            "tag",
+                                            "uid",
+                                            "count",
+                                            "name",
+                                            "entryTime",
+                                            "logkey"
+                                        ],
+                                        "storageParams": [
+                                            {
+                                                "MINIO": {
+                                                    "endpoint": "serverip:port",
+                                                    "access_key": "secretAccess",
+                                                    "secret_key": "secretKey",
+                                                    "MINIOURLREPLACEMENT": ""
+                                                }
+                                            }
+                                        ],
+                                        "dbParams": [
+                                            {
+                                                "MONGO": {
+                                                    "host": "mongodURI",
+                                                    "dbname": "PROJECT_LOG",
+                                                    "collection": "frs_store"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "usecase": {
+                                        "filters": [
+                                            {
+                                                "key": "faceRecognition",
+                                                "params": {
+                                                    "DB_update_interval": 1000,
+                                                    "DB_update_now": false,
+                                                    "logger_interval": 60,
+                                                    "match_score": 0.95,
+                                                    "minimum_reco_count": 15,
+                                                    "log_roi_object": "face",
+                                                    "classification_type": "classifier",
+                                                    "alertableTags": [
+                                                        "PROJECT",
+                                                        "Blacklisted",
+                                                        "Criminal"
+                                                    ],
+                                                    "alert_interval": 600,
+                                                    "severity": "high",
+                                                    "dbParams": [
+                                                        {
+                                                            "MONGO": {
+                                                                "host": "mongodURI",
+                                                                "dbname": "PROJECT_DATA",
+                                                                "collection": "frs_store"
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.allocation.allocation-sample:v0.0.1-beta",
+                            "values": {
+                                "clusterID": "registry.k8s.clusters.default-cluster",
+                                "machineID": "framequeues-11",
+                                "gpuID": 0,
+                                "configurations": {
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.drawing.drawing:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "alerts": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.alert.alert:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    },
+                                    "logging": {
+                                        "enabled": true,
+                                        "componentURI": "node.utils.logging.logger:v0.0.1-stable",
+                                        "dimensions": {
+                                            "width": 1920,
+                                            "height": 1080
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    }
+                ],
+                "graph": {
+                    "input": [
+                        {
+                            "nodeLabel": "obj-det-1",
+                            "inputNames": [
+                                "input_0"
+                            ]
+                        },
+                        {
+                            "nodeLabel": "face-det-1",
+                            "inputNames": [
+                                "input_0"
+                            ]
+                        }
+                    ],
+                    "output": [
+                        {
+                            "nodeLabel": "usecase-1",
+                            "outputNames": [
+                                "output_0"
+                            ]
+                        }
+                    ],
+                    "connections": [
+                        {
+                            "nodeLabel": "policy-1",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "obj-det-1",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "nodeLabel": "tracker-1",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "policy-1",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "nodeLabel": "policy-2",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "face-det-1",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "nodeLabel": "frs-1",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "policy-2",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "nodeLabel": "policy-3",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "frs-1",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "nodeLabel": "policy-4",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "policy-3",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                },
+                                {
+                                    "nodeLabel": "tracker-1",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "nodeLabel": "usecase-1",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "policy-4",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

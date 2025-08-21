@@ -1,0 +1,351 @@
+{
+  "componentId": {
+    "name": "deepseek-r1-distill-70b",
+    "version": "1.0.0",
+    "releaseTag": "stable"
+  },
+  "componentType": "model",
+  "containerRegistryInfo": {
+    "containerImage": "MANAGEMENTMASTER:31280/deepseek-r1-distill-70b:v1",
+    "containerRegistryId": "MANAGEMENTMASTER:31280/deepseek-r1-distill-70b:v1",
+    "containerImageMetadata": {
+      "author": "llm-team",
+      "description": "AIOS block for chat using llama-cpp-python with DeepSeek-R1-Distill-70B"
+    },
+    "componentMode": "aios"
+  },
+  "componentMetadata": {
+    "usecase": "chat-completion, multi-modal",
+    "framework": "llama-cpp-python",
+    "hardware": "gpu",
+    "supports_local_models": true,
+    "model_path_resolution": "automatic",
+    "supports_quantization": true,
+    "quantization_methods": [
+      "4bit",
+      "8bit",
+      "fp16",
+      "fp8"
+    ],
+    "provider": {
+      "name": "AIOS-Internal",
+      "modelIdentifier": "deepseek-r1-distill-70b-v1"
+    },
+    "architecture": {
+      "contextLength": 128000,
+      "parameterCountB": 70
+    },
+    "capabilities": {
+      "supportsStreaming": true
+    },
+    "dataUsagePolicy": {
+      "usedForTraining": false,
+      "policyStatement": "User data is not used for training or improving this model."
+    },
+    "biasAndFairness": {
+      "assessmentSummary": "Model evaluated against standard benchmarks for social and cultural biases. Exhibits some known biases common to large language models."
+    },
+    "trainingDetails": {
+      "trainingData": {
+        "datasetName": "Internal-Corpus-V3",
+        "datasetSize": "3T tokens",
+        "dataPreprocessing": "Advanced filtering for PII, toxic content, and quality, with a focus on multi-modal data."
+      },
+      "trainingProcedure": {
+        "trainingFramework": "JAX",
+        "hyperparameters": {
+          "learningRate": 1e-05,
+          "batchSize": 4096,
+          "optimizer": "AdamW"
+        }
+      }
+    },
+    "evaluation": {
+      "benchmarks": {
+        "MMLU": {
+          "metric": "5-shot accuracy",
+          "value": 85.5
+        },
+        "HellaSwag": {
+          "metric": "10-shot",
+          "value": 92.1
+        },
+        "ARC-Challenge": {
+          "metric": "25-shot",
+          "value": 96.3
+        }
+      },
+      "evaluationData": {
+        "datasetSummary": "Evaluated on a comprehensive suite of public and internal benchmarks, including multi-modal tasks."
+      }
+    }
+  },
+  "componentInitData": {
+    "model_name": "DeepSeek-R1-Distill-Llama-70B-UD-Q8_K_XL/DeepSeek-R1-Distill-Llama-70B-UD-Q8_K_XL-00001-of-00002.gguf",
+    "system_message": "You are an expert in analysing video anlaytics critical events like snatching,weapon usage,assualt,sos,accident,theft and provide detailed insights with confidence value and reasoning. You are a helpful assistant."
+  },
+  "componentInitParametersProtocol": {
+    "temperature": {
+      "type": "number",
+      "description": "Sampling temperature",
+      "min": 0.0,
+      "max": 1.0
+    }
+  },
+  "componentInitSettingsProtocol": {
+    
+    "cleanup_enabled": {
+          "type": "boolean",
+          "description": "To enable the Clean Up of sessions",
+          "default": true
+        },
+    "cleanup_check_interval": {
+      "type": "number",
+      "description": "interval(in seconds) with which check happens for cleanup",
+      "min": 1,
+      "max": 10000
+    },
+    "cleanup_session_timeout": {
+      "type": "number",
+      "description": "Session ID will be removed beyond this timeout this threshold in seconds",
+      "min": 1,
+      "max": 18000
+    },
+    "generation_config": {
+      "type": "object",
+      "description": "Parameters needed for inference/chat/generation",
+      "properties": {
+        "max_new_tokens": {
+          "type": "number",
+          "description": "Maximum number of tokens to generate",
+          "min": 1,
+          "max": 40960
+        },
+        "temperature": {
+          "type": "float",
+          "description": "Sampling temperature",
+          "min": 0.0,
+          "max": 1.0
+        },
+        "top_k": {
+          "type": "number",
+          "description": "Topk ",
+          "min": 1,
+          "max": 1000
+        },
+        "top_p": {
+          "type": "float",
+          "description": "top_p",
+          "min": 0.0,
+          "max": 1.0
+        },
+        "repetition_penalty": {
+          "type": "float",
+          "description": "repetition_penalty",
+          "min": 0.0,
+          "max": 10.0
+        },
+        "do_sample": {
+          "type": "boolean",
+          "description": "do_sample",
+          "default": true
+        }
+  }
+    },
+    "tensor_parallel": {
+      "type": "boolean",
+      "description": "Enable tensor parallelism",
+      "default": true
+    },
+    "device": {
+      "type": "string",
+      "description": "Device to run model on",
+      "default": "cuda"
+    },
+    "quantization_type": {
+      "type": "string",
+      "description": "Quantization type: '4bit', '8bit', 'fp16', 'fp8', or null for no quantization",
+      "enum": [
+        "4bit",
+        "8bit",
+        "fp16",
+        "fp8"
+      ],
+      "default": null
+    }
+  },
+  "componentInputProtocol": {
+    "mode": {
+      "type": "string",
+      "description": "Operation mode: chat, generate, tokens, embed",
+      "default": "chat"
+    },
+    "message": {
+      "type": "string",
+      "description": "Input message from the user (for chat mode)"
+    },
+    "prompt": {
+      "type": "string",
+      "description": "Input prompt (for generate/tokens mode)"
+    },
+    "text": {
+      "type": "string",
+      "description": "Input text (for embed mode)"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Unique identifier for the chat session",
+      "default": "default"
+    },
+    "system_message": {
+      "type": "string",
+      "description": "System message for chat initialization"
+    },
+    "generation_kwargs": {
+      "type": "object",
+      "description": "Additional generation parameters"
+    }
+  },
+  "componentOutputProtocol": {
+    "reply": {
+      "type": "string",
+      "description": "Chat reply from the model (chat mode)"
+    },
+    "generated": {
+      "type": "string",
+      "description": "Generated text (generate mode)"
+    },
+    "tokens": {
+      "type": "array",
+      "description": "Generated token IDs (tokens mode)"
+    },
+    "embedding": {
+      "type": "array",
+      "description": "Text embedding vector (embed mode)"
+    }
+  },
+  "componentParameters": {
+    "temperature": 0.2
+  },
+  "componentInitSettings": {
+    "tensor_parallel": true,
+    "device": "cuda",
+    "quantization_type": "8bit",
+    "generation_config": {
+      "max_new_tokens": 2048,
+      "temperature": 0.2,
+      "top_k": 50,
+      "top_p": 0.95,
+      "repetition_penalty": 1.1,
+      "do_sample": true
+    }
+  },
+  "componentManagementCommandsTemplate": {
+    "reload_model": {
+      "description": "Reloads the model with optional new parameters",
+      "args": {
+        "generation_config": {
+          "type": "object",
+          "description": "Parameters needed for inference/chat/generation",
+          "properties": {
+            "max_new_tokens": {
+              "type": "number",
+              "description": "Maximum number of tokens to generate",
+              "min": 1,
+              "max": 40960
+            },
+            "temperature": {
+              "type": "float",
+              "description": "Sampling temperature",
+              "min": 0.0,
+              "max": 1.0
+            },
+            "top_k": {
+              "type": "number",
+              "description": "Topk ",
+              "min": 1,
+              "max": 1000
+            },
+            "top_p": {
+              "type": "float",
+              "description": "top_p",
+              "min": 0.0,
+              "max": 1.0
+            },
+            "repetition_penalty": {
+              "type": "float",
+              "description": "repetition_penalty",
+              "min": 0.0,
+              "max": 10.0
+            },
+            "do_sample": {
+              "type": "boolean",
+              "description": "do_sample",
+              "default": true
+            }
+          }
+        },
+        "tensor_parallel": {
+          "type": "boolean",
+          "description": "Enable tensor parallelism",
+          "default": true
+        },
+        "device": {
+          "type": "string",
+          "description": "Device to run model on",
+          "default": "cuda"
+        },
+        "quantization_type": {
+          "type": "string",
+          "description": "Quantization type: '4bit', '8bit', 'fp16', 'fp8', or null for no quantization",
+          "enum": [
+            "4bit",
+            "8bit",
+            "fp16",
+            "fp8"
+          ],
+          "default": null
+        }
+      }
+    },
+    "set_generation_config": {
+      "description": "Updates generation configuration parameters",
+      "args": {
+        "generation_config": {
+          "type": "object",
+          "description": "New generation configuration"
+        }
+      }
+    },
+    "device_info": {
+      "description": "Returns device and model diagnostics",
+      "args": {}
+    },
+    "remove_chat_session": {
+      "description": "Removes a specific chat session",
+      "args": {
+        "session_id": {
+          "type": "string",
+          "description": "Session ID to remove"
+        }
+      }
+    },
+    "update_cleanup_config": {
+              "description": "Update Clean Up Config",
+              "args": {
+                "cleanup_config": {
+                  "type": "object",
+                  "description": "Send enabled: boolen, check_interval: in seconds for keep checcking, session_timeout: remove session beyond this in seconds"
+                }
+              }
+            }
+  },
+  "tags": [
+    "llama-cpp-python",
+    "chat",
+    "multi-modal",
+    "gpu",
+    "quantization",
+    "local-models"
+  ]
+}

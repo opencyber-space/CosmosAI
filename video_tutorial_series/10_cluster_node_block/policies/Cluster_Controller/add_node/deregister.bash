@@ -1,0 +1,1 @@
+curl -X DELETE http://MANAGEMENTMASTER:30102/policy/demo_cluster_controller_add_node_policy:1.0.0-stable | json_pp

@@ -1,0 +1,150 @@
+{
+  "parser_version": "Parser/V1",
+  "body": {
+    "spec": {
+      "values": {
+        "vdagName": "llm-analyzer",
+        "vdagVersion": {
+          "version": "0.0.6",
+          "release-tag": "stable"
+        },
+        "discoveryTags": [
+          "objedet",
+          "narasimha",
+          "prasanna"
+        ],
+        "controller": {},
+        "nodes": [
+          {
+            "spec": {
+              "values": {
+                "nodeLabel": "gemma3-27b-block",
+                "nodeType": "block",
+                "manualBlockId": "gemma3-27b-block",
+                "preprocessingPolicyRule": {},
+                "postprocessingPolicyRule": {},
+                "modelParameters": {}
+              },
+              "IOMap": [
+                {
+                  "inputs": [
+                    {
+                      "name": "input_0",
+                      "reference": "input_0"
+                    }
+                  ],
+                  "outputs": [
+                    {
+                      "name": "output_0",
+                      "reference": "output_0"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "spec": {
+              "values": {
+                "nodeLabel": "llama4-scout-17b-block",
+                "nodeType": "block",
+                "manualBlockId": "llama4-scout-17b-block",
+                "preprocessingPolicyRule": {},
+                "postprocessingPolicyRule": {},
+                "modelParameters": {}
+              },
+              "IOMap": [
+                {
+                  "inputs": [
+                    {
+                      "name": "input_0",
+                      "reference": "input_0"
+                    }
+                  ],
+                  "outputs": [
+                    {
+                      "name": "output_0",
+                      "reference": "output_0"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "spec": {
+              "values": {
+                "nodeLabel": "magistral-small-2506-llama-cpp-block",
+                "nodeType": "block",
+                "manualBlockId": "magistral-small-2506-llama-cpp-block",
+                "preprocessingPolicyRule": {},
+                "postprocessingPolicyRule": {
+                  "policyRuleURI": "post_processor_for_job_caller:0.0.1-stable"
+                },
+                "modelParameters": {}
+              },
+              "IOMap": [
+                {
+                  "inputs": [
+                    {
+                      "name": "input_0",
+                      "reference": "input_0"
+                    }
+                  ],
+                  "outputs": [
+                    {
+                      "name": "output_0",
+                      "reference": "output_0"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "graph": {
+          "input": [
+            {
+              "nodeLabel": "gemma3-27b-block",
+              "inputNames": [
+                "input_0"
+              ]
+            }
+          ],
+          "output": [
+            {
+              "nodeLabel": "magistral-small-2506-llama-cpp-block",
+              "outputNames": [
+                "output_0"
+              ]
+            }
+          ],
+          "connections": [
+            {
+              "nodeLabel": "llama4-scout-17b-block",
+              "inputs": [
+                {
+                  "nodeLabel": "gemma3-27b-block",
+                  "outputNames": [
+                    "output_0"
+                  ]
+                }
+              ]
+            },
+            {
+              "nodeLabel": "magistral-small-2506-llama-cpp-block",
+              "inputs": [
+                {
+                  "nodeLabel": "llama4-scout-17b-block",
+                  "outputNames": [
+                    "output_0"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

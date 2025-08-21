@@ -1,0 +1,15 @@
+{
+           "operation": "scale",
+           "block_id": "magistral",
+           "instances_count": 2,
+           "allocation_data": [
+               {
+                   "node_id": "node-1",
+                   "gpu_ids": [1,2]
+               },
+               {
+                   "node_id": "node-2",
+                   "gpu_ids": [0,1]
+               }
+           ]
+}

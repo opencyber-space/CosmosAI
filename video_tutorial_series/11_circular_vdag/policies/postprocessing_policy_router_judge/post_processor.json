@@ -1,0 +1,49 @@
+{
+  "name": "postprocessing_policy_router_judge",
+  "version": "0.0.1",
+  "release_tag": "stable",
+  "metadata": {
+    "author_name": "Srikanth",
+    "author_email": "srikanth@openvision.ai",
+    "organization": "openvision.ai",
+    "country": "US",
+    "license": "MIT",
+    "category": "Post-processing policy router (Judge)",
+    "use_case": "Route judge decisions to target debater or finalize, with caps.",
+    "geographic_scope": "Global",
+    "audience": ["vdag_users"],
+    "integration_notes": "Expects minimal payloads {judge_text, topic, opponent_last, bump_round, session_id?}. Uses assignment_info to map node labels to block IDs.",
+    "tested_environments": [],
+    "execution_environment": "Python 3.10+",
+    "compliance_tags": ["ISO/IEC 27001"]
+  },
+  "tags": "router, post_processor, policy, judge",
+  "code": "http://MANAGEMENTMASTER:32555/postprocessing_policy_router_judge.zip",
+  "code_type": "zip",
+  "type": "policy",
+  "policy_input_schema": {
+    "input_data": {
+      "type": "object",
+      "description": "Packet containing previous block output from judge block."
+    }
+  },
+  "policy_output_schema": {
+    "input_data": {
+      "type": "object",
+      "description": "Packet routed to debater A/B or finalized."
+    }
+  },
+  "policy_settings_schema": {
+    "assignment_info": {"type": "object", "description": "Map from node label to destination block_id"},
+    "node_labels": {"type": "object", "description": "Labels for A, B, judge nodes"},
+    "judge_continue_cap": {"type": "integer", "description": "Max judge 'CONTINUE' actions per session"},
+    "max_rounds": {"type": "integer", "description": "Max total rounds before finalization"}
+  },
+  "policy_parameters_schema": {},
+  "policy_settings": {},
+  "policy_parameters": {},
+  "management_commands_schema": [],
+  "description": "Judge policy router that enforces caps and routes CONTINUE_A/B to debaters with minimal payloads.",
+  "functionality_data": {},
+  "resource_estimates": {}
+}

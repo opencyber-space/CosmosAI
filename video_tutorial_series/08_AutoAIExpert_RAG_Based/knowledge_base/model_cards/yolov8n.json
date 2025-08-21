@@ -1,0 +1,199 @@
+{
+  "componentId": {
+    "name": "yolov8n",
+    "release": "stable",
+    "version": "v8.0.0"
+  },
+  "componentType": "node.algorithm.detection",
+  "containerImage": "yolov8n:latest",
+  "requiresGPU": true,
+  "componentConfig": {
+    "batchSize": 16,
+    "supportsBatching": true,
+    "frameSize": [
+      {
+        "height": 640,
+        "width": 640
+      }
+    ],
+    "inputs": [
+      "input_0"
+    ],
+    "outputs": [
+      "output_0"
+    ],
+    "parameters": [
+      {
+        "default": 0.25,
+        "max": 1.0,
+        "min": 0.01,
+        "name": "conf",
+        "type": "float"
+      },
+      {
+        "default": 0.45,
+        "max": 1.0,
+        "min": 0.01,
+        "name": "iou",
+        "type": "float"
+      },
+      {
+        "default": 300,
+        "max": 1000,
+        "min": 1,
+        "name": "max_det",
+        "type": "int"
+      }
+    ],
+    "requireFrames": true,
+    "settings": [
+      {
+        "default": true,
+        "name": "use_fp16",
+        "options": [
+          true,
+          false
+        ],
+        "type": "bool"
+      },
+      {
+        "default": true,
+        "name": "enable_batching",
+        "options": [
+          true,
+          false
+        ],
+        "type": "bool"
+      },
+      {
+        "default": "DALI",
+        "name": "decoderType",
+        "options": [
+          "TURBO",
+          "DALI"
+        ],
+        "type": "String"
+      }
+    ]
+  },
+  "componentMetadata": {
+    "author": {
+      "authorEmail": "poc@ai.org",
+      "authorLinks": {
+        "linkName": "github",
+        "url": "https://github.com/poc.org"
+      },
+      "authorName": "poc"
+    },
+    "description": "YOLOv8 Nano - Ultra-lightweight object detection model optimized for edge devices and real-time applications",
+    "license": "AGPL-3.0",
+    "tags": [
+      "object_detection",
+      "yolo",
+      "lightweight",
+      "real_time"
+    ]
+  },
+  "modelDetails": {
+    "id": "mdl-yolov8n",
+    "label": "Module",
+    "name": "YOLOv8 Nano Object Detection",
+    "category": "object_detection",
+    "framework": "PyTorch",
+    "license": "AGPL-3.0",
+    "repo_url": "https://github.com/ultralytics/ultralytics"
+  },
+  "parameters": {
+    "total_params_m": 3.2,
+    "backbone": "CSPDarknet",
+    "neck": "C2f",
+    "head": "Detect",
+    "flops_g": 8.7,
+    "activation": "SiLU"
+  },
+  "training": {
+    "pretrained": true,
+    "input_resolution": [640, 640],
+    "trained_on": {
+      "dataset": "COCO 2017",
+      "type": "object_detection",
+      "classes": 80,
+      "images": 118287,
+      "scenarios": ["general", "surveillance", "automotive"],
+      "notes": "Trained on COCO dataset with 80 object classes including person, vehicle, animals, and everyday objects"
+    }
+  },
+  "runtime": {
+    "gpu_required": true,
+    "min_gpu_mem_gb": 2,
+    "recommended_gpu": "NVIDIA T4",
+    "cpu_cores": 4,
+    "ram_gb": 4,
+    "docker_image": "yolov8n:latest",
+    "env": {
+      "python": "3.8",
+      "pytorch": "1.13",
+      "cuda": "11.0",
+      "cudnn": "8.0",
+      "os": "ubuntu-20.04"
+    }
+  },
+  "benchmarks": {
+    "hardware": "NVIDIA T4",
+    "test_conditions": {
+      "input_resolution": [640, 640],
+      "decoder": "DALI",
+      "interpolation": "INTERP_GAUSSIAN",
+      "precision": "FP16",
+      "batch_size": 16
+    },
+    "detection_performance": {
+      "map_50": 0.371,
+      "map_50_95": 0.265,
+      "precision": 0.75,
+      "recall": 0.68,
+      "dataset": "COCO val2017"
+    },
+    "throughput_fps": {
+      "single_image_640x640": 180,
+      "batch_16_640x640": 320,
+      "batch_32_640x640": 280,
+      "cpu_intel_xeon": 25
+    },
+    "gpu_utilization_percent": {
+      "single_image": 35,
+      "batch_16": 75,
+      "batch_32": 95
+    },
+    "gpu_memory_mb": {
+      "single_image": 1200,
+      "batch_16": 2800,
+      "batch_32": 4000
+    },
+    "latency_ms": {
+      "preprocessing": 1.2,
+      "model_inference": 4.2,
+      "postprocessing": 0.6,
+      "total": 6.0
+    }
+  },
+  "produces": ["bounding_boxes", "class_ids", "confidence_scores", "detection_count"],
+  "consumes": ["rgb_frames", "input_images"],
+  "input_formats": ["OD1"],
+  "output_formats": ["OD1"],
+  "sources": [
+    {
+      "title": "YOLOv8: A New Real-Time Object Detection Algorithm",
+      "url": "https://arxiv.org/abs/2301.10972"
+    },
+    {
+      "title": "Ultralytics YOLOv8 Official Repository",
+      "url": "https://github.com/ultralytics/ultralytics"
+    },
+    {
+      "title": "Internal YOLOv8n performance benchmarks",
+      "url": "internal://benchmark-data/yolov8n.txt"
+    }
+  ],
+  "notes": "YOLOv8 Nano is the smallest and fastest variant of the YOLOv8 family, designed for edge deployment and real-time applications. With only 3.2M parameters, it achieves excellent speed-accuracy tradeoff. Supports 80 COCO object classes and is optimized for surveillance, automotive, and IoT applications."
+}

@@ -1,0 +1,277 @@
+ScaleLayout
+
+Introduction:
+    In AIOS, we have two layout terms which will be using now and then , applayout and scale layout. 
+    
+AppLayout:
+    AppLayout is a pipeline structure of Directed Acyclic Graph which creates a plan for running a usecase with the help of AI model(algorithm), Policy and Usecase blocks along withnecessary sidecars for handling various data manipulation tasks.
+    For Example, To run a Loitering Usecase, we connecte General Object detection which can detect people and then connect it to some Policy block which can filter only person who are inside the certain zone of Interest, then filter persons will be sent to Track them, and once tracked we have to add one other policy to control the object which are tracked for atleast few seconds and then send to actual usecase logic which take care of sending alerts upon loiitering threshold.
+    So the AppLayout is Object Detection -> Policy -> Tracker -> Policy -> Usecase.
+
+ScaleLayout: 
+    ScaleLayout describes talks about how to put this pod one real Hardware. Like Which Node, which GPU. Since multiple cameras/source can share same blocks, how to share  this blocks is scalelayout. 
+    Optimizing the ScaleLayout is of atmost importance, as this result ins fewer Hardware. 
+    Optimization of ScaleLayout involves understanding of Model(Throughtputs vs GPU&CPU Utilitzation), Hardware (CPU,RAM,GPU Utility, GPU RAM), Camera/Source Grouping etc which we shall explain in current discussion.
+
+Application:
+    With the Help of Scaleyout and AppLayout we can achive following things for a project.
+    1. Evaluate Hardware Requirement for the Project in optimized mode.
+    2. Plan the deployment of the Project effectively by consuming calculated Hardware.
+
+In this document let us not woork for Application.1 but we shall focus on Application.2
+But knowing the ScaleLayout optimization will definetly can help in achiving Application.1
+
+So this document will focus mainly on ScaleLayout optimization, Planning the deployment, Understanding of Usecase with respect to Hardware Requirement, tweaking key parameters to achiving the best deployment possible
+
+Concept:
+    Before diving into ScaleLayout optimization, it is important to know many concpets. This topic covers most of the topic that we know with the hlep of deploying in few live projects. So let us study one by one.
+
+    1. Gstremer Pipeline.
+        As in our deployements, we mainly use eiither rtsp stream or recorded videos as our source/input, We use Gstremer Library to achive the breaking of input feed to frames. All our building blocks in  DAG pipeline will consume this frames to analyse the usecase under question.
+        As there can be different format like videocodec, resolution, FPS variations in rtsp/video feed, this can lead to differnt Hardware consmption. So it is important to break the Gstremers usage of CPU Utility,RAM,GPU RAM, GPU Utility for each feed that it connects with respect to feeds paramters/settings.
+        Since, We use mainly Nvidia GPUs in our project, we would be using Hardware Encoder/Decoder available in GPUs to handle the conversions of encoded data from stream.
+        The library which does this job is known as Nvidia Video Codec SDK, which uses the undelaying Decoder/Encoder Hardware of each GPU. 
+        Important: Since we have to use this Hardware present in each GPU, we would be deploying our Gstremer Based Decoder in Each GPU as a docker which is a REST Service.
+        This Service takes RTSP/Recoded video feed, decodes it to RAW data and then takes care of resolution changes for the frames needed  by algorithms and limit the number of input frames  needed for the actual pipline(DAG).
+        Becasue Running at same FPS of Input Stream/Video is of no use as the frames has redudant data in it and also we require too much of Hardware to process every frame. 
+        Important: So We control how much frames are required by each Usecase. As All usecase doesnt require same number of frames, this helps in reducing Hardware Requirement.
+        And we calculate, what all algorithms present in the DAG, which might require differnet input resolutions of the frame. So GST does takes care of Resizing those frames needed by Algorithm.
+        Important: Any given point, one cameraID(cameraID is unique representation of camera in AIOS) in the project can be run with differnet DAGs(Usecases) but Gstremer based decoding happens only once. If at all for any reason you are creating a new cameraID for a same camera (example: camera_1_1 and camera_1_2 are cameraIDs of camera_1), then decoding can happen twice.
+        Since we have different kind of Video Codec, FPS, and Resolution, We have evaluated/approximated how this Hardware requirement varies for Differnet GPUs. With the help of that, we need to distribute our camera decoding pipline in all the machines where GPUs are presnet.
+        1. Nvidia Tesla A10
+            1.1 H265, 1920x1080(FullHD), 79 cameras with 30 FPS can be decoded
+            1.2 H265, 3840x2160(4K), 21 cameras can with 30 FPS can be decoded
+            1.3 H264, 1920x1080(FullHD), 35 cameras with 30 FPS can be decoded
+            1.4 H264, 3840x2160(4K), 9 cameras can with 30 FPS can be decoded
+            We have approximated for other resolution with linear approximation with Resolution as main paramters
+            1.5 H265, 2560x1920(5MP), 32 cameras with 30 FPS can be decoded
+            1.6 H265, 1560x1440(4K), 43 cameras can with 30 FPS can be decoded
+            1.7 H264, 2560x1920(5MP), 13 cameras with 30 FPS can be decoded
+            1.8 H264, 1560x1440(4K), 18 cameras can with 30 FPS can be decoded
+        2. Nvidia Tesla A100
+            2.1 H265, 1920x1080(FullHD), 172 cameras with 30 FPS can be decoded
+            2.2 H265, 3840x2160(4K), 47 cameras can with 30 FPS can be decoded
+            2.3 H264, 1920x1080(FullHD), 78 cameras with 30 FPS can be decoded
+            2.4 H264, 3840x2160(4K), 21 cameras can with 30 FPS can be decoded
+            We have approximated for other resolution with linear approximation with Resolution as main paramters
+            2.5 H265, 2560x1920(5MP), 71 cameras with 30 FPS can be decoded
+            2.6 H265, 1560x1440(4K), 96 cameras can with 30 FPS can be decoded
+            2.7 H264, 2560x1920(5MP), 31 cameras with 30 FPS can be decoded
+            2.8 H264, 1560x1440(4K), 43 cameras can with 30 FPS can be decoded
+        3. Nvidia Tesla T4
+            3.1 H265, 1920x1080(FullHD), 69 cameras with 30 FPS can be decoded
+            3.2 H265, 3840x2160(4K), 18 cameras can with 30 FPS can be decoded
+            3.3 H264, 1920x1080(FullHD), 32 cameras with 30 FPS can be decoded
+            3.4 H264, 3840x2160(4K), 8 cameras can with 30 FPS can be decoded
+            We have approximated for other resolution with linear approximation with Resolution as main paramters
+            3.5 H265, 2560x1920(5MP), 28 cameras with 30 FPS can be decoded
+            3.6 H265, 1560x1440(4K), 38 cameras can with 30 FPS can be decoded
+            3.7 H264, 2560x1920(5MP), 12 cameras with 30 FPS can be decoded
+            3.8 H264, 1560x1440(4K), 17 cameras can with 30 FPS can be decoded
+        Important: As we have calculated with respect to 30FPS cameras, but in deployment, we might have 15 FPS or 25FPS or 10FPS cameras, In suc cases we need calculate as below
+            For example: If we have to calculate for 15 FPS, then
+                For 69 cameras = 30 FPS (In Nvidia Tesla T4, H265, 1920x1080 FullHD)
+                    For 15 FPS: 30 FPS/15FPS = 2
+                    i.e X cameras = 69x2 = 138 cameras of 15 FPS can be decoded
+                    Simlarly to calculate for 25 FPS, we need to mulitply it by 30/25=1.2
+
+        So far we have estimated GPU Requirement. To calculate CPU requirement (in terms of vCPU), following data we have from our experience.
+        For 3500 source of H264, FullHD(1920x1080) we need 1547 to 1867 vCPU
+        For 3500 source of H265, FullHD(1920x1080) we need 1586 to 1712 vCPU
+        Simlilarly few more data we will provide as below 
+        For 1000 source of H264, FullHD(1920x1080) we need 475 to 566 vCPU
+        For 1000 source of H265, FullHD(1920x1080) we need 487 to 523 vCPU
+        For 2000 source of H264, FullHD(1920x1080) we need 903 to 1085 vCPU
+        For 2000 source of H265, FullHD(1920x1080) we need 925 to 996 vCPU
+        We have data only for FullHD, not for others as we have not deployed or tested any other resolution for callculating the CPU requirement.
+        Hope Linear approximation may or may not be a good option there.If we get any data on it we shall update this document.
+
+        In Gstremer pipeline, every pipeline takes GPU RAM and the GPU RAM Usage varies with respect to Codec and Resolution as well.
+        For Example:
+            In Nvidia Tesla T4,
+                1. FullHD(1920x1080), 15FPS H265 Stream takes 169MB of RAM per Stream/Source
+                2. FullHD(1920x1080), 25FPS MJPEG Stream takes 155MB of RAM per Stream/Source
+                3. FullHD(1920x1080), 25FPS H264 Stream takes 177MB of RAM per Stream/Source
+        So when deciding Application.1 and Application.2, it is important to consider the GPU RAM Usage by individual Streams. As All Nvidia Hardwars has limited GPU RAM.
+        For example,
+            1. Nvidia Tesla T4 has 16GB GPU RAM
+            2. Nvidia Tesla A10 has 24GB GPU RAM
+            3. Nvidia Tesla A100 has 80GB GPU RAM
+            4. Nvidia Tesla V100 has 16GB GPU RAM
+
+        What so ever data we provided above is an estimations. But we shall provide with Practical CPU Requirement below. 
+        In one of our project where FullHD(1920x1080), 15 FPS, H265 Stream
+            1. A Gstremer Decoder Pod takes 278MB of CPU RAM with 73.00m Cores Usage in K8s dashboard, at this time only 2 streams were active.
+            2. A Gstremer Decoder Pod takes 1.17GB of CPU RAM with 516.00m Cores Usage in K8s dashboard, at this time only 6 streams were active.
+            3. A Gstremer Decoder Pod takes 2.71GB of CPU RAM with 1.22 Cores Usage in K8s dashboard, at this time only 13 streams were active.
+            4. A Gstremer Decoder Pod takes 3.44GB of CPU RAM with 2.86 Cores Usage in K8s dashboard, at this time only 17 streams were active.
+            
+    2. Model Requirement
+        All AI Models are hosted  inside the docker container and along with the models its sidecars also will be available. The model requires GPU Hardware as well as CPU HW for running the inference.
+        Each model takes frames as input from differant camer stream pipline and runs the inference one it in a Batched inference manner as batching increases the throught of the model. Differnt Batch Size will provide different thoughtput with taking different amount of HW Resource.
+        We Generally Run Model as well as Gstremer pipeline in same GPUs, so that we can effectively use Nvidia GPUs Codec HW as well as CUDA cores.
+        So when calculating or planning the deployment, we need to take care of GPU RAM and GPU Utilization into considerations of each GPU Family(T4,V100,A10,A100 etc)
+        To understand various models that we have in our deployment, you can check the model_cards directory.
+        Important: Generally batch_size,decoderType(DALI/TURBO),model resolutoins(i.e width and height) and input image resolution(frameSize) controlls the thoughtput of the model which inturn control the GPU Utilization and GPU RAM usage.
+        Important: And Model Resolution(i.e width and height) and input image resolution(frameSize) can controll the accuracy.
+        So if you want to make of GPU effectively, we should focus on using its CODEC Hardware and CUDA cores effectively withougt breaching the GPU RAM. So GPU Utility and GPU RAm is a Scars resource whcih weneed to plan properly.
+        With respect to vCPU and CPU RAM, we would generally get good numbers per node.
+        With the help of current deployment understanding, we can break down vCPU and RAM requiremenet as below:
+            1. Generally if 5 GPUs are their in a node, we will be requirering 256GB CPU RAM and 96-108 vCPUs.
+            2. If 3 GPUs are there , then we might need 128-152GB of CPU RAM and 64-72 vCPUs.
+        We generally plan to keep the average GPU Utilization(CUDA Cores Usage) to 60-80%. Because increasing further can create delays in models compuation as models will be heavliy occupied with tasks.
+
+        To Give away the Practical Data points from certain of our projects for each Model, Following Section can be used.
+        1. For Estimating CPU(in millicores) and RAM in GB
+            Read "pod_metrics.xlsx" from current folder
+            This excel file containes mulitple sheet within and named as algorithm names(with model resolution paramters), policy(variatns like 1 input "policy", 2 input "policy_mux") and usecase( variants like 1 input "usecase", 3 input "usecasmux_3input", usecase which needs frames "usecase-frames")
+            For example,
+                1. general7Detection_360h_640 stands for it is yolov7 model trained on coco dataset and takes width and height of the model as 640x360
+                    But to understand more about this model, we need to check actual registration(.json) files under model_cards directory where the sheet name of the excel will match the componentId.name of the json content.
+                Simlarly we can mapp other algorithms, policy and usecase blocks as well.
+            So for practical analysis, we need to analyse the content of these sheet and map against the model_cards/*.json.
+            Content of Sheet:
+                1. pod_name (you can ignore this)
+                2. cpu_data (millicores)
+                3. mem_data (GB)
+                4. instanceQueue (you can ignore this)
+                5. eventsReceivedPerTick(60seconds): This is total number of frames received per 60 seconds. If we divide the number by 60, we get what is input per second. With that we need to estimate CPU and RAM(which is bit of constant doenst vary with number of events received per tick) for each blocks we add in pipeline with respect to its input.
+                    i.e If block received 100 Frames / seconds, then it can consume a x CPU millicore
+                    if it receives 200 Frames / seconds, then  it can consume a y CPU millicore, where y > x
+                    So estimating the x and y should be based on mathematical formulas, like Linear Regresions, or any non linear regressoin.
+                    Following we suggest:
+                        0. Ignore the datapoints with 0  eventsReceivedPerTick(60seconds)
+                        1. Start with linear regression — if accuracy is poor (high error), switch to random forest or XGBoost.
+                        2. Visualize the eventsReceivedPerTick vs cpu_data — scatter plots often show whether linear models make sense.
+                        3. Evaluate your model using R², MAE, or RMSE to pick the best estimator. 
+                6. updateTime (you can ignore this)  
+        2. To Uderstand GPU Utilization and GPU RAM
+            RAM of Gstremer pipeline already shared in above section  "Concept --> 1. Gstremer Pipeline"
+            For getting the practival usage of each pod please check the "pod_gpumemory_and_gpuutility.csv" present in current directory.
+            This needs to be mapped with "pod_metrics.xlsx" to understand blockID mapping with the kindof algorithm and eventsReceivedPerTick at that time.
+            As it is very difficult to extract each pods GPU Utilizations, we have given gpuID's complete utilization at that point of time.
+            And importantly, "pod_metrics.xlsx" and "pod_gpumemory_and_gpuutility.csv" are time syncronized, i.e but codes were at same amount of time so that data colleccted in both matches.
+            Headers in "pod_gpumemory_and_gpuutility.csv" is almost self explainatory. i.e block_id,pid,gpu_index,gpu_name,used_gpu_memory,avg_gpu_util
+            avg_gpu_util is taken for 100 samples with 0.25seconds sleep in between.
+            
+    So whenever we are trying to provide with Application.1 and Application.2 , knowing these to files i.e "pod_gpumemory_and_gpuutility.csv" and "pod_metrics.xlsx" and deciphering the relation between each Algorithm type with respect to CPU RAM,CPU Utilization , GPU RAM and GPU Utilization with respect to Input frames (eventsReceivedPerTick(60seconds)) is of importance.
+    Along with that we need to club the CPU and GPU requirement of Gstremer pipeline. Especially GPU RAM as GPU RAM is limited in a GPU.
+
+
+Deepdive into Application:
+    Above provided metadata in Concept headers is enough for Application.1, So here after let us focus on Application.2 as it requires some more informations.
+    Application.2 is about Planning the deployment, where you need input like what all cameras and what all usecase per camera. Whihc should be basically a matrix kind like as below
+    
+    Camera Vs Usecase Matrix:
+    
+        | camera1            | usecase1 | usecase2   | usecasex |
+        |--------------------|----------|------------|----------|
+        | camera_100_100     | 1        | 0          |  1       |
+        | camera_105_10      | 0        | 1          |  1       |
+
+        Where 1 represent usecase is assigned to camera and 0 means not.
+        When User gives this matrix for very large number of cameras then we can plan effectively. We need to know what all servers we have like number of servers, CPU RAM, vCPU, Number of GPU, Type of GPU, GPU RAM etc to deside the planning.
+        
+        Say i have asked with 1700 Usecases(Licences) for 605 cameras as example.
+                Then we shal break how to plan 1,2,3 or 4 usecase cameras in 605
+                licenses/camera = 1700/605 = 2.8 usecase (licences) per camera
+                    so we should have 2 to 3 usecase per camera on an average. It doesnt mean that you should not deploy 1 and 4 usecase cameras. But they might be less in number.
+                    So let us check how to calculate 2 and 3 usecase camera number with formula.
+                    x*2+(605-x)*3 = 1700 => x(2 usecase cameras) = 115  and 3 usecase cameras: 490
+                    So ask the user to plan like this before giving matrix of camera vs Usecase.If any 1 or 4 usecase is given, that is also acceptable.Going beyond 4 can be avoided until stressing requirement.
+    Usecase Vs Number of input Frames
+        Come up with:
+                Usecase combination that will ease my deployment and planning of licecen distribution
+                    (mainly with respect to FPS of Usecase and number of models of Usecase)
+                    
+            Assigned Usecase name		      |		RFP Count   |    Possible FPS requirement
+            ------------------------------------------------------------------------------------------------
+            Camera Tampering				  |    100          |     1,2,3,4,5...
+            Parking Violation				  |    100          |     0.5,1,2,3,4,5...
+            Loitering					      |    100          |     3,4,5,6.....
+            Unidentified and suspicious object|	  100           |    1,2,3,4,5,...
+            Fire Detection					  |    100          |     0.5,1,2,3,4,5,...
+            Crowd Gathering					  |    100          |     0.25,0.5,1,2,3,4,5...
+            Lone Woman Detection			  |	  100           |    2,3,4,5.....
+            Men in Women only area			  |	  100           |    2,3,4,5.....
+            Chain Snatching					  |    100          |     5,6,7,8...
+            Age and gender via faces		  |	  100           |    2,3,4,5,...
+            Congestion Detection			  |	  100           |    2,3,4,5,...
+            Multi Camera Tracking			  |	  100           |    1,2,3,4,5,...
+            Assault-Fight Detection			  |	  100           |    5,6,7,8
+            Face Presence and Face Frequency  |	  100           |    1,2,3,4,5..
+            Indicative Object Search		  |	  100           |    1,2,3,4,5...
+            Weapon detection				  |    100          |    2,3,4,5...
+            Lying						      |     50          |     1,2,3,4,5,
+            Leaning						      |     50          |     1,2,3,4,5   
+            -----------------------------------------------------------------------------------------------
+            Total count					      |    1700
+                
+            Rules:	
+            1. Club Same FPS usecase are groups
+                Ex1: Parking+CameraTampering+FireDetection
+                Ex2: WeaponDetection+Crowd+IndicativeObjectSearch
+            2. Club Usecase which has similar models
+                Ex1: ChainSnatching+Assualt+Leaning+Lying
+                Ex2: Loitering+crowd+IndicativeObjectSearch
+            3. If 2 usecase with different FPS as grouped, then current FPS is maximum of both the usecase
+                Ex1: ChainSnathing+Lying overall fps will be 5
+                Ex2: Loitering+LoneWomen overall fps will be 3	
+            3. Try to get maximum from the model (by increasing number of camera in the set you created. Set here means collecction of cameras which are grouped with respect to usecase)
+            4. Dont add new usecase(with new model) to the group if only 1 or 2 cameras will be run with it
+                10 camera with CameraTampeirng + Parking Violation - initially given
+                2 camera with CameraTampeirng + Parking Violation + Loitering -> Later addition. Since loitering needs Genral object detection, but his model is usd only for 2 cameras is of wasting GPU RAM. Better to create new cameraID in such cases only for Loitering
+                Creating new cameraIDs also has side effects as new Gstreamer pipeline needs to be created which comsumes CPU and GPUs sepertely. So Have lesser these kind of violation.
+            5. Keep an eye on Image Resolution that model takes
+                Ex1: LuggaeDetection in Unidentified and suspicious object  :  1920x1080 images is needed. So restrict it with 1(Prefered) or 2 FPS
+                Ex2: GenderDetection in Lone Woman Detection : 1440x810 images is needed. So restrict with 2 to 3 FPS only
+            6. If customer demands different combination of usescase. Analyse with respect to HW,GPU utility, GPU RAM
+                Keep the violations as less as possible
+            7. If ChainSnatching, Fight Detection Usecase are present, then we have observed that 
+                We can run Lying and Leaning usecase for this Set for same cameras.
+                Maximum of 5 cameras can be run in a Set in One GPU(Tesla T4). After that this GPU Utility will be almost reaching 50-80% mark.
+                But 2 pose models are needed. Pose model that we are currently using is pose-estimation-rt. If any other Pose model is onboarded then this can be avoided for performance reason.
+
+			
+    Deployment Planning: 
+        Set Creation
+            The set here means collection of cameras which can be grouped with respect to 
+                1. Given 'Camera Vs Usecase Matrix given' and
+                2. Available informations 'Usecase Vs Number of input Frames' and its Rules as mentioned above.
+                3. The Number of cameras in a Set should such that:
+                    GPU RAM (from all the models of usecase assigned) and Gstreamer pipeline should not breach 90-95%.
+                    and Average GPU Utility < 60-80%
+                    and Nodes Load(vCPU) < 80% and RAM < 90% 
+
+                4. If breaching the above condition should create new Set itself. Either Differenet GPU or other GPU of other Nodes.(This is the reason for asking camera vs matrix should have good numbers)
+                5. If GPU RAM and GPPU Utility supports, we can have mulitple set deployed in Same GPU
+                    Say we have 20 Crowd usecase in 20 cameras and 15 FallDetection usecase in differnt 15 cameras,
+                    then we can put in 2 sets but in same GPU. As they are running with very low FPS (means less GPu utilization) and 
+                    RAM should also be sufficient becasue only 2 model(say 2.5GB+2.5GB) and 20+15 Gstreamer pipeline(35x169MB for H265 fullHD 15FPS), which can be definelty less that 16GB RAM in Tesla T4 GPU
+                6. If needed you can create 2nd model of same family (i.e example General Object Detection yolov7) in same set.
+                    This kind requirement comes when one model is reaching its throughput limitation but some more cameras are there in the set which can exploit other models present in the set but not this model. So we can create e new model of this.
+                    Example: In a set i have 20 cameras, and Usecase is CrowdDetection and Abandoned Bag Detection.
+                        So we create 1 General Object Detection(640x360) for detecting people and 1 Luggage Model(1920x1080)
+                        For some reason, throughput of the Luggae model is 12-15 inference FPS, then i will create one more model of Luggage such that first 10 cameras is for one model and second 10 for other model.
+                        But all 20 cameras share same GeneralObject Detection(640x360) model. This is possible only when sufficient GPU RAM and GPU Utility is available.
+                7. Other component in usecase like Tracker, Policy and Usecase also can be shared.
+                    During Sharing, we generally create seperate block for each usecase.
+                    Example: If the Set has 3 usecase() and 10 cameras then,
+                        Aussume: Usecase 1: ObjectDetection 1-->Policy 1-->Usecase 1
+                                 Usecase 2: ObjectDetection 1-->Policy 2-->Tracker 1-->Usecase 2
+                                 Usecase 3: ObjectDetection 1-->Policy 3-->Tracker 2-->Policy 4-->Usecase 3
+                         2 tracker block(pod) can be created, 3 Usecase block(pod) can be created. 4 Policy block(pod) and 1 ObjectDetection block(pod) can be created. 
+        Decide The Nodes and GPU:
+            Once Sets are created, Now this needs to be assigned for Node and GPU.
+            Rules:
+                1. If there are multiple sets which has same usecase, then plan them in differnet server.
+                    Why is is important:
+                        i. If one server goes down, the same usecase will be running in other server, so customers will not complain about one kind of usecase not being available at this point of time.
+                        ii. Techincally we have observed that, say if one group of usecase needs more GPU but uses lesser CPU, then when we deploy these groups in one node, say multiple sets(collection of cameras) i have
+                            When we run in same servers, GPU Utility will be utilised completely but in that node CPU will be still available but we can not run anything as GPU is not available for usage.
+
+                2. Dont Push all nodes initially to its limit. i.e Distribute Horizontally in each nodes first.
+                    Example: we should create one one set in each GPU we have in each node.
+                            Create second set in one GPU only when all GPU are having atelast one set in it.
+                            So that we utiliza all GPU in project. And Heat genertion in server can be distributed per GPU wise instead of increasing heat only in one GPU.
+                            

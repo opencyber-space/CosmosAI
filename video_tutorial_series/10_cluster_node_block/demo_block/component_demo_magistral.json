@@ -1,0 +1,401 @@
+{
+          "componentId": {
+            "name": "demo-magistral-llama_cpp",
+            "version": "1.0.0",
+            "releaseTag": "stable"
+          },
+          "componentType": "model",
+          "containerRegistryInfo": {
+            "containerImage": "MANAGEMENTMASTER:31280/magistral-small-2506-llama-cpp:v1",
+            "containerRegistryId": "MANAGEMENTMASTER:31280/magistral-small-2506-llama-cpp:v1",
+            "containerImageMetadata": {
+              "author": "llm-team",
+              "description": "AIOS block for chat using LLAMA-CPP in-process with local model path support for Mistral-ai Magistral Small 2506 model"
+            },
+            "componentMode": "aios"
+          },
+          "componentMetadata": {
+            "usecase": "chat-completion",
+            "framework": "llama-cpp",
+            "hardware": "gpu",
+            "supports_local_models": true,
+            "model_path_resolution": "automatic",
+            "supports_quantization": true,
+            "quantization_methods": ["4bit", "8bit", "fp16", "fp8"],
+            "provider": {
+              "name": "Mistral AI",
+              "modelIdentifier": "Magistral-Small-2506-24B"
+            },
+            "architecture": {
+              "contextLength": 40960,
+              "parameterCountB": 24
+            },
+            "capabilities": {
+              "supportsStreaming": true
+            },
+            "dataUsagePolicy": {
+              "usedForTraining": false,
+              "policyStatement": "User data is not used for training or improving this model."
+            },
+            "biasAndFairness": {
+              "assessmentSummary": "Internal testing showed some stereotypical associations. The model may reflect biases present in the training data.",
+              "knownBiases": [
+                "cultural biases towards Western norms",
+                "potential for generating stereotypical content"
+              ]
+            },
+            "knownLimitations": "May generate plausible but incorrect information. Performance on highly specialized topics may be limited.",
+            "trainingDetails": {
+              "trainingData": {
+                "datasetName": "Proprietary mix of publicly available web data",
+                "datasetSize": "Not disclosed",
+                "dataPreprocessing": "Standard cleaning and filtering techniques were applied."
+              },
+              "trainingProcedure": {
+                "trainingFramework": "Custom distributed training framework",
+                "hyperparameters": {
+                  "learningRate": "Not disclosed",
+                  "batchSize": "Not disclosed",
+                  "optimizer": "AdamW"
+                }
+              }
+            },
+            "evaluation": {
+              "benchmarks": {
+                "MMLU": {
+                  "metric": "5-shot accuracy",
+                  "value": 74.6
+                },
+                "HellaSwag": {
+                  "metric": "10-shot accuracy",
+                  "value": 69.1
+                },
+                "TruthfulQA": {
+                  "metric": "mc2",
+                  "value": 66.4
+                }
+              },
+              "evaluationData": {
+                "details": "Evaluated on a standard set of academic benchmarks to assess reasoning, knowledge, and safety."
+              }
+            }
+          },
+          "componentInitData": {
+            "model_name": "mistralai/Magistral-Small-2506_gguf/Magistral-Small-2506_Q8_0.gguf",
+            "system_message": "You are a helpfull assistant"
+          },
+          "componentInitParametersProtocol": {
+            "temperature": {
+              "type": "number",
+              "description": "Sampling temperature",
+              "min": 0.0,
+              "max": 1.0
+            },
+            "max_tokens": {
+              "type": "number",
+              "description": "Maximum token to generate (Should be less than n_ctx)",
+              "min": 1,
+              "max": 128000
+            },
+            "top_p": {
+              "type": "number",
+              "description": "Top p",
+              "min": 0.0,
+              "max": 1.0
+            },
+            "min_p": {
+              "type": "number",
+              "description": "Min Probability",
+              "min": 0.0,
+              "max": 1.0
+            }
+          },
+          "componentInitSettingsProtocol": {
+            "use_gpu": {
+              "type": "boolean",
+              "description": "Enable GPU Inference",
+              "default": true
+            },
+            "gpu_id": {
+              "type": "string",
+              "description": "Device to run model on",
+              "default": "0"
+            },
+            "enable_metrics": {
+              "type": "boolean",
+              "description": "To enable the metrics of AIOS",
+              "default": true
+            },
+            "model_config": {
+              "type": "object",
+              "description": "Model Configuration",
+              "properties": {
+                        "n_ctx": {
+                          "type": "number",
+                          "description": "Max Context for the model (Check the Model supported n_ctx)",
+                          "min": 1,
+                          "max": 40960
+                        },
+                        "n_gpu_layers": {
+                          "type": "number",
+                          "description": "Number of layers to GPU",
+                          "min": -1,
+                          "max": 1000
+                        },
+                        "n_threads": {
+                          "type": "number",
+                          "description": "Number of CPU Threads ",
+                          "min": -1,
+                          "max": 1000
+                        },
+                        "seed": {
+                          "type": "number",
+                          "description": "Seed (To generate same result for same input)",
+                          "min": 1,
+                          "max": 10000
+                        },
+                        "verbose": {
+                          "type": "boolean",
+                          "description": "Verbose to print or not",
+                          "default": true
+                        }
+                      }
+            },
+            "cleanup_enabled": {
+              "type": "boolean",
+              "description": "To enable the Clean Up of sessions",
+              "default": true
+            },
+            "cleanup_check_interval": {
+              "type": "number",
+              "description": "interval(in seconds) with which check happens for cleanup",
+              "min": 1,
+              "max": 10000
+            },
+            "cleanup_session_timeout": {
+              "type": "number",
+              "description": "Session ID will be removed beyond this timeout this threshold in seconds",
+              "min": 1,
+              "max": 18000
+            }
+          },
+          "componentInputProtocol": {
+            "message": {
+              "type": "string",
+              "description": "Input message from the user (for chat mode)"
+            },
+            "prompt": {
+              "type": "string",
+              "description": "Input prompt (for generate/tokens mode)"
+            },
+            "text": {
+              "type": "string",
+              "description": "Input text (for embed mode)"
+            },
+            "session_id": {
+              "type": "string",
+              "description": "Unique identifier for the chat session",
+              "default": "default"
+            },
+            "system_message": {
+              "type": "string",
+              "description": "System message for chat initialization"
+            },
+            "gen_params": {
+              "type": "object",
+              "description": "Additional generation parameters"
+            }
+          },
+          "componentOutputProtocol": {
+            "reply": {
+              "type": "string",
+              "description": "Chat reply from the model (chat mode)"
+            },
+            "generated": {
+              "type": "string",
+              "description": "Generated text (generate mode)"
+            },
+            "tokens": {
+              "type": "array",
+              "description": "Generated token IDs (tokens mode)"
+            },
+            "embedding": {
+              "type": "array",
+              "description": "Text embedding vector (embed mode)"
+            }
+          },
+          "componentParameters": {
+            "temperature": 0.2,
+            "max_tokens": 2048,
+            "top_p": 0.95,
+            "min_p": 0.01
+          },
+          "componentInitSettings": {
+            "use_gpu": true,
+            "gpu_id": 0,
+            "enable_metrics": true,
+            "model_config": {
+                "n_gpu_layers": -1,
+                "n_threads": -1,
+                "n_ctx": 4096,
+                "seed": 3407,
+                "verbose": true
+            }
+          },
+          "componentManagementCommandsTemplate": {
+            "reset": {
+              "description": "Reset all chat session",
+              "args": {
+              }
+            },
+            "info": {
+              "description": "Get info",
+              "args": {
+              }
+            },
+            "set_seed": {
+              "description": "To set seed",
+              "args": {
+                "seed": {
+                  "type": "number",
+                  "description": "Set the seed",
+                  "min": 1,
+                  "max": 10000
+                }
+              }
+            },
+            "tokenize": {
+              "description": "To Tokenize",
+              "args": {
+                "text": {
+                  "type": "string",
+                  "description": "Text to tokenize"
+                }
+              }
+            },
+            "detokenize": {
+              "description": "To DeTokenize",
+              "args": {
+                "text": {
+                  "type": "tokens",
+                  "description": "Tokens to detokenize"
+                }
+              }
+            },
+            "reload_model": {
+              "description": "Reloads the model with optional new parameters",
+              "args": {
+                "generation_config": {
+                    "type": "object",
+                    "description": "Parameters needed for inference/chat/generation",
+                    "properties": {
+                              "max_new_tokens": {
+                                "type": "number",
+                                "description": "Maximum number of tokens to generate",
+                                "min": 1,
+                                "max": 40960
+                              },
+                              "temperature": {
+                                "type": "float",
+                                "description": "Sampling temperature",
+                                "min": 0.0,
+                                "max": 1.0
+                              },
+                              "top_k": {
+                                "type": "number",
+                                "description": "Topk ",
+                                "min": 1,
+                                "max": 1000
+                              },
+                              "top_p": {
+                                "type": "float",
+                                "description": "top_p",
+                                "min": 0.0,
+                                "max": 1.0
+                              },
+                              "repetition_penalty": {
+                                "type": "float",
+                                "description": "repetition_penalty",
+                                "min": 0.0,
+                                "max": 10.0
+                              },
+                              "do_sample": {
+                                "type": "boolean",
+                                "description": "do_sample",
+                                "default": true
+                              }
+                            }
+                  },
+                  "tensor_parallel": {
+                    "type": "boolean",
+                    "description": "Enable tensor parallelism",
+                    "default": true
+                  },
+                  "device": {
+                    "type": "string",
+                    "description": "Device to run model on",
+                    "default": "cuda"
+                  },
+                  "hf_token": {
+                    "type": "string",
+                    "description": "Hugging Face authentication token for private models or rate limiting"
+                  },
+                  "quantization_type": {
+                    "type": "string",
+                    "description": "Quantization type: '4bit', '8bit', 'fp16', 'fp8', or null for no quantization",
+                    "enum": ["4bit", "8bit", "fp16", "fp8"],
+                    "default": null
+                  }
+              }
+            },
+            "set_generation_config": {
+              "description": "Updates generation configuration parameters",
+              "args": {
+                "generation_config": {
+                  "type": "object",
+                  "description": "New generation configuration"
+                }
+              }
+            },
+            "device_info": {
+              "description": "Returns device and model diagnostics",
+              "args": {}
+            },
+            "remove_chat_session": {
+              "description": "Removes a specific chat session",
+              "args": {
+                "session_id": {
+                  "type": "string",
+                  "description": "Session ID to remove"
+                }
+              }
+            },
+            "update_cleanup_config": {
+              "description": "Update Clean Up Config",
+              "args": {
+                "cleanup_config": {
+                  "type": "object",
+                  "description": "Send enabled: boolen, check_interval: in seconds for keep checcking, session_timeout: remove session beyond this in seconds"
+                }
+              }
+            }
+          },
+          "tags": [
+            "transformers",
+            "chat",
+            "huggingface",
+            "mistral-ai",
+            "llm",
+            "embedding",
+            "in-process",
+            "local-models",
+            "model-path-resolution",
+            "quantization",
+            "4bit",
+            "8bit",
+            "fp16",
+            "bitsandbytes"
+          ]
+        }
+
+  

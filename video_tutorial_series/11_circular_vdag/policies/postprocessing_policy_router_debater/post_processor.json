@@ -1,0 +1,55 @@
+{
+  "name": "postprocessing_policy_router_debater",
+  "version": "0.0.1",
+  "release_tag": "stable",
+  "metadata": {
+    "author_name": "Srikanth",
+    "author_email": "srikanth@openvision.ai",
+    "organization": "openvision.ai",
+    "country": "US",
+    "license": "MIT",
+    "category": "Post-processing policy router (Debater)",
+    "use_case": "Route debater outputs with evaluator gating, retries, judge escalation.",
+    "geographic_scope": "Global",
+    "audience": ["vdag_users"],
+    "integration_notes": "Expects minimal payloads {reply, prev_role, topic, session_id?}. Uses assignment_info to map node labels to block IDs. For judge escalation only, forwards router_meta.",
+    "tested_environments": [],
+    "execution_environment": "Python 3.10+",
+    "compliance_tags": ["ISO/IEC 27001"]
+  },
+  "tags": "router, post_processor, policy, debater",
+  "code": "http://MANAGEMENTMASTER:32555/postprocessing_policy_router_debater.zip",
+  "code_type": "zip",
+  "type": "policy",
+  "policy_input_schema": {
+    "input_data": {
+      "type": "object",
+      "description": "Packet containing previous block output. Expects minimal payload from debater block."
+    }
+  },
+  "policy_output_schema": {
+    "input_data": {
+      "type": "object",
+      "description": "Packet with updated output_ptr set to opponent debater or judge."
+    }
+  },
+  "policy_settings_schema": {
+    "assignment_info": {"type": "object", "description": "Map from node label to destination block_id"},
+    "node_labels": {"type": "object", "description": "Labels for A, B, judge nodes"},
+    "role": {"type": "string", "description": "Fixed role for this debater router: A or B"},
+    "review_threshold": {"type": "number", "description": "Gating threshold in [0,1] (default 0.5)"},
+    "max_router_retries": {"type": "integer", "description": "Max self-retries before judge escalation (default 0)"},
+    "judge_interval_rounds": {"type": "integer", "description": "Every N non-retry rounds, escalate to judge (default 4)"},
+    "max_consec_by_same_role": {"type": "integer", "description": "If the same role speaks this many times consecutively, escalate to judge (default 3)"},
+    "evaluator": {"type": "object", "description": "External LLM scoring endpoint {url|server_address, model|model_id}"},
+    "external_llm_addr": {"type": "string", "description": "Default evaluator server address when evaluator.url is not set (default CLUSTER1MASTER:31504)"},
+    "external_llm_model_id": {"type": "string", "description": "Default evaluator model id when evaluator.model is not set (default qwen3-32b-llama-cpp-block)"}
+  },
+  "policy_parameters_schema": {},
+  "policy_settings": {},
+  "policy_parameters": {},
+  "management_commands_schema": [],
+  "description": "Debater policy router with evaluator gating, retry, and judge escalation. Minimal payloads to debaters.",
+  "functionality_data": {},
+  "resource_estimates": {}
+}

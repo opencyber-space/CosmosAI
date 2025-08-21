@@ -1,0 +1,60 @@
+# First line tells pip to also look in the PyTorch repository
+--extra-index-url https://download.pytorch.org/whl/cu126
+
+# PyTorch packages (will be found in the extra index)
+torch==2.7.1+cu126
+torchaudio==2.7.1+cu126
+#torchelastic==0.2.2 #not needed.this is for distrbuted training
+torchvision==0.22.1+cu126
+
+#transformers==4.40.1
+#accelerate==0.27.2
+sentencepiece==0.1.99
+pyyaml==6.0.1
+
+auto-gptq==0.7.0
+autoawq==0.2.3
+bitsandbytes==0.43.2            # last release compiled for CUDA 12.1
+
+requests
+langchain
+langchain-community
+langchain-experimental
+networkx
+numpy
+scikit-learn
+sentence-transformers
+#>=2.7.0
+neo4j
+pdfplumber
+faiss-cpu
+tqdm
+pymongo
+chromadb
+hnswlib
+weaviate-client
+
+protobuf==3.20.3
+grpcio==1.62.1
+kubernetes==26.1.0
+accelerate==1.0.1
+#torch==2.4.1
+#torch==2.7.1
+transformers==4.46.3
+#transformers[all]
+openpyxl==3.1.5
+
+spacy==3.8.7
+spacy-legacy==3.0.12
+spacy-loggers==1.0.5
+
+
+#for lamaindex
+#llama-index-vector-stores-milvus
+#pymilvus
+numpy==2.3.1
+llama-index
+openai
+pynvml==12.0.0
+
+notebook==7.4.4

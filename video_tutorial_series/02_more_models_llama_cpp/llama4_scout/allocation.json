@@ -1,0 +1,110 @@
+{
+    "head": {
+        "templateUri": "Parser/V1",
+        "parameters": {}
+    },
+    "body": {
+        "spec": {
+            "values": {
+                "mode": "allocate",
+                "blockId": "llama4-scout-17b-block",
+                "blockComponentURI": "model.llama4-scout-17b:1.0.0-stable",
+                "minInstances": 1,
+                "maxInstances": 3,
+                "blockInitData": {
+                    "model_name": "Llama-4-Scout-17B-16E-Instruct-UD-Q8_K_XL/Llama-4-Scout-17B-16E-Instruct-UD-Q8_K_XL-00001-of-00003.gguf",
+                    "system_message": "You are an expert in analysing video anlaytics critical events like snatching,weapon usage,assualt,sos,accident,theft and provide detailed insights with confidence value and reasoning. You are a helpful assistant."
+
+                },
+                "initSettings": {
+                    "tensor_parallel": true,
+                    "device": "cuda",
+                    "quantization_type": "int8",
+                    "cleanup_enabled":  true,
+                    "cleanup_check_interval": 60,
+                    "cleanup_session_timeout": 1800,
+                    "generation_config": {
+                        "max_new_tokens": 2048,
+                        "temperature": 0.6,
+                        "top_k": 50,
+                        "top_p": 0.9,
+                        "repetition_penalty": 1.1,
+                        "do_sample": true
+                    }
+                },
+                "policyRulesSpec": [
+                    {
+                        "values": {
+                            "name": "clusterAllocator",
+                            "policyRuleURI": "cluster-selector:2.0-stable",
+                            "parameters": {
+                                "filter": {
+                                    "clusterQuery": {
+                                        "variable": "id",
+                                        "operator": "==",
+                                        "value": "gcp-cluster-2"
+                                    }
+                                }
+                            },
+                            "settings": {
+                                "max_candidates": 2
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "resourceAllocator",
+                            "policyRuleURI": "allocator:2.0-stable",
+                            "parameters": {
+                                "allocation_data": {
+                                    "node_id": "wc-gpu-node7",
+                                    "gpus": [0,1]
+                                }
+                            },
+                            "settings": {
+                                "selection_mode": "balanced"
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "loadBalancer",
+                            "policyRuleURI": "load_balancer:2.0-stable",
+                            "parameters": {
+                                "cache_sessions": true
+                            },
+                            "settings": {
+                                "session_cache_size": 2000
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "stabilityChecker",
+                            "policyRuleURI": "health_checker:2.0-stable",
+                            "parameters": {
+                                "unhealthy_threshold": 2
+                            },
+                            "settings": {
+                                "check_interval_sec": 10
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "autoscaler",
+                            "policyRuleURI": "autoscaler:2.0-stable",
+                            "parameters": {
+                                "target_gpu_utilization": 0.8
+                            },
+                            "settings": {
+                                "scale_up_cooldown": 45,
+                                "scale_down_cooldown": 90
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

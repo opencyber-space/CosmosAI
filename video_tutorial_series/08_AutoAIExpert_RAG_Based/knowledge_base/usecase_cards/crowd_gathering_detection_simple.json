@@ -1,0 +1,81 @@
+{
+  "componentId": "crowd_gathering",
+  "componentType": "node.algorithm.usecase",
+  "id": "uc-crowd-gathering",
+  "label": "Usecase",
+  "name": "Crowd Gathering Detection",
+  "category": "security_usecase",
+  "framework": "AIOS Pipeline",
+  "license": "MIT",
+
+  "modelDetails": {
+    "description": "Detects crowd formation events that exceed predefined thresholds with configurable alert management",
+    "intended_use": "Monitor crowd density and prevent overcrowding in public spaces, retail, and transportation hubs",
+    "limitations": ["Accuracy decreases in extremely dense crowds", "Requires clear camera view"],
+    "ethical_considerations": "Ensure crowd monitoring respects privacy and does not target specific groups"
+  },
+
+  "parameters": {
+    "computational_complexity": "O(n) where n=detected objects per frame",
+    "dependencies": ["object_detection", "counting_algorithm", "zone_filtering"],
+    "memory_footprint": "Medium",
+    "processing_type": "spatial_counting_with_temporal_filtering"
+  },
+
+  "configuration": {
+    "countThreshold": {
+      "description": "Raise alerts if the object count exceeds the specified countThreshold",
+      "type": "integer",
+      "default": 20,
+      "range": [5, 200]
+    },
+    "ViolationFrameCount": {
+      "description": "If the count threshold exceeds for at least this many frames",
+      "type": "integer",
+      "default": 10,
+      "range": [3, 30],
+      "unit": "frames"
+    },
+    "alert_interval": {
+      "description": "To alert every first and at every alert_interval if the object continues to exist, to avoid continuously throwing alerts",
+      "type": "integer",
+      "default": 60,
+      "range": [30, 300],
+      "unit": "seconds"
+    },
+    "severity": {
+      "description": "Severity of the alerts, where 'low' indicates minimal impact or urgency, 'medium' indicates moderate impact requiring attention, and 'high' indicates critical impact requiring immediate action",
+      "type": "string",
+      "allowed_values": ["low", "medium", "high"],
+      "default": "medium"
+    }
+  },
+
+  "runtime": {
+    "cpu_intensive": false,
+    "gpu_required": true,
+    "min_ram_mb": 150,
+    "recommended_cpu": "Multi-core CPU",
+    "python_version": "3.8+",
+    "dependencies": {
+      "opencv-python": ">=4.5.0",
+      "numpy": ">=1.20.0"
+    }
+  },
+
+  "benchmarks": {
+    "throughput": {
+      "max_objects_per_frame": 200,
+      "counting_accuracy": "±5% for crowds up to 50 people",
+      "alert_generation_latency_ms": 1000
+    }
+  },
+
+  "produces": ["crowd_alerts", "count_metadata", "severity_metadata"],
+  "consumes": ["detected_objects", "zone_definitions"],
+  
+  "input_formats": ["OD1"],
+  "output_formats": ["OD1"],
+
+  "notes": "Effective for crowd management and safety compliance. ViolationFrameCount prevents false alarms from brief count spikes."
+}

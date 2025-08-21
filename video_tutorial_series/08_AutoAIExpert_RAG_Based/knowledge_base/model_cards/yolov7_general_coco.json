@@ -1,0 +1,235 @@
+{
+   "componentId" : {
+      "name" : "general7Detection",
+      "release" : "stable",
+      "version" : "v0.0.1"
+   },
+	"componentType" : "node.algorithm.objdet",
+   "containerImage" : "generalobjdetection:latest",
+   "requiresGPU" : true,
+   "componentConfig" : {
+      "batchSize" : 8,
+      "supportsBatching" : true,
+      "frameSize" : [
+         {
+            "height" : 1080,
+            "width" : 1920
+         }
+      ],
+      "inputs" : [
+         "input_0"
+      ],
+      "outputs" : [
+         "output_0"
+      ],
+      "parameters" : [
+         {
+            "default" : 0.4,
+            "max" : 1,
+            "min" : 0.1,
+            "name" : "conf",
+            "type" : "float"
+         },
+         {
+            "default" : 0.4,
+            "max" : 1,
+            "min" : 0.1,
+            "name" : "nms_iou",
+            "type" : "float"
+         }
+      ],
+      "requireFrames" : true,
+      "settings" : [
+         {
+            "default" : true,
+            "name" : "use_fp16",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "name": "enable_batching",
+            "type": "bool",
+            "default": true,
+            "options" : [
+              true,
+              false
+            ]
+         },
+         {
+            "default" : true,
+            "name" : "use_cuda",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         },
+         {
+            "default" : 640,
+            "max" : 1280,
+            "min" : 416,
+            "name" : "width",
+            "type" : "int"
+         },
+         {
+            "default" : 640,
+            "max" : 1280,
+            "min" : 416,
+            "name" : "height",
+            "type" : "int"
+         },
+         {
+            "default" : 8,
+            "max" : 8,
+            "min" : 1,
+            "name" : "batch_size",
+            "type" : "int"
+         },
+         {
+            "default" : 1,
+            "max" : 4,
+            "min" : 1,
+            "name" : "roiBatchSize",
+            "type" : "int"
+         },
+         {
+            "default" : "TURBO",
+            "name" : "decoderType",
+            "options" : [
+               "TURBO",
+               "DALI"
+            ],
+            "type" : "String"
+         },
+         {
+            "default" : "INTERP_GAUSSIAN",
+            "name" : "interpolationType",
+            "options" : [
+               "INTERP_NN",
+               "INTERP_LINEAR",
+               "INTERP_CUBIC",
+               "INTERP_TRIANGULAR",
+               "INTERP_GAUSSIAN",
+               "INTERP_LANCZOS3"
+            ],
+            "type" : "String"
+         },
+         {
+            "default" : true,
+            "name" : "FullImage",
+            "options" : [
+               true,
+               false
+            ],
+            "type" : "bool"
+         }
+      ]
+   },
+   "componentMetadata" : {
+      "author" : {
+         "authorEmail" : "poc@ai.org",
+         "authorLinks" : {
+            "linkName" : "github",
+            "url" : "https://github.com/poc.org"
+         },
+         "authorName" : "poc"
+      },
+      "description" : "A general purpose object detection container trained on COCO dataset",
+      "license" : "closed",
+      "tags" : [
+         "alert"
+      ]
+   },
+   "modelDetails" : {
+      "id" : "mdl-yolov7-general-coco",
+      "label" : "Module",
+      "name" : "YOLOv7 General COCO",
+      "category" : "object_detector",
+      "framework" : "PyTorch",
+      "license" : "closed",
+      "repo_url" : "https://github.com/poc.org"
+   },
+   "parameters" : {
+      "total_params_m" : 37.2,
+      "backbone" : "E-ELAN",
+      "neck" : "FPN-PANet",
+      "head" : "Detect(V7)",
+      "anchor_config" : "[[12,16],[19,36],[40,28],[36,75],[76,55],[72,146],[142,110],[192,243],[459,401]]"
+   },
+   "training" : {
+      "pretrained" : true,
+      "input_resolution" : [640, 640],
+      "trained_on" : {
+         "dataset" : "COCO 2017",
+         "classes" : [
+            "person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat",
+            "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
+            "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack",
+            "umbrella", "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball",
+            "kite", "baseball bat", "baseball glove", "skateboard", "surfboard", "tennis racket",
+            "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana", "apple",
+            "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake",
+            "chair", "couch", "potted plant", "bed", "dining table", "toilet", "tv", "laptop",
+            "mouse", "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink",
+            "refrigerator", "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"
+         ],
+         "type" : "general_objects",
+         "categories" : 80,
+         "notes" : "Trained on COCO dataset for general object detection across 80 common object classes"
+      }
+   },
+   "runtime" : {
+      "gpu_required" : true,
+      "min_gpu_mem_gb" : 6,
+      "recommended_gpu" : "NVIDIA RTX 3060",
+      "cpu_cores" : 4,
+      "ram_gb" : 8,
+      "docker_image" : "generalobjdetection:latest",
+      "env" : {
+         "python" : "3.8",
+         "cuda" : "11.0",
+         "cudnn" : "8.0",
+         "os" : "ubuntu-20.04"
+      }
+   },
+   "benchmarks" : {
+      "hardware" : "NVIDIA RTX 3060",
+      "test_conditions" : {
+         "input_resolution" : [640, 640],
+         "decoder" : "TURBO",
+         "confidence_threshold" : 0.4,
+         "nms_threshold" : 0.4,
+         "precision" : "FP32",
+         "dataset" : "COCO val2017"
+      },
+      "throughput_fps" : {
+         "batch_size_1" : 90,
+         "batch_size_4" : 150,
+         "batch_size_8" : 170
+      },
+      "accuracy" : {
+         "map50" : 55.4,
+         "map5095" : 41.6,
+         "precision" : 0.78,
+         "recall" : 0.72
+      }
+   },
+   "produces" : ["object_bboxes", "object_classifications"],
+   "consumes" : ["rgb_frames"],
+   "input_formats": ["OD1"],
+   "output_formats": ["OD1"],
+   "sources" : [
+      {
+         "title" : "YOLOv7: Trainable bag-of-freebies sets new state-of-the-art",
+         "url" : "https://arxiv.org/abs/2207.02696"
+      },
+      {
+         "title" : "COCO Dataset",
+         "url" : "https://cocodataset.org/"
+      }
+   ],
+   "notes" : "General purpose object detector trained on COCO dataset. Suitable for detecting 80 common object classes in various scenarios. Good baseline model for general computer vision applications."
+}

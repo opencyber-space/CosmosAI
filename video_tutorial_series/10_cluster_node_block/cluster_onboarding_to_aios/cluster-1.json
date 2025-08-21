@@ -1,0 +1,71 @@
+{
+    "header": {
+        "templateUri": "Parser/V1",
+        "parameters": {}
+    },
+    "body": {
+        "spec": {
+            "values": {
+                "id": "gcp-demo-cluster",
+                "regionId": "us-central-1",
+                "status": "live",
+                "nodes": {
+                    "nodeData": [],
+                    "count": 0
+                },
+                "config": {
+                    "policyExecutorId": "executor-001",
+                    "policyExecutionMode": "local",
+                    "customPolicySystem": {},
+                    "publicHostname": "DEMOMASTERNODE",
+                    "localNetworkHostName": "10.128.0.62",
+                    "useGateway": false,
+                    "actionsPolicyMap": {}
+                },
+                "tags": [
+                    "gpu",
+                    "demo",
+                    "us-central-1"
+                ],
+                "clusterMetadata": {
+                    "name": "Demo Cluster 1",
+                    "description": "Cluster 1 with 3 nodes, 1 master and 2 worker, 1 L4 GPUs in one node and 2xT4 GPU in one other worked node",
+                    "owner": "AI Demo Team",
+                    "email": "ai-demo@company.net",
+                    "countries": [
+                        "USA",
+                        "Canada"
+                    ],
+                    "miscContactInfo": {
+                        "pagerDuty": "https://sample-website/ai-clusters",
+                        "slack": "#ml-infra"
+                    },
+                    "additionalInfo": {
+                        "kubeadmVersion": "v29.0.1",
+                        "kubectlVersion": "v29.0.1",
+                        "joinCommand": ""
+                    }
+                },
+                "reputation": 10,
+                "gpus": {
+                    "count": 0,
+                    "memory": 0
+                },
+                "vcpus": {
+                    "count": 0
+                },
+                "memory": 0,
+                "swap": 0,
+                "storage": {
+                    "disks": 0,
+                    "size": 0
+                },
+                "network": {
+                    "interfaces": 0,
+                    "txBandwidth": 0,
+                    "rxBandwidth": 0
+                }
+            }
+        }
+    }
+}

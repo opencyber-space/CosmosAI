@@ -1,0 +1,147 @@
+{
+  "componentId": "associate",
+  "componentType": "node.algorithm.policy",
+  "id": "pol-associate",
+  "label": "Policy",
+  "name": "Association Policy",
+  "category": "association_filter",
+  "framework": "OpenCV + NumPy",
+  "license": "MIT", 
+  "repo_url": "https://github.com/aios/policies",
+
+  "modelDetails": {
+    "description": "Advanced association policy for linking bounding boxes using multiple association methods (IOU, pixel distance, real-world distance) with sophisticated preprocessing and postprocessing options",
+    "intended_use": "Associate related objects in computer vision pipelines for complex scene understanding and object relationship analysis",
+    "limitations": ["Computationally intensive for large object counts", "Real-world distance requires camera calibration", "Complex parameter tuning"],
+    "ethical_considerations": "Association algorithms may introduce bias in crowd analysis or demographic tracking"
+  },
+
+  "parameters": {
+    "computational_complexity": "O(n²) to O(n³) depending on association type and preprocessing",
+    "dependencies": ["opencv-python", "numpy", "scipy"],
+    "memory_footprint": "Medium to High",
+    "processing_type": "geometric_association_with_postprocessing"
+  },
+
+  "configuration": {
+    "type": {
+      "description": "Association method to use",
+      "type": "string",
+      "allowed_values": ["IOU", "pixel2d", "real_world_distance"],
+      "required": true
+    },
+    "sort": {
+      "description": "Sorting order for association priorities",
+      "type": "string",
+      "allowed_values": ["ascending", "descending"],
+      "default": "descending"
+    },
+    "preprocess": {
+      "description": "Preprocessing options for position adjustment",
+      "type": "dict",
+      "options": {
+        "exclude_top_25_percent": "boolean",
+        "exclude_bottom_25_percent": "boolean", 
+        "exclude_bottom_half": "boolean",
+        "same_height_width_range": "dict",
+        "pivot_inside_roi": "boolean"
+      }
+    },
+    "selection": {
+      "description": "Selection policy for associations",
+      "type": "list",
+      "format": ["many", "many"] 
+    },
+    "comparisons": {
+      "description": "Class pairs to compare for association",
+      "type": "list",
+      "format": [["class1", "class2"], ["class3", "class4"]]
+    },
+    "dist2d_threshold": {
+      "description": "Distance threshold for pixel2d association",
+      "type": "float",
+      "default": 50,
+      "range": [1, 1000]
+    },
+    "iou_threshold": {
+      "description": "IoU threshold for IOU association",
+      "type": "float", 
+      "default": 0.3,
+      "range": [0.0, 1.0]
+    },
+    "real_world_threshold": {
+      "description": "Real world distance threshold in meters",
+      "type": "float",
+      "default": 2.0,
+      "range": [0.1, 100.0]
+    },
+    "postprocess": {
+      "description": "Postprocessing policy for association results",
+      "type": "dict",
+      "required": true,
+      "format": {
+        "primary": ["list of primary classes"],
+        "policy": "Keep1|Keep2|KeepBoth|Remove1|Remove2|RemoveBoth|Merge|CommonROI"
+      }
+    }
+  },
+
+  "dynamic_parameters": {
+    "supports_runtime_updates": true,
+    "updateable_parameters": ["dist2d_threshold", "iou_threshold", "real_world_threshold", "preprocess", "postprocess"],
+    "update_latency_ms": 20,
+    "api_endpoints": {
+      "update_parameters": "/api/v1/policies/association/update_parameters",
+      "update_thresholds": "/api/v1/policies/association/update_thresholds"
+    }
+  },
+
+  "runtime": {
+    "cpu_intensive": true,
+    "gpu_required": false,
+    "min_ram_mb": 500,
+    "recommended_cpu": "Multi-core CPU with high clock speed",
+    "python_version": "3.7+",
+    "dependencies": {
+      "opencv-python": ">=4.5.0",
+      "numpy": ">=1.20.0", 
+      "scipy": ">=1.7.0"
+    }
+  },
+
+  "benchmarks": {
+    "throughput": {
+      "associations_per_second": 1000,
+      "max_objects_supported": 500,
+      "latency_ms_per_100_objects": 50
+    },
+    "accuracy": {
+      "iou_precision": 0.95,
+      "pixel_distance_accuracy": "±2 pixels",
+      "real_world_accuracy": "±0.1 meters"
+    }
+  },
+
+  "produces": ["associated_detections", "association_metadata", "relationship_graph"],
+  "consumes": ["positioned_detections", "camera_calibration"],
+  
+  "input_formats": ["OD1"],
+  "output_formats": ["OD1"],
+
+  "sources": [
+    {
+      "title": "Object Association in Computer Vision",
+      "url": "https://arxiv.org/abs/object-association-cv"
+    },
+    {
+      "title": "IoU and Distance Metrics",
+      "url": "https://arxiv.org/abs/1708.02002"
+    },
+    {
+      "title": "Camera Calibration for Real-World Measurements",
+      "url": "https://docs.opencv.org/master/dc/dbb/tutorial_py_calibration.html"
+    }
+  ],
+
+  "notes": "Highly configurable but requires careful parameter tuning. Chain associations enable complex object relationship modeling. Performance scales quadratically with object count."
+}

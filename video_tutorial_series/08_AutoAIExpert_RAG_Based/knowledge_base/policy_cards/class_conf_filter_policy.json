@@ -1,0 +1,119 @@
+{
+  "componentId": "class_conf_filter",
+  "componentType": "node.algorithm.policy",
+  "id": "pol-class-conf-filter",
+  "label": "Policy",
+  "name": "Class Confidence Filter",
+  "category": "hybrid_filter", 
+  "framework": "Python",
+  "license": "MIT",
+  "repo_url": "https://github.com/aios/policies",
+
+  "modelDetails": {
+    "description": "Combined filtering policy that applies both class filtering and confidence filtering with support for time-based parameter updates",
+    "intended_use": "Apply sophisticated filtering combining class selection and confidence thresholds with temporal parameter adaptation",
+    "limitations": ["Time-based updates require system clock synchronization", "Complex parameter management"],
+    "ethical_considerations": "Time-based filtering may introduce temporal bias in surveillance systems"
+  },
+
+  "parameters": {
+    "computational_complexity": "O(n) where n=number of objects",
+    "dependencies": ["python-stdlib", "datetime"],
+    "memory_footprint": "Low", 
+    "processing_type": "hybrid_filtering_with_temporal_logic"
+  },
+
+  "configuration": {
+    "allowed_classes": {
+      "description": "List of class names to keep in the pipeline",
+      "type": "list",
+      "required": true,
+      "example": ["person", "vehicle", "bicycle"]
+    },
+    "score": {
+      "description": "Minimum detection confidence score threshold",
+      "type": "float",
+      "required": true,
+      "range": [0.0, 1.0],
+      "default": 0.5
+    },
+    "params_update_interval": {
+      "description": "Interval in seconds for updating time-based parameters",
+      "type": "int",
+      "default": 60,
+      "range": [1, 3600]
+    },
+    "timebased": {
+      "description": "Time ranges with corresponding parameter overrides",
+      "type": "dict",
+      "format": {
+        "time_ranges": [
+          {
+            "start_time": "HH:MM",
+            "end_time": "HH:MM", 
+            "allowed_classes": ["list"],
+            "score": "float"
+          }
+        ]
+      },
+      "default": null
+    },
+    "timezone": {
+      "description": "Timezone for time-based parameter evaluation",
+      "type": "string",
+      "default": "UTC"
+    }
+  },
+
+  "dynamic_parameters": {
+    "supports_runtime_updates": true,
+    "updateable_parameters": ["allowed_classes", "score", "timebased", "params_update_interval"],
+    "update_latency_ms": 50,
+    "api_endpoints": {
+      "update_parameters": "/api/v1/policies/class_conf_filter/update_parameters",
+      "update_timebased": "/api/v1/policies/class_conf_filter/update_timebased"
+    }
+  },
+
+  "runtime": {
+    "cpu_intensive": false,
+    "gpu_required": false,
+    "min_ram_mb": 100,
+    "recommended_cpu": "Any modern CPU",
+    "python_version": "3.7+",
+    "dependencies": {
+      "pytz": ">=2021.1"
+    }
+  },
+
+  "benchmarks": {
+    "throughput": {
+      "objects_per_second": 50000,
+      "latency_ms": 0.02,
+      "memory_per_object_bytes": 12
+    },
+    "temporal_accuracy": {
+      "parameter_update_latency_ms": 10,
+      "time_drift_tolerance_s": 1
+    }
+  },
+
+  "produces": ["filtered_detections", "active_parameters"],
+  "consumes": ["classified_scored_detections"],
+  
+  "input_formats": ["OD1"],
+  "output_formats": ["OD1"],
+
+  "sources": [
+    {
+      "title": "Temporal Logic in Computer Vision",
+      "url": "https://ieeexplore.ieee.org/document/temporal-cv"
+    },
+    {
+      "title": "Adaptive Filtering Systems",
+      "url": "https://arxiv.org/abs/adaptive-filtering"
+    }
+  ],
+
+  "notes": "Powerful for dynamic environments where filtering criteria change throughout the day. Essential for surveillance systems with varying operational requirements."
+}

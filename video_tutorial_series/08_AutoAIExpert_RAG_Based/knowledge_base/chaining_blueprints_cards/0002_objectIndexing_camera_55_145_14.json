@@ -1,0 +1,570 @@
+{
+    "parser_version": "Parser/V1",
+    "body": {
+        "header": {
+            "uid": {
+                "id": "objectIndexing_camera_55_145_14",
+                "version": "v0.0.1",
+                "releaseTag": "stable"
+            }
+        },
+        "spec": {
+            "@templateType": "template.vdag.app-layout.sample-vdag:v0.0.1-beta",
+            "values": {
+                "masterDAG": {
+                    "runtimeID": "default-mdag",
+                    "db_location": "framequeues-8"
+                },
+                "source": {
+                    "assignmentType": "source",
+                    "id": "camera_55_145_14",
+                    "settings": {
+                        "controller_node": "framequeues-8"
+                    },
+                    "parameters": {
+                        "fps": "3/1",
+                        "actuation_frequency": 1,
+                        "gpu_id": 1,
+                        "use_gpu": true,
+                        "allocation_node": "framequeues-8",
+                        "mode": "memory",
+                        "loop_video": true,
+                        "as_live": true,
+                        "frame_quality": 90,
+                        "color_format": "BGR"
+                    }
+                },
+                "settings": {
+                    "alert_url": "http://test-alerts.io",
+                    "test": {
+                        "x": "hello",
+                        "y": "world",
+                        "z": [
+                            {
+                                "a": "hello",
+                                "b": "world"
+                            },
+                            {
+                                "c": "hello",
+                                "d": "world"
+                            }
+                        ]
+                    },
+                    "ALERTIDURL": "http://serverip:serverport/getalertid"
+                },
+                "nodes": [
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "obj-det-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.algorithm.objdet.gen7Det540h_960_640_384h:v0.0.1-stable",
+                                "settings": {
+                                    "use_fp16": true,
+                                    "use_cuda": true,
+                                    "batch_size": 8,
+                                    "decoderType": "DALI",
+                                    "interpolationType": "INTERP_GAUSSIAN",
+                                    "width": 640,
+                                    "height": 384,
+                                    "FullImage": true,
+                                    "enable_batching": true,
+                                    "decoder_width": 1920,
+                                    "decoder_height": 1080,
+                                    "stretch_image": false,
+                                    "blockRoiEnabled": false,
+                                    "roiBatchSize": 1
+                                },
+                                "parameters": {
+                                    "mjpeg": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": true,
+                                                "caliberation": false
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "conf": 0.4,
+                                    "iou": 0.45,
+                                    "max_dets": 300
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.copy-assignment.copy-sample:v0.0.1-beta",
+                            "values": {
+                                "vdagId": "vdag-objectIndexing_camera_55_145_11.v0.0.1:stable",
+                                "nodeLabel": "obj-det-1"
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "policy-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.utils.policy.policy:v0.0.1-stable",
+                                "settings": {},
+                                "parameters": {
+                                    "mjpeg": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": true,
+                                                "caliberation": false
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "policies": {
+                                        "filters": [
+                                            {
+                                                "key": "class_conf_filter",
+                                                "params": {
+                                                    "score": 0.7,
+                                                    "allowed_classes": [
+                                                        "person",
+                                                        "car",
+                                                        "bus",
+                                                        "truck",
+                                                        "bicycle",
+                                                        "motorcycle",
+                                                        "cat",
+                                                        "dog",
+                                                        "horse",
+                                                        "sheep",
+                                                        "cow",
+                                                        "elephant",
+                                                        "bear",
+                                                        "zebra",
+                                                        "giraffe"
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "key": "class_replacer",
+                                                "params": {
+                                                    "class_replace_tuples": [
+                                                        [
+                                                            "cat",
+                                                            "Animal"
+                                                        ],
+                                                        [
+                                                            "dog",
+                                                            "Animal"
+                                                        ],
+                                                        [
+                                                            "horse",
+                                                            "Animal"
+                                                        ],
+                                                        [
+                                                            "sheep",
+                                                            "Animal"
+                                                        ],
+                                                        [
+                                                            "cow",
+                                                            "Animal"
+                                                        ],
+                                                        [
+                                                            "elephant",
+                                                            "Animal"
+                                                        ],
+                                                        [
+                                                            "bear",
+                                                            "Animal"
+                                                        ],
+                                                        [
+                                                            "zebra",
+                                                            "Animal"
+                                                        ],
+                                                        [
+                                                            "giraffe",
+                                                            "Animal"
+                                                        ]
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "key": "inside_zone",
+                                                "params": {
+                                                    "zone": [
+                                                        "ZoneObject"
+                                                    ],
+                                                    "pivotPoint": "bottomPoint"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.copy-assignment.copy-sample:v0.0.1-beta",
+                            "values": {
+                                "vdagId": "vdag-objectIndexing_camera_55_145_11.v0.0.1:stable",
+                                "nodeLabel": "policy-1"
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "tracker-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.algorithm.tracker.trackerlite:v0.0.1-stable",
+                                "settings": {
+                                    "ttl": 4,
+                                    "tracker_type": "NONE",
+                                    "keep_upper_height_ratio": 1.0,
+                                    "decoderType": "DALI",
+                                    "interpolationType": "INTERP_GAUSSIAN",
+                                    "batch_size": 16,
+                                    "enable_batching": true
+                                },
+                                "parameters": {
+                                    "iou": 0.45,
+                                    "sigma_iou": 0.3,
+                                    "sigma_h": 0.3,
+                                    "sigma_l": 0.1,
+                                    "t_min": 1,
+                                    "mjpeg": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": true,
+                                                "arrow": true,
+                                                "alertHighlight": true,
+                                                "caliberation": true
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false
+                                    },
+                                    "logging": {
+                                        "enabled": true,
+                                        "dbData": [
+                                            "entryTime",
+                                            "exitTime",
+                                            "category",
+                                            "conf",
+                                            "zone",
+                                            "id",
+                                            "roi",
+                                            "usecase",
+                                            "cameraID",
+                                            "severity",
+                                            "timestamp",
+                                            "latitude",
+                                            "longitude"
+                                        ],
+                                        "extraParams": [
+                                            {
+                                                "usecase": "objectIndexing"
+                                            }
+                                        ],
+                                        "dataPushParams": [
+                                            {
+                                                "REDIS": {
+                                                    "host": "serverip",
+                                                    "port": 6379,
+                                                    "password": "pass",
+                                                    "db": 0
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.copy-assignment.copy-sample:v0.0.1-beta",
+                            "values": {
+                                "vdagId": "vdag-objectIndexing_camera_55_145_11.v0.0.1:stable",
+                                "nodeLabel": "tracker-1"
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "usecase-1",
+                                "nodeType": "algorithm",
+                                "componentURI": "node.utils.usecase.usecase:v0.0.1-stable",
+                                "settings": {},
+                                "parameters": {
+                                    "log_level": "info",
+                                    "mjpeg": {
+                                        "enabled": true,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": true,
+                                                "caliberation": false,
+                                                "drawKeyPoints": true
+                                            }
+                                        ]
+                                    },
+                                    "alerts": {
+                                        "enabled": false,
+                                        "drawingParams": [
+                                            {
+                                                "zone": true,
+                                                "roi": true,
+                                                "line": false,
+                                                "arrow": false,
+                                                "alertHighlight": true,
+                                                "caliberation": false,
+                                                "drawKeyPoints": true
+                                            }
+                                        ],
+                                        "storageParams": [
+                                            {
+                                                "MINIO": {
+                                                    "endpoint": "serverip:port619",
+                                                    "access_key": "secretAccess",
+                                                    "secret_key": "secretKey",
+                                                    "MINIOURLREPLACEMENT": ""
+                                                }
+                                            }
+                                        ],
+                                        "dbParams": [
+                                            {
+                                                "MONGO": {
+                                                    "host": "mongodURI",
+                                                    "dbname": "PROJECT_ALERT",
+                                                    "collection": "alerts"
+                                                }
+                                            }
+                                        ],
+                                        "dataPushParams": [
+                                            {
+                                                "REDIS": {
+                                                    "host": "serverip:port7",
+                                                    "port": 6379,
+                                                    "password": "pass",
+                                                    "db": 0
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "logging": {
+                                        "enabled": true,
+                                        "imgurl": false,
+                                        "dbData": [
+                                            "cameraId",
+                                            "location",
+                                            "conf",
+                                            "class",
+                                            "id",
+                                            "startTime",
+                                            "endTime",
+                                            "logkey"
+                                        ],
+                                        "storageParams": [
+                                            {
+                                                "MINIO": {
+                                                    "endpoint": "serverip:port619",
+                                                    "access_key": "secretAccess",
+                                                    "secret_key": "secretKey",
+                                                    "MINIOURLREPLACEMENT": ""
+                                                }
+                                            }
+                                        ],
+                                        "dbParams": [
+                                            {
+                                                "MONGO": {
+                                                    "host": "mongodb://user1:proCog%23128@serverip:port9:27018,serverip:port0:27018,serverip:port1:27018,serverip:port7:27018/?replicaSet=rs0&readPreference=primary&serverSelectionTimeoutMS=50000&connectTimeoutMS=100000&socketTimeoutMS=360000&authSource=admin&authMechanism=SCRAM-SHA-1",
+                                                    "dbname": "PROJECT_LOG",
+                                                    "collection": "objectindex_store"
+                                                }
+                                            }
+                                        ],
+                                        "dataPushParams": [
+                                            {
+                                                "REDIS": {
+                                                    "host": "serverip:port7",
+                                                    "port": 6379,
+                                                    "password": "pass",
+                                                    "db": 0
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "usecase": {
+                                        "filters": [
+                                            {
+                                                "key": "objectIndexing",
+                                                "params": {
+                                                    "sizeChangeType": "height",
+                                                    "sizeChangePerc": 50,
+                                                    "alert_interval": 5,
+                                                    "severity": "high"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "nodeDescription": "Hello-world!"
+                            }
+                        },
+                        "scaleSpec": {
+                            "@templateType": "template.scale.copy-assignment.copy-sample:v0.0.1-beta",
+                            "values": {
+                                "vdagId": "vdag-objectIndexing_camera_55_145_11.v0.0.1:stable",
+                                "nodeLabel": "usecase-1"
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ],
+                        "extensions": []
+                    }
+                ],
+                "graph": {
+                    "input": [
+                        {
+                            "nodeLabel": "obj-det-1",
+                            "inputNames": [
+                                "input_0"
+                            ]
+                        }
+                    ],
+                    "output": [
+                        {
+                            "nodeLabel": "usecase-1",
+                            "outputNames": [
+                                "output_0"
+                            ]
+                        }
+                    ],
+                    "connections": [
+                        {
+                            "nodeLabel": "policy-1",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "obj-det-1",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "nodeLabel": "tracker-1",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "policy-1",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "nodeLabel": "usecase-1",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "tracker-1",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
