@@ -34,11 +34,8 @@ This guide is an index and progress tracker for the video tutorial series and ac
 ### Legend
 
 - ✅ Video recorded
-- 🔄 Video in review
 - 🟢 Jupyter notebook created
 - 🟡 Jupyter notebook partially created
-- 🟠 In progress
-- 📝 Reviews to be incorporated
 
 ---
 
@@ -53,8 +50,7 @@ This guide is an index and progress tracker for the video tutorial series and ac
 
 ## 🚧 Coming Soon
 
-- Video recordings for parts 10–11.
-- Many more tutorials on AIOS Ecosystem
+- Many more tutorials on AGI Ecosystem
 
 ---
 
