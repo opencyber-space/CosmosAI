@@ -29,17 +29,13 @@ This guide is an index and progress tracker for the video tutorial series and ac
 | 10 | [10_Cluster_Node_Block](./video_tutorial_series/10_cluster_node_block/) | <br>Part1: Cluster Controller gateway APIs, Cluster Controller, Node, Block <br> Part2: Policies of Control for Gateway, Cluster Controller, Block | <br>✅ Video recorded <br>🔄 Video in review |   Part1:[Cluster Controller gateway APIs, Cluster Controller](https://youtu.be/DktryLA-gaY)   |
 | 11 | [11_Circular_vDAG](./video_tutorial_series/11_circular_vdag/) | Using AIOSV1 policies to create a Debate System between LLMs | <br>✅ Video recorded <br>🔄 Video in review <br>🟢 Jupyter notebook created |   -   |
 | 12 | [12_Model_Splitting](./video_tutorial_series/12_model_splitting/) | Model Splitting across GPUs and Nodes in AIOSV1 | <br>🟠 In progress <br>🟢 Jupyter notebook created |   -   |
-
 ---
 
 ### Legend
 
 - ✅ Video recorded
-- 🔄 Video in review
 - 🟢 Jupyter notebook created
 - 🟡 Jupyter notebook partially created
-- 🟠 In progress
-- 📝 Reviews to be incorporated
 
 ---
 
@@ -54,8 +50,7 @@ This guide is an index and progress tracker for the video tutorial series and ac
 
 ## 🚧 Coming Soon
 
-- Video recordings for parts 10–11.
-- Many more tutorials on AIOS Ecosystem
+- Many more tutorials on AGI Ecosystem
 
 ---
 
