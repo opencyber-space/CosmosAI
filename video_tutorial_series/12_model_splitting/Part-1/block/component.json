@@ -1,0 +1,118 @@
+{
+    "componentId": {
+        "name": "pytorch-runner",
+        "version": "1.0.0",
+        "releaseTag": "stable"
+    },
+    "componentType": "model",
+    "containerRegistryInfo": {
+        "containerImage": "MANAGEMENTMASTER:31280/example/pytorch-split-client:latest",
+        "containerRegistryId": "MANAGEMENTMASTER:31280/example/pytorch-split-client:latest",
+        "containerImageMetadata": {
+            "author": "LLM",
+            "description": "LLM Runner that takes any hugging face model as input and runs it on GPUs"
+        },
+        "componentMode": "aios"
+    },
+    "componentMetadata": {
+        "usecase": "real-time object detection",
+        "framework": "PyTorch",
+        "hardware": "GPU"
+    },
+    "componentInitData": {
+        "model_split_id": "phi-128k-2"
+    },
+    "componentInputProtocol": {
+        "message": {
+              "type": "string",
+              "description": "input message"
+            },
+        "mode": {
+            "type": "string",
+            "description": "mode of request (chat,generate,tokens etc)"
+        },
+        "system_message": {
+            "type": "string",
+            "description": "Override system message"
+        },
+        "generation_config": {
+            "type": "object",
+            "description": "Config for generation",
+            "properties": {
+                "max_new_tokens": {
+                        "type": "integer",
+                        "description": "Number of tokens to generate",
+                        "min": 1,
+                        "max": 36000
+                    },
+                "top_k": {
+                        "type": "integer",
+                        "description": "Topk",
+                        "min": 1,
+                        "max": 1000
+                    },
+                "top_p": {
+                            "type": "number",
+                            "description": "Top p",
+                            "min": 0.0,
+                            "max": 1.0
+                        },
+                "temperature": {
+                        "type": "number",
+                        "description": "Temperature",
+                        "min": 0.0,
+                        "max": 1.0
+                    },
+                "do_sample": {
+                        "type": "boolean",
+                        "description": "Do Sample"
+                    }
+            }
+        }
+    },
+    "componentOutputProtocol": {
+        "reply": {
+              "type": "string",
+              "description": "Chat reply from the model (chat mode)"
+            },
+        "generated": {
+            "type": "string",
+            "description": "Generated text (generate mode)"
+        }
+    },
+    "componentInitParametersProtocol": {
+        
+    },
+    "componentInitSettingsProtocol": {
+        "system_message": {
+            "type": "string",
+            "description": "System-message for LLM"
+        }
+    },
+    "policies": {
+    },
+    "componentManagementCommandsTemplate": {
+        "reset": {
+            "description": "Restart the Chat history",
+            "args": {}
+        }
+    },
+    "componentParameters": {
+        "generation_config": {
+            "max_new_tokens": 2048,
+            "top_k": 50,
+            "top_p": 0.95,
+            "temperature": 1.0,
+            "do_sample": false
+        }
+    },
+    "componentInitSettings": {
+        "system_message": "You are an helpfull Assistant"
+    },
+    "tags": [
+        "proxy",
+        "model-splitting",
+        "pytorch",
+        "transformers"
+    ]
+}

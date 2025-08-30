@@ -1,0 +1,126 @@
+{
+    "head": {
+        "templateUri": "Parser/V1",
+        "parameters": {}
+    },
+    "body": {
+        "spec": {
+            "values": {
+                "mode": "allocate",
+                "blockId": "vllm-block-1",
+                "blockComponentURI": "model.vllm-runner:1.0.0-stable",
+                "minInstances": 1,
+                "maxInstances": 3,
+                "blockInitData": {
+                   "model": "Qwen/Qwen1.5-0.5B-Chat",
+                   "namespace": "vllm-blocks"
+                },
+                "initSettings": {
+                    "max_new_tokens": 256,
+                    "tensor_parallel": true,
+                    "device": "cuda",
+                    "hf_token": "",
+                    "quantization_type": "8bit",
+                    "bnb_4bit_compute_dtype": "float16",
+                    "bnb_4bit_quant_type": "nf4",
+                    "bnb_4bit_use_double_quant": true,
+                    "llm_int8_threshold": 6.0,
+                    "llm_int8_skip_modules": null,
+                    "llm_int8_enable_fp32_cpu_offload": false,
+                    "model_kwargs": {
+                        "torch_dtype": "auto"
+                    },
+                    "generation_config": {
+                        "do_sample": true,
+                        "temperature": 0.7,
+                        "top_p": 0.9,
+                        "max_new_tokens": 256
+                    }
+                },
+                "parameters": {
+                    "temperature": 0.7
+                },
+                "policyRulesSpec": [
+                    {
+                        "values": {
+                            "name": "clusterAllocator",
+                            "policyRuleURI": "cluster-selector:2.0-stable",
+                            "parameters": {
+                                "filter": {
+                                    "clusterQuery": {
+                                        "variable": "id",
+                                        "operator": "==",
+                                        "value": "gcp-cluster-1"
+                                    }
+                                }
+                            },
+                            "settings": {
+                                "max_candidates": 2
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "resourceAllocator",
+                            "policyRuleURI": "allocator-2:2.0-stable",
+                            "parameters": {
+                                "allocation_data": {
+                                    "node_id": "wc-gpu-node4",
+                                    "gpus": [
+                                        0,
+                                        1
+                                    ]
+                                },
+                                "third_party_allocation_data": {
+                                    "nodes": ["wc-gpu-node4"],
+                                    "gpus": [0],
+                                    "worker_gpus": [1]
+                                }
+                            },
+                            "settings": {
+                                "selection_mode": "balanced"
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "loadBalancer",
+                            "policyRuleURI": "load_balancer:2.0-stable",
+                            "parameters": {
+                                "cache_sessions": true
+                            },
+                            "settings": {
+                                "session_cache_size": 2000
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "stabilityChecker",
+                            "policyRuleURI": "health_checker:2.0-stable",
+                            "parameters": {
+                                "unhealthy_threshold": 2
+                            },
+                            "settings": {
+                                "check_interval_sec": 10
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "autoscaler",
+                            "policyRuleURI": "autoscaler:2.0-stable",
+                            "parameters": {
+                                "target_gpu_utilization": 0.8
+                            },
+                            "settings": {
+                                "scale_up_cooldown": 45,
+                                "scale_down_cooldown": 90
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
