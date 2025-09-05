@@ -7,7 +7,7 @@ This repository contains tutorials to get started on the following:
 # AIOS AI Blueprints: Video Tutorial Series Index & Progress
 
 Welcome to the **AIOS AI Blueprints Video Tutorial Series**!  
-This guide is an index and progress tracker for the video tutorial series and accompanying Jupyter notebooks. It provides an overview of each part, its current status (as of August 6, 2025), and guidance on navigating the materials.
+This guide is an index and progress tracker for the video tutorial series and accompanying Jupyter notebooks. It provides an overview of each part, its current status (as of September 5, 2025), and guidance on navigating the materials.
 
 ---
 
