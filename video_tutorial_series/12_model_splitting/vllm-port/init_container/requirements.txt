@@ -1,6 +1,0 @@
-redis
-requests
-prometheus_client
-websocket_server
-kubernetes
-pyhelm
