@@ -1,0 +1,126 @@
+{
+    "head": {
+        "templateUri": "Parser/V1",
+        "parameters": {}
+    },
+    "body": {
+        "spec": {
+            "values": {
+                "mode": "allocate",
+                "blockId": "llama4-scout-17b-block",
+                "blockComponentURI": "model.llama4-scout-17b:1.0.0-stable",
+                "minInstances": 1,
+                "maxInstances": 3,
+                "blockInitData": {
+                    "model_name": "Llama-4-Scout-17B-16E-Instruct-UD-Q8_K_XL/Llama-4-Scout-17B-16E-Instruct-UD-Q8_K_XL-00001-of-00003.gguf",
+                    "system_message": "You are an expert recruitment assistant. Your task is to analyze the provided resume context and create a JSON-based execution plan for a multi-stage recruitment pipeline. Your output MUST be a valid JSON object with a single key, \"tool_calls\". This key must contain a list of jobs to be executed in sequence.\n\nIMPORTANT: Group ALL candidates into a SINGLE background check job. Do not create separate background check jobs for each candidate.\n\nEach job in the list is a JSON object and MUST have the following keys:\n- \"name\": A descriptive name for the job (e.g., \"background-check-batch-1\").\n- \"policy_rule_uri\": The specific URI for the policy to be executed.\n- \"inputs\": A JSON object containing the parameters for that policy.\n\nHere are the available policies and their details:\n\n1.  **Background Check Policy**\n    -   `policy_rule_uri`: `generic_background_check:1.0.0-stable`\n    -   `inputs`: A JSON object with a \"candidates\" key, which is an ARRAY containing ALL candidate objects with \"id\", \"name\", and \"email\".\n\n2.  **Send Email Policy**\n    -   `policy_rule_uri`: `generic_send_email:1.0.0-stable`\n    -   `inputs`: A JSON object with \"subject\" and \"body\" keys. The \"to\" address will be handled automatically by the pipeline for candidates who pass the background check.\n\n**Correct Output Format (Note: ALL candidates in ONE background check):**\n\n{\n  \"tool_calls\": [\n    {\n      \"name\": \"background-check-batch\",\n      \"policy_rule_uri\": \"generic_background_check:1.0.0-stable\",\n      \"inputs\": {\n        \"candidates\": [\n          {\n            \"id\": \"1\",\n            \"name\": \"John Doe\",\n            \"email\": \"john.doe@example.com\"\n          },\n          {\n            \"id\": \"2\",\n            \"name\": \"Jane Smith\",\n            \"email\": \"jane.smith@example.com\"\n          }\n        ]\n      }\n    },\n    {\n      \"name\": \"send-follow-up-email\",\n      \"policy_rule_uri\": \"generic_send_email:1.0.0-stable\",\n      \"inputs\": {\n        \"subject\": \"Next Steps in Your Application\",\n        \"body\": \"Thank you for your application. We will be in touch with the next steps shortly.\"\n      }\n    }\n  ]\n}\n\nAlways combine ALL candidates into a SINGLE background check job. Do not create individual background check jobs per candidate."
+
+                },
+                "initSettings": {
+                    "tensor_parallel": true,
+                    "device": "cuda",
+                    "quantization_type": "int8",
+                    "cleanup_enabled":  true,
+                    "cleanup_check_interval": 60,
+                    "cleanup_session_timeout": 1800,
+                    "generation_config": {
+                        "max_new_tokens": 2048,
+                        "temperature": 0.6,
+                        "top_k": 50,
+                        "top_p": 0.9,
+                        "repetition_penalty": 1.1,
+                        "do_sample": true
+                    }
+                },
+                "policyRulesSpec": [
+                    {
+                        "values": {
+                            "name": "pre_processing",
+                            "policyRuleURI": "recruitment_preprocessing:1.0.0-stable",
+                            "parameters": {},
+                            "settings": {}
+                        }
+                    },                    
+                    {
+                        "values": {
+                            "name": "post_processing",
+                            "policyRuleURI": "recruitment_postprocessing:1.0.0-stable",
+                            "parameters": {},
+                            "settings": {}
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "clusterAllocator",
+                            "policyRuleURI": "cluster-selector:2.0-stable",
+                            "parameters": {
+                                "filter": {
+                                    "clusterQuery": {
+                                        "variable": "id",
+                                        "operator": "==",
+                                        "value": "gcp-cluster-2"
+                                    }
+                                }
+                            },
+                            "settings": {
+                                "max_candidates": 2
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "resourceAllocator",
+                            "policyRuleURI": "allocator:2.0-stable",
+                            "parameters": {
+                                "allocation_data": {
+                                    "node_id": "wc-gpu-node2",
+                                    "gpus": [0,1]
+                                }
+                            },
+                            "settings": {
+                                "selection_mode": "balanced"
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "loadBalancer",
+                            "policyRuleURI": "load_balancer:2.0-stable",
+                            "parameters": {
+                                "cache_sessions": true
+                            },
+                            "settings": {
+                                "session_cache_size": 2000
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "stabilityChecker",
+                            "policyRuleURI": "health_checker:2.0-stable",
+                            "parameters": {
+                                "unhealthy_threshold": 2
+                            },
+                            "settings": {
+                                "check_interval_sec": 10
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "autoscaler",
+                            "policyRuleURI": "autoscaler:2.0-stable",
+                            "parameters": {
+                                "target_gpu_utilization": 0.8
+                            },
+                            "settings": {
+                                "scale_up_cooldown": 45,
+                                "scale_down_cooldown": 90
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -6,7 +6,7 @@ apt install -y git
 
 CUR_DIR=$(dirname "$(realpath "$0")")
 
-#git clone https://github.com/OpenCyberspace/AIGr.id.git
+#git clone https://github.com/opencyber-space/AIGr.id.git
 
 cd "$CUR_DIR/../AIGr.id/services/applications/aios-sdk/instance-sdk"
 
