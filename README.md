@@ -7,7 +7,7 @@ This repository contains tutorials to get started on the following:
 # AIOS AI Blueprints: Video Tutorial Series Index & Progress
 
 Welcome to the **AIOS AI Blueprints Video Tutorial Series**!  
-This guide is an index and progress tracker for the video tutorial series and accompanying Jupyter notebooks. It provides an overview of each part, its current status (as of August 6, 2025), and guidance on navigating the materials.
+This guide is an index and progress tracker for the video tutorial series and accompanying Jupyter notebooks. It provides an overview of each part, its current status (as of September 5, 2025), and guidance on navigating the materials.
 
 ---
 
@@ -16,9 +16,9 @@ This guide is an index and progress tracker for the video tutorial series and ac
 | Part | Tutorial | Description | Status (as of 2025-09-5) | Video Link |
 |------|----------------|-------------|---------------------------|:----------:|
 | 1 | [prerequisites_setup](./video_tutorial_series/01_prerequisites_setup/) | Initial setup and prerequisites for the AIOS platform and working with LLMs. | <br>🟢 Jupyter notebook  |   -   |
-| 2a | [Part-1: onboard_gemma3<br>_llama_cpp](./video_tutorial_series/02_Part1_onboard_gemma3_llama_cpp/) | Onboarding Gemma-3 to AIOS ecosystem. | <br>✅ Video  <br>🟢 Jupyter notebook  | [AIOS Tutorial: Onboard Any GGUF Model in AIOS Ecosystem with LlamacppPython in Minutes](https://youtu.be/G_yKqIbBP5Q) |
-| 2b | [Part-2: onboard_<br>custom_llama_cpp](./video_tutorial_series/02_Part2_onboard_custom_llama_cpp/) | Onboarding custom LLM models with llama_cpp_python on AIOS. | <br>🟢 Jupyter notebook  |   -   |
-| 2c | [Part-3: more_models_llama_cpp](./video_tutorial_series/02_more_models_llama_cpp/) | Onboarding more models (Qwen & Magistral notebooks under AIOS onboarding in progress) using llama_cpp_python. | <br>🟠 In progress |   -   |
+| 2.a | [Part-1: onboard_gemma3<br>_llama_cpp](./video_tutorial_series/02_Part1_onboard_gemma3_llama_cpp/) | Onboarding Gemma-3 to AIOS ecosystem. | <br>✅ Video  <br>🟢 Jupyter notebook  | [AIOS Tutorial: Onboard Any GGUF Model in AIOS Ecosystem with LlamacppPython in Minutes](https://youtu.be/G_yKqIbBP5Q) |
+| 2.b | [Part-2: onboard_<br>custom_llama_cpp](./video_tutorial_series/02_Part2_onboard_custom_llama_cpp/) | Onboarding custom LLM models with llama_cpp_python on AIOS. | <br>🟢 Jupyter notebook  |   -   |
+| 2.c | [Part-3: more_models_llama_cpp](./video_tutorial_series/02_more_models_llama_cpp/) | Onboarding more models (Qwen & Magistral notebooks under AIOS onboarding in progress) using llama_cpp_python. | <br>🟠 In progress |   -   |
 | 3 | [autoscaler](./video_tutorial_series/03_autoscaler/) | Autoscaling on AIOS to support varying workloads as V1 Policy. | <br>✅ Video  <br>🟢 Jupyter notebook  | [Never Overprovision Again: Intelligent LLM Autoscaling with AIOS](https://youtu.be/SZPScDgwhqA) |
 | 4 | [loadbalancer](./video_tutorial_series/04_loadbalancer/) | Load balancing strategies (V1 Policy) in AIOS for efficient inference. | <br>✅ Video  <br>🟢 Jupyter notebook  | [AIOS Smart Routing: Building a Token-Aware Load Balancer](https://youtu.be/HyC1jV-fzuE) |
 | 5 | [router](./video_tutorial_series/05_router/) | Dynamic routing of requests to LLM models/endpoints in AIOS. | <br>✅ Video  <br>🟢 Jupyter notebook  | [The Ultimate AI Router: Dynamic Model Selection with AIOS](https://youtu.be/uW-qEsVKZAE) |
