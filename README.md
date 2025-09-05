@@ -4,9 +4,9 @@ This repository contains tutorials to get started on the following:
 1. https://github.com/OpenCyberspace/OpenOS.AI-Documentation
 2. https://github.com/opencyber-space/AIGr.id/tree/main
 
-# Jupyter notebooks & Video walkthroughs index
+# Jupyter Notebooks & Video Walkthroughs Index
 
-Welcome to the **AIOS AI Blueprints Video Tutorial Series**!  
+Welcome to the **AIOS AI Blueprints & Video Tutorial Series**!  
 
 
 ---
@@ -31,8 +31,8 @@ Welcome to the **AIOS AI Blueprints Video Tutorial Series**!
 | 10.a | [Part-1: Cluster Node Block in AIOS](./video_tutorial_series/10_cluster_node_block/) | Cluster Controller gateway APIs, Cluster Controller, Node, Block | <br>✅ Video  <br>🟢 Jupyter notebook |   <br> [Cluster Controller gateway APIs, Cluster Controller](https://youtu.be/DktryLA-gaY) |
 | 10.b | [Part-2: Policies of Control](./video_tutorial_series/10_cluster_node_block/) | Policies of Control for Gateway, Cluster Controller, Block | <br>✅ Video  <br>🟢 Jupyter notebook |  [Policies of Control for Gateway, Cluster Controller, Block](https://youtu.be/XlJufXZzYno) |
 | 11 | [Cyclic Graph](./video_tutorial_series/11_circular_vdag/) | Using AIOSV1 policies to create a Debate System between LLMs | <br>✅ Video  <br>🟢 Jupyter notebook  |   -   |
-| 12.a | [Part1: Model Splitting](./video_tutorial_series/12_model_splitting/) | Model Splitting within and across Nodes in AIOSV1 using Native Library Pytorch and Transformer(without Optimizations) | 🟢 Jupyter notebook  |   -   |
-| 12.b | [Part2: Model Splitting](./video_tutorial_series/12_model_splitting/) | Model Splitting  within and across Nodes in AIOS using 3rd party softwares like vLLM(with Ray) in a Grid | 🟢 Jupyter notebook  |   -   |
+| 12.a | [Part-1: Model Splitting](./video_tutorial_series/12_model_splitting/) | Model Splitting within and across Nodes in AIOSV1 using Native Library Pytorch and Transformer(without Optimizations) | 🟢 Jupyter notebook  |   -   |
+| 12.b | [Part-2: Model Splitting](./video_tutorial_series/12_model_splitting/) | Model Splitting  within and across Nodes in AIOS using 3rd party softwares like vLLM(with Ray) in a Grid | 🟢 Jupyter notebook  |   -   |
 | 13 | [Automate Vision Model Selection MCP & RoR](./video_tutorial_series/12_model_splitting/) | Selecting Vision Models Dynamically from Registry of Registries Via MCP and LLM | 🟢 Jupyter notebook  |   -   |
 ---
 
