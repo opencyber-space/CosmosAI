@@ -13,28 +13,32 @@ This guide is an index and progress tracker for the video tutorial series and ac
 
 ## 📚 Series Overview & Progress
 
-| Part | Tutorial Folder | Description | Status (as of 2025-08-21) | Video Link |
+| Part | Tutorial | Description | Status (as of 2025-09-5) | Video Link |
 |------|----------------|-------------|---------------------------|:----------:|
-| 1 | [01_prerequisites_setup](./video_tutorial_series/01_prerequisites_setup/) | Initial setup and prerequisites for the AIOS platform and working with LLMs. | <br>🟢 Jupyter notebook created |   -   |
-| 2a | [02_Part1_onboard_gemma3<br>_llama_cpp](./video_tutorial_series/02_Part1_onboard_gemma3_llama_cpp/) | Onboarding Gemma-3 to AIOS ecosystem. | <br>✅ Video recorded <br>🔄 Video in review <br>🟢 Jupyter notebook created | [AIOS Tutorial: Onboard Any GGUF Model in AIOS Ecosystem with LlamacppPython in Minutes](https://youtu.be/G_yKqIbBP5Q) |
-| 2b | [02_Part2_onboard_<br>custom_llama_cpp](./video_tutorial_series/02_Part2_onboard_custom_llama_cpp/) | Onboarding custom LLM models with llama_cpp_python on AIOS. | <br>🟢 Jupyter notebook created |   -   |
-| 2c | [02_more_models_llama_cpp](./video_tutorial_series/02_more_models_llama_cpp/) | Onboarding more models (Qwen & Magistral notebooks under AIOS onboarding in progress) using llama_cpp_python. | <br>🟠 In progress |   -   |
-| 3 | [03_autoscaler](./video_tutorial_series/03_autoscaler/) | Autoscaling on AIOS to support varying workloads as V1 Policy. | <br>✅ Video recorded <br>🔄 Video in review <br>🟢 Jupyter notebook created | [Never Overprovision Again: Intelligent LLM Autoscaling with AIOS](https://youtu.be/SZPScDgwhqA) |
-| 4 | [04_loadbalancer](./video_tutorial_series/04_loadbalancer/) | Load balancing strategies (V1 Policy) in AIOS for efficient inference. | <br>✅ Video recorded <br>🔄 Video in review <br>🟢 Jupyter notebook created | [AIOS Smart Routing: Building a Token-Aware Load Balancer](https://youtu.be/HyC1jV-fzuE) |
-| 5 | [05_router](./video_tutorial_series/05_router/) | Dynamic routing of requests to LLM models/endpoints in AIOS. | <br>✅ Video recorded <br>🔄 Video in review <br>🟢 Jupyter notebook created | [The Ultimate AI Router: Dynamic Model Selection with AIOS](https://youtu.be/uW-qEsVKZAE) |
-| 6 | [06_adhoc_inference](./video_tutorial_series/06_adhoc_inference/) | Ad-hoc/on-demand inference serving using AIOS. | <br>✅ Video recorded <br>🔄 Video in review <br>🟢 Jupyter notebook created | [Mastering Ad-hoc Inference for Dynamic Model Execution](https://youtu.be/lEqe0iIUQy8) |
-| 7 | [07_pre_and_post_processing<br>_metrics_streaming_health](./video_tutorial_series/07_pre_and_post_processing_metrics_streaming_health/) | Pre/post-processing policies, metrics and streaming, health monitoring in AIOS. | <br>🟠 In progress |   -   |
-| 8 | [08_AutoAIExpert_RAG_Based](./video_tutorial_series/08_AutoAIExpert_RAG_Based/) | RAG based AppLayout and ScaleLayout generation | <br>✅ Video recorded <br>🔄 Video in review | [Automate AI Design & Scaling with AutoAI Expert System for AIOS v1](https://youtu.be/RX7UYUQ1kKY) |
-| 9 | [09_vDAG](./video_tutorial_series/09_vDAG/) |  <br> Part-1: vDAGs, Blocks, PostProcessing Policies, vDAG Controller <br> Part-2: Policies(Quota Check, Quality Store) <br> Part-3: Health Check and vDAGs Metrics | <br>✅ Video recorded <br>🔄 Video in review | Part1:[Break Down Complex AI Models with AIOS v1's vDAG \| A Deep Dive](https://youtu.be/VROxR2e5RNE)<br> Part2: [09 vDAG Controller Policy Demonstration: Quota and Quality store policy](https://youtu.be/OdBeVDoMhzE)<br> Part3:[Health Check policies and Metrics of vDAG Controller](https://youtu.be/XRc32ywSzX8) |
-| 10 | [10_Cluster_Node_Block](./video_tutorial_series/10_cluster_node_block/) | <br>Part1: Cluster Controller gateway APIs, Cluster Controller, Node, Block <br> Part2: Policies of Control for Gateway, Cluster Controller, Block | <br>✅ Video recorded <br>🔄 Video in review |   <br> Part1:[Cluster Controller gateway APIs, Cluster Controller](https://youtu.be/DktryLA-gaY)  <br> Part2:[Policies of Control for Gateway, Cluster Controller, Block](https://youtu.be/XlJufXZzYno) |
-| 11 | [11_Circular_vDAG](./video_tutorial_series/11_circular_vdag/) | Using AIOSV1 policies to create a Debate System between LLMs | <br>✅ Video recorded <br>🔄 Video in review <br>🟢 Jupyter notebook created |   -   |
-| 12 | [12_Model_Splitting](./video_tutorial_series/12_model_splitting/) | <br> **Part-1**: Model Splitting across GPUs and Nodes in AIOSV1 using Native Library Pytorch and Transformer(without Optimizations) <br> **Part-2**: Model Splitting with  3rd party softwares like vLLM(with Ray) in Grid | <br>🟠 In progress <br>🟢 Jupyter notebook created |   -   |
+| 1 | [prerequisites_setup](./video_tutorial_series/01_prerequisites_setup/) | Initial setup and prerequisites for the AIOS platform and working with LLMs. | <br>🟢 Jupyter notebook  |   -   |
+| 2a | [Part-1: onboard_gemma3<br>_llama_cpp](./video_tutorial_series/02_Part1_onboard_gemma3_llama_cpp/) | Onboarding Gemma-3 to AIOS ecosystem. | <br>✅ Video  <br>🟢 Jupyter notebook  | [AIOS Tutorial: Onboard Any GGUF Model in AIOS Ecosystem with LlamacppPython in Minutes](https://youtu.be/G_yKqIbBP5Q) |
+| 2b | [Part-2: onboard_<br>custom_llama_cpp](./video_tutorial_series/02_Part2_onboard_custom_llama_cpp/) | Onboarding custom LLM models with llama_cpp_python on AIOS. | <br>🟢 Jupyter notebook  |   -   |
+| 2c | [Part-3: more_models_llama_cpp](./video_tutorial_series/02_more_models_llama_cpp/) | Onboarding more models (Qwen & Magistral notebooks under AIOS onboarding in progress) using llama_cpp_python. | <br>🟠 In progress |   -   |
+| 3 | [autoscaler](./video_tutorial_series/03_autoscaler/) | Autoscaling on AIOS to support varying workloads as V1 Policy. | <br>✅ Video  <br>🟢 Jupyter notebook  | [Never Overprovision Again: Intelligent LLM Autoscaling with AIOS](https://youtu.be/SZPScDgwhqA) |
+| 4 | [loadbalancer](./video_tutorial_series/04_loadbalancer/) | Load balancing strategies (V1 Policy) in AIOS for efficient inference. | <br>✅ Video  <br>🟢 Jupyter notebook  | [AIOS Smart Routing: Building a Token-Aware Load Balancer](https://youtu.be/HyC1jV-fzuE) |
+| 5 | [router](./video_tutorial_series/05_router/) | Dynamic routing of requests to LLM models/endpoints in AIOS. | <br>✅ Video  <br>🟢 Jupyter notebook  | [The Ultimate AI Router: Dynamic Model Selection with AIOS](https://youtu.be/uW-qEsVKZAE) |
+| 6 | [adhoc_inference](./video_tutorial_series/06_adhoc_inference/) | Ad-hoc/on-demand inference serving using AIOS. | <br>✅ Video  <br>🟢 Jupyter notebook  | [Mastering Ad-hoc Inference for Dynamic Model Execution](https://youtu.be/lEqe0iIUQy8) |
+| 7 | [pre_and_post_processing<br>_metrics_streaming_health](./video_tutorial_series/07_pre_and_post_processing_metrics_streaming_health/) | Pre/post-processing policies, metrics and streaming, health monitoring in AIOS. | <br>🟠 In progress |   -   |
+| 8 | [AutoAIExpert_RAG_Based](./video_tutorial_series/08_AutoAIExpert_RAG_Based/) | RAG based AppLayout and ScaleLayout generation | <br>✅ Video <br>🟢 Jupyter notebook | [Automate AI Design & Scaling with AutoAI Expert System for AIOS v1](https://youtu.be/RX7UYUQ1kKY) |
+| 9.a | [Part-1: vDAG](./video_tutorial_series/09_vDAG/) |  vDAGs, Blocks, PostProcessing Policies, vDAG Controller | <br>✅ Video  <br>🟢 Jupyter notebook| [Break Down Complex AI Models with AIOS v1's vDAG \| A Deep Dive](https://youtu.be/VROxR2e5RNE) |
+| 9.b | [Part-2: vDAG Policies](./video_tutorial_series/09_vDAG/) |  Policies(Quota Check, Quality Store) | <br>✅ Video <br>🟢 Jupyter notebook | [vDAG Controller Policy Demonstration: Quota and Quality store policy](https://youtu.be/OdBeVDoMhzE) |
+| 9.c | [Part-3: vDAG Policies & Metrics](./video_tutorial_series/09_vDAG/) | Health Check and vDAGs Metrics | <br>✅ Video <br>🟢 Jupyter notebook | [Health Check policies and Metrics of vDAG Controller](https://youtu.be/XRc32ywSzX8) |
+| 10.a | [Part-1: Cluster Node Block in AIOS](./video_tutorial_series/10_cluster_node_block/) | Cluster Controller gateway APIs, Cluster Controller, Node, Block | <br>✅ Video  <br>🟢 Jupyter notebook |   <br> [Cluster Controller gateway APIs, Cluster Controller](https://youtu.be/DktryLA-gaY) |
+| 10.b | [Part-2: Policies of Control](./video_tutorial_series/10_cluster_node_block/) | Policies of Control for Gateway, Cluster Controller, Block | <br>✅ Video  <br>🟢 Jupyter notebook |  [Policies of Control for Gateway, Cluster Controller, Block](https://youtu.be/XlJufXZzYno) |
+| 11 | [Cyclic Graph](./video_tutorial_series/11_circular_vdag/) | Using AIOSV1 policies to create a Debate System between LLMs | <br>✅ Video  <br>🟢 Jupyter notebook  |   -   |
+| 12.a | [Part1: Model_Splitting](./video_tutorial_series/12_model_splitting/) | Model Splitting within and across Nodes in AIOSV1 using Native Library Pytorch and Transformer(without Optimizations) | 🟢 Jupyter notebook  |   -   |
+| 12.b | [Part2: Model_Splitting](./video_tutorial_series/12_model_splitting/) | Model Splitting  within and across Nodes in AIOS using 3rd party softwares like vLLM(with Ray) in a Grid | 🟢 Jupyter notebook  |   -   |
 ---
 
 ### Legend
 
-- ✅ Video recorded
-- 🟢 Jupyter notebook created
+- ✅ Video Available
+- 🟢 Jupyter notebook Available
 - 🟡 Jupyter notebook partially created
 
 ---
