@@ -1,0 +1,11 @@
+redis
+requests
+prometheus_client
+protobuf==3.20.3
+flask
+websockets==13.1
+boto3
+kubernetes
+grpcio
+psutil
+pynvml

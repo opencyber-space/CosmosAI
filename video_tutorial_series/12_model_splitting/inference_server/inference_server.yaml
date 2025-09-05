@@ -23,7 +23,7 @@ spec:
             - containerPort: 50060
           env:
             - name: INFERENCE_REDIS_HOST
-              value: "34.29.155.243"
+              value: "REDISHOSTIP"
             - name: INFERENCE_REDIS_PORT
               value: "31502"
             - name: ADHOC_INSTANCE_ID

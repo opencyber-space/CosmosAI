@@ -1,0 +1,169 @@
+{
+    "componentId": {
+        "name": "vllm-runner-demo",
+        "version": "1.0.0",
+        "releaseTag": "stable"
+    },
+    "componentType": "model",
+    "containerRegistryInfo": {
+        "containerImage": "MANAGEMENTMASTER:31280/example/vllm-client:demo",
+        "containerRegistryId": "MANAGEMENTMASTER:31280/example/vllm-client:demo",
+        "containerImageMetadata": {
+            "author": "LLM",
+            "description": "LLM Runner that takes any hugging face model as input and runs it on GPUs with the help of vLLM for model splitting across nodes"
+        },
+        "componentMode": "third_party",
+        "initContainer": {
+            "image": "MANAGEMENTMASTER:31280/third-party/vllm:demo"
+        }
+    },
+    "componentMetadata": {
+        "usecase": "real-time object detection",
+        "framework": "PyTorch",
+        "hardware": "GPU"
+    },
+    "componentInitData": {
+        "model": "google/gemma-2-27b-it",
+        "namespace": "vllm-blocks",
+        "replicas": 1,
+        "group_size": 2,
+        "tensor_parallel_size": 2,
+        "pipeline_parallel_size": 1,
+        "max_model_len": 8192,
+        "gpu_memory_utilization": 0.9
+    },
+    "componentInputProtocol": {
+        "message": {
+            "type": "string",
+            "description": "Input message"
+        },
+        "mode": {
+            "type": "string",
+            "description": "chat/completions"
+        },
+        "system_message": {
+            "type": "string",
+            "description": "Per Query System Message"
+        },
+        "generation_config": {
+              "type": "object",
+              "description": "Per Query generation Configuration",
+              "properties": {
+                "temperature": {
+                    "type": "number",
+                    "description": "Sampling temperature",
+                    "min": 0.0,
+                    "max": 1.0
+                },
+                "max_tokens": {
+                    "type": "number",
+                    "description": "Maximum token to generate (Should be less than n_ctx)",
+                    "min": 1,
+                    "max": 128000
+                },
+                "top_p": {
+                    "type": "number",
+                    "description": "Top p",
+                    "min": 0.0,
+                    "max": 1.0
+                },
+                "stream": {
+                    "type": "boolean",
+                    "description": "To Stream or not"
+                }
+            }
+        }
+    },
+    "componentOutputProtocol": {
+        "message": {
+            "type": "string",
+            "description": "Reply message"
+        }
+    },
+    "componentInitParametersProtocol": {
+        "temperature": {
+            "type": "number",
+            "description": "Temperture",
+            "min": 0.0,
+            "max": 1.0
+        }
+    },
+    "componentInitSettingsProtocol": {
+        "hf_token": {
+            "type": "string",
+            "description": "hugging Face Token"
+        },
+        "generation_config": {
+              "type": "object",
+              "description": "Generation Configuration",
+              "properties": {
+                "temperature": {
+                    "type": "number",
+                    "description": "Sampling temperature",
+                    "min": 0.0,
+                    "max": 1.0
+                },
+                "max_tokens": {
+                    "type": "number",
+                    "description": "Maximum token to generate (Should be less than n_ctx)",
+                    "min": 1,
+                    "max": 128000
+                },
+                "top_p": {
+                    "type": "number",
+                    "description": "Top p",
+                    "min": 0.0,
+                    "max": 1.0
+                },
+                "stream": {
+                    "type": "boolean",
+                    "description": "To Stream or not"
+                }
+            }
+        },
+        "system_message": {
+            "type": "string",
+            "description": "Default System Message"
+        }
+    },
+    "policies": {
+        "resource_affinity": {
+            "nodeType": "gpu",
+            "minMemory": "4GB"
+        }
+    },
+    "componentManagementCommandsTemplate": {
+        "restart": {
+            "description": "Restart the model",
+            "args": {}
+        },
+        "reload_weights": {
+            "description": "Reload weights from disk",
+            "args": {
+                "weights_path": {
+                    "type": "string",
+                    "required": true
+                }
+            }
+        }
+    },
+    "componentParameters": {
+        "temperature": 0.7
+    },
+    "componentInitSettings": {
+        "hf_token": "",
+        "generation_config": {
+            "temperature": 0.7,
+            "top_p": 0.9,
+            "max_tokens": 512,
+            "stream": false
+        },
+        "system_message": "You are a helpful assistant"
+    },
+    "tags": [
+        "vision",
+        "object-detection",
+        "yolo",
+        "realtime"
+    ]
+}

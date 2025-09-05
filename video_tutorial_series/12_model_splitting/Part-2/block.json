@@ -1,0 +1,116 @@
+{
+    "head": {
+        "templateUri": "Parser/V1",
+        "parameters": {}
+    },
+    "body": {
+        "spec": {
+            "values": {
+                "mode": "allocate",
+                "blockId": "vllm-block-demo-1",
+                "blockComponentURI": "model.vllm-runner-demo:1.0.0-stable",
+                "minInstances": 1,
+                "maxInstances": 3,
+                "blockInitData": {
+                   "model": "google/gemma-2-27b-it",
+                   "namespace": "vllm-blocks",
+                   "replicas": 1,
+                   "group_size": 2,
+                   "tensor_parallel_size": 2,
+                   "pipeline_parallel_size": 1,
+                   "max_model_len": 8192,
+                   "gpu_memory_utilization": 0.9
+
+                },
+                "initSettings": {
+                    "hf_token": "",
+                    "generation_config": {
+                        "temperature": 0.7,
+                        "top_p": 0.9,
+                        "max_tokens": 512,
+                        "stream": false
+                    },
+                    "system_message": "You are a helpful assistant"
+                },
+                "parameters": {
+                    "temperature": 0.7
+                },
+                "policyRulesSpec": [
+                    {
+                        "values": {
+                            "name": "clusterAllocator",
+                            "policyRuleURI": "cluster-selector:2.0-stable",
+                            "parameters": {
+                                "filter": {
+                                    "clusterQuery": {
+                                        "variable": "id",
+                                        "operator": "==",
+                                        "value": "gcp-cluster-2"
+                                    }
+                                }
+                            },
+                            "settings": {
+                                "max_candidates": 2
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "resourceAllocator",
+                            "policyRuleURI": "allocator-2:2.0-stable",
+                            "parameters": {
+                                "allocation_data": {
+                                    "node_id": "wc-gpu-node2",
+                                    "gpus": []
+                                },
+                                "third_party_allocation_data": {
+                                    "allocation": [{"node_id": "wc-gpu-node2","gpu_id":0},{"node_id": "wc-gpu-node2","gpu_id":1}]
+                                }
+                            },
+                            "settings": {
+                                "selection_mode": "balanced"
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "loadBalancer",
+                            "policyRuleURI": "load_balancer:2.0-stable",
+                            "parameters": {
+                                "cache_sessions": true
+                            },
+                            "settings": {
+                                "session_cache_size": 2000
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "stabilityChecker",
+                            "policyRuleURI": "health_checker:2.0-stable",
+                            "parameters": {
+                                "unhealthy_threshold": 2
+                            },
+                            "settings": {
+                                "check_interval_sec": 10
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "autoscaler",
+                            "policyRuleURI": "autoscaler:2.0-stable",
+                            "parameters": {
+                                "target_gpu_utilization": 0.8
+                            },
+                            "settings": {
+                                "scale_up_cooldown": 45,
+                                "scale_down_cooldown": 90
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
