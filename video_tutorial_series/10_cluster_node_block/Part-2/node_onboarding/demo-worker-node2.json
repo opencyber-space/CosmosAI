@@ -1,0 +1,48 @@
+{
+  "clusterId": "gcp-demo-cluster",
+  "id": "demo-worker-node2",
+  "gpus": {
+    "count": 2,
+    "memory": 30720,
+    "gpus": [
+      {
+        "modelName": "Tesla T4",
+        "memory": 15360
+      },
+      {
+        "modelName": "Tesla T4",
+        "memory": 15360
+      }
+    ],
+    "modelNames": [
+      "Tesla T4"
+    ],
+    "features": [
+      "tensor_cores"
+    ]
+  },
+  "vcpus": {
+    "count": 8
+  },
+  "memory": 51000,
+  "swap": 0,
+  "storage": {
+    "disks": 1,
+    "size": 128000
+  },
+  "network": {
+    "interfaces": 1,
+    "txBandwidth": 2000,
+    "rxBandwidth": 2000
+  },
+  "tags": [
+    "gpu",
+    "fp16",
+    "demo"
+  ],
+  "nodeMetadata": {
+    "vendor": "Supermicro",
+    "location": "Rack 2 - DC1",
+    "notes": "Installed 2024-12"
+  }
+}

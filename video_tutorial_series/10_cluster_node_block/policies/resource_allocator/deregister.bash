@@ -1,0 +1,1 @@
+curl -X DELETE http://MANAGEMENTMASTER:30102/policy/demo_block_resource_allocator:1.0.0-stable | json_pp
