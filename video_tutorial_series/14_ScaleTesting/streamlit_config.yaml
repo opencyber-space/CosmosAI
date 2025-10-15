@@ -1,0 +1,192 @@
+# Streamlit Monitor Configuration
+# This file contains additional configuration for the monitoring dashboard
+
+# API Configuration
+api:
+  base_url: "http://MANAGEMENTMASTER:30201/block/"
+  timeout: 10
+  max_retries: 3
+
+# Data Storage Configuration
+data_history:
+  max_data_points: 5000  # Maximum number of historical data points to keep
+  cleanup_interval: 3600  # Cleanup old data every hour (seconds)
+
+# Default Metric Configurations
+default_metrics:
+  - name: "Queue Length Metrics"
+    keys:
+      - "queue_length.average_15m"
+      - "queue_length.average_5m" 
+      - "queue_length.average_1m"
+      - "queue_length.current"
+    enabled: true
+    chart_type: "line"
+    color_scheme: "viridis"
+
+  - name: "FPS Metrics"
+    keys:
+      - "fps.average_15m"
+      - "fps.average_5m"
+      - "fps.average_1m" 
+      - "fps.current"
+    enabled: true
+    chart_type: "line"
+    color_scheme: "plasma"
+
+  - name: "Latency Metrics"
+    keys:
+      - "latency.average_15m"
+      - "latency.average_5m"
+      - "latency.average_1m"
+      - "latency.current"
+    enabled: true
+    chart_type: "line"
+    color_scheme: "blues"
+
+  - name: "End-to-End Latency"
+    keys:
+      - "end_to_end_latency"
+      - "end_to_end_count_total"
+    enabled: false
+    chart_type: "line"
+    color_scheme: "blues"
+
+  - name: "End-to-End FPS"
+    keys:
+      - "end_to_end_fps"
+    enabled: false
+    chart_type: "line"
+    color_scheme: "blues"
+
+  - name: "End-to-End Count"
+    keys:
+      - "end_to_end_count_total"
+    enabled: false
+    chart_type: "line"
+    color_scheme: "blues"
+
+  - name: "LLM Active Sessions"
+    keys:
+      - "llm_active_sessions_rolling.average_15m"
+      - "llm_active_sessions_rolling.average_5m"
+      - "llm_active_sessions_rolling.average_1m"
+      - "llm_active_sessions_rolling.current"
+    enabled: false
+    chart_type: "line"
+    color_scheme: "greens"
+
+  - name: "GPU Utilization"
+    keys:
+      - "llm_gpu_utilization_rolling.average_15m"
+      - "llm_gpu_utilization_rolling.average_5m"
+      - "llm_gpu_utilization_rolling.average_1m"
+      - "llm_gpu_utilization_rolling.current"
+    enabled: false
+    chart_type: "line"
+    color_scheme: "oranges"
+
+  - name: "CPU Utilization"
+    keys:
+      - "llm_cpu_utilization_rolling.average_15m"
+      - "llm_cpu_utilization_rolling.average_5m"
+      - "llm_cpu_utilization_rolling.average_1m"
+      - "llm_cpu_utilization_rolling.current"
+    enabled: false
+    chart_type: "line"
+    color_scheme: "purples"
+
+  - name: "Memory Usage"
+    keys:
+      - "llm_memory_usage_rolling.average_15m"
+      - "llm_memory_usage_rolling.average_5m"
+      - "llm_memory_usage_rolling.average_1m"
+      - "llm_memory_usage_rolling.current"
+    enabled: false
+    chart_type: "line"
+    color_scheme: "rainbow"
+
+  - name: "Token Metrics"
+    keys:
+      - "llm_tokens_per_second"
+      - "llm_tps_rolling.average_15m"
+      - "llm_tps_rolling.average_5m"
+      - "llm_tps_rolling.average_1m"
+      - "llm_tps_rolling.current"
+    enabled: false
+    chart_type: "line"
+    color_scheme: "turbo"
+
+  - name: "Hardware GPU"
+    keys:
+      - "hardware.gpus[0].utilization"
+      - "hardware.gpus[0].freeMem"
+      - "hardware.gpus[0].usedMem"
+      - "hardware.gpus[0].powerUtilization"
+    enabled: false
+    chart_type: "line"
+    color_scheme: "spectral"
+
+  - name: "Hardware CPU"
+    keys:
+      - "hardware.cpu.percent"
+      - "hardware.cpu.load1m"
+      - "hardware.cpu.load5m"
+      - "hardware.cpu.load15m"
+    enabled: false
+    chart_type: "line"
+    color_scheme: "coolwarm"
+
+  - name: "Empty Response Count"
+    keys:
+      - "llm_inference_empty_token_total"
+    enabled: true
+    chart_type: "line"
+    color_scheme: "reds"
+
+  - name: "Error Count"
+    keys:
+      - "llm_inference_errors_total"
+    enabled: true
+    chart_type: "line"
+    color_scheme: "reds"
+
+  - name: "Token per second"
+    keys:
+      - "llm_tokens_per_second"
+    enabled: true
+    chart_type: "line"
+    color_scheme: "reds"
+
+  - name: "On Data Latency"
+    keys:
+      - "on_data_latency"
+    enabled: true
+    chart_type: "line"
+    color_scheme: "reds"
+
+  - name: "On Preprocess Latency"
+    keys:
+      - "on_preprocess_latency"
+    enabled: true
+    chart_type: "line"
+    color_scheme: "reds"
+
+
+# UI Configuration
+ui:
+  refresh_intervals: [5, 10, 15, 30, 60, 120, 300]  # Available refresh intervals in seconds
+  default_refresh_interval: 30
+  max_blocks_per_view: 5
+  chart_height: 400
+  sidebar_width: 300
+
+# Alerts Configuration (for future enhancement)
+alerts:
+  enabled: false
+  thresholds:
+    high_latency: 10.0  # seconds
+    low_fps: 0.1  # fps
+    high_queue_length: 100
+    high_gpu_utilization: 90  # percentage
+    high_cpu_utilization: 90  # percentage

@@ -1,0 +1,45 @@
+#####FROM pytorch/pytorch:2.7.1-cuda11.8-cudnn9-runtime
+#FROM MANAGEMENTMASTER:31280/lama_cpp_python_base
+#FROM MANAGEMENTMASTER:31280/magistral-small-2506-llama-cpp:v1
+FROM magistral_base_llama_cpp:sqashed 
+
+RUN apt-get update
+RUN apt-get -y install build-essential curl
+
+ARG FOLDER_NAME
+RUN rm -rf /${FOLDER_NAME}/*
+WORKDIR /${FOLDER_NAME}
+
+COPY . /${FOLDER_NAME}/
+
+#RUN pip install -r requirements.txt
+######RUN CMAKE_ARGS="-DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS" pip3 install llama-cpp-python
+#RUN CMAKE_ARGS="-DGGML_CUDA=on" pip3 install llama-cpp-python
+
+#below will rebuild which need based docker image with devel tag
+######RUN CMAKE_ARGS="-DGGML_CUDA=on" pip3 install --upgrade --force-reinstall llama-cpp-python
+
+####For the perf metrix 
+#### Define the target file path in a variable for better readability
+#ARG TARGET_FILE=/usr/local/lib/python3.10/dist-packages/llama_cpp/_internals.py
+#### Append the new functions using printf and sed's read command
+# RUN printf '%s\n' \
+#   '' \
+#   '    def get_timings(self) -> dict:' \
+#   '        return self._structure_to_dict(llama_cpp.llama_perf_context(self.ctx))' \
+#   '' \
+#   '    def _structure_to_dict(self, struct_instance) -> dict:' \
+#   '        """' \
+#   '        Helper function to convert a ctypes.Structure instance to a' \
+#   '        Python dictionary.' \
+#   '        """' \
+#   '        result = {}' \
+#   "        # The _fields_ attribute holds the names of the C struct's members" \
+#   '        for field_name, _ in llama_cpp.llama_perf_context_data._fields_:' \
+#   '            result[field_name] = getattr(struct_instance, field_name)' \
+#   '        return result' \
+#   | sed -i -e "/^\s*llama_cpp\.llama_perf_context_print(self\.ctx)/r /dev/stdin" "${TARGET_FILE}"
+
+#This is for llama-cpp-python
+ENTRYPOINT ["python3", "-u", "main.py"]
+

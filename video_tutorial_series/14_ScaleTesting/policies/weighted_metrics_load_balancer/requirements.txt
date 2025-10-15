@@ -1,0 +1,2 @@
+# Weighted Metrics Load Balancer Requirements
+# Built-in Python modules only - no external dependencies required

@@ -1,0 +1,1 @@
+curl -X DELETE http://MANAGEMENTMASTER:30102/policy/weightedmetricsloadbalancer:2.0-stable

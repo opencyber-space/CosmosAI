@@ -1,0 +1,1 @@
+curl -X DELETE http://MANAGEMENTMASTER:30102/policy/queuebasedautoscaler:2.0-stable | json_pp
