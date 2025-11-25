@@ -37,6 +37,7 @@ Welcome to the **AIOS AI Blueprints & Video Tutorial Series**!
 | 13 | [Automate Vision Model Selection MCP & RoR](./video_tutorial_series/12_model_splitting/) | Selecting Vision Models Dynamically from Registry of Registries Via MCP and LLM | 🟢 Jupyter notebook  |   -   |
 | 14.a | [Part-1: ScaleTesting](./video_tutorial_series/14_scale_testing/) | AIOS Block Scaling & Load Testing: Strategies, Policies, and Metrics With Medium Sized Model | <br>✅ Video  <br>🟢 Jupyter notebook |  [ AIOS Block Scaling & Load Testing: Strategies, Policies, and Metrics](https://youtu.be/ZgU09r80TxA)   |
 | 14.b | [Part-2: ScaleTesting](./video_tutorial_series/14_scale_testing/) | AIOS Block Scaling & Load Testing: Strategies, Policies, and Metrics With Smaller Model | <br>✅ Video  <br>🟢 Jupyter notebook |  [ AIOS Block Scaling & Load Testing: Strategies, Policies, and Metrics with Smaller Model](https://youtu.be/NS9vNDeoptc)   |
+| 15 | [VDAG ScaleTesting](./video_tutorial_series/15_VDAGScaleTesting/) | Compound/Ensemble AI (vDAG) Load Testing: Strategies, Policies, and Metrics | <br>✅ Video  <br>🟢 Jupyter notebook |  [ AIOS Performance Benchmarks - Part-3: Ensemble AI (SuperGraph) ](https://youtu.be/MioD8H0bA4w)   |
 ---
 
 ### Legend

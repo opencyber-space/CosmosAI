@@ -1,0 +1,16 @@
+FROM vllm/vllm-openai:v0.10.2
+
+ARG FOLDER_NAME
+RUN rm -rf /${FOLDER_NAME}/*
+WORKDIR /${FOLDER_NAME}
+
+COPY . /${FOLDER_NAME}/
+
+RUN --mount=type=cache,target=/root/.cache/uv uv pip install --system -r requirements.txt
+
+#RUN pip3 install --system --ignore-installed -r requirements.txt
+
+
+ENV VLLM_WORKER_MULTIPROC_METHOD=spawn
+ENV OMP_NUM_THREADS=1
+ENTRYPOINT [ "python3", "-u", "main_orig_vllmbatch.py"]

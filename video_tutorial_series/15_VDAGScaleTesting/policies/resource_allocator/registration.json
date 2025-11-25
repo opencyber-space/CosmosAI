@@ -1,0 +1,276 @@
+{
+    "name": "scaletest_block_resource_allocator",
+    "version": "1.0.0",
+    "release_tag": "stable",
+    "metadata": {
+        "author_name": "Srikanth",
+        "author_email": "openvision.ai",
+        "organization": "openvision.ai",
+        "country": "US",
+        "license": "MIT",
+        "category": "resource_allocation",
+        "use_case": "Allocate granular resources (CPU, memory, GPU) for block instances within selected clusters based on specific actions: dry_run, allocation, scale, reassignment",
+        "geographic_scope": "Global",
+        "audience": ["cluster_admins", "infrastructure_teams", "devops", "resource_managers"],
+        "integration_notes": "Requires helper policies for node selection, GPU allocation, feasibility scoring, and affinity rules. Expects policy_outputs in input_data containing helper policy results.",
+        "tested_environments": ["Ubuntu 22.04", "Amazon Linux 2"],
+        "execution_environment": "Python 3.10+",
+        "compliance_tags": ["ISO27001", "SOC2"]
+    },
+    "tags": "block,resource,allocation,cpu,memory,gpu,scheduling,infrastructure,nodes",
+    "code": "http://34.58.1.86:32555/scaletest_block_resource_allocator.zip",
+    "code_type": "zip",
+    "type": "policy",
+    "policy_input_schema": {
+        "action": {
+            "type": "string",
+            "description": "Action type: dry_run, allocation, scale, or reassignment",
+            "enum": ["dry_run", "allocation", "scale", "reassignment"]
+        },
+        "payload": {
+            "type": "object",
+            "description": "Action-specific payload containing block, cluster, metrics, and nodes data",
+            "properties": {
+                "block": {
+                    "type": "object",
+                    "description": "Block data including resource requirements"
+                },
+                "cluster": {
+                    "type": "object", 
+                    "description": "Cluster data including node information"
+                },
+                "cluster_metrics": {
+                    "type": "object",
+                    "description": "Real-time cluster and node metrics"
+                },
+                "healthy_nodes": {
+                    "type": "array",
+                    "description": "List of healthy node IDs available for allocation"
+                },
+                "block_metrics": {
+                    "type": "object",
+                    "description": "Block metrics for scale and reassignment actions"
+                },
+                "instance_id": {
+                    "type": "string",
+                    "description": "Instance ID for reassignment action"
+                },
+                "pod_name": {
+                    "type": "string",
+                    "description": "Pod name for reassignment action"
+                }
+            }
+        }
+    },
+    "policy_output_schema": {
+        "selection_score_data": {
+            "type": "object",
+            "properties": {
+                "score": {
+                    "type": "number",
+                    "description": "Feasibility score between 0.0 and 1.0"
+                },
+                "node_info": {
+                    "type": "object",
+                    "properties": {
+                        "node_id": {
+                            "type": "string",
+                            "description": "Selected node ID or null if no suitable node"
+                        },
+                        "gpus": {
+                            "type": "array",
+                            "description": "List of allocated GPU IDs"
+                        }
+                    }
+                }
+            }
+        },
+        "node_id": {
+            "type": "string",
+            "description": "Allocated node ID"
+        },
+        "gpus": {
+            "type": "array",
+            "description": "List of allocated GPU IDs"
+        },
+        "error":{
+            "type": "string",
+            "description": "Error Message if any available"
+        }
+    },
+    "policy_settings_schema": {
+        
+    },
+    "policy_parameters_schema": {
+        "allocation_data": {
+            "type": "object",
+            "description": "To provide hardcoded node_is and gpus",
+            "properties": {
+                "node_id": {
+                    "type": "string",
+                    "description": "Node Name"
+                },
+                "gpus": {
+                    "type": "array",
+                    "description": "list of gpus from node"
+                }
+            }
+        },
+        "third_party_allocation_data": {
+            "type": "object",
+            "description": "To provide hardcoded node_is and gpus for 3rd party resource allocation system",
+            "properties": {
+                "node_id": {
+                    "type": "string",
+                    "description": "Node Name"
+                },
+                "gpus": {
+                    "type": "array",
+                    "description": "list of gpus from node"
+                }
+            }
+        },
+        "min_cpu_per_instance": {
+            "type": "integer",
+            "description": "Minimum CPU cores required per instance",
+            "default": 1
+        },
+        "min_memory_per_instance": {
+            "type": "integer",
+            "description": "Minimum memory in MB required per instance",
+            "default": 1024
+        },
+        "min_gpu_memory_per_instance": {
+            "type": "integer",
+            "description": "Minimum GPU memory in MB required per instance",
+            "default": 1024
+        },
+        "min_storage":{
+            "type": "integer",
+            "description": "Minimum Storage in MB required for storing the model",
+            "default": 1024
+        },
+        "gpu_memory_buffer": {
+            "type": "number",
+            "description": "GPU memory buffer percentage (0.1 = 10%)",
+            "default": 0.1
+        },
+        "node_cpu_threshold": {
+            "type": "number",
+            "description": "Maximum CPU utilization threshold (0.8 = 80%)",
+            "default": 0.8
+        },
+        "node_memory_threshold": {
+            "type": "number",
+            "description": "Maximum memory utilization threshold (0.8 = 80%)",
+            "default": 0.8
+        },
+        "node_storage_threshold": {
+            "type": "number",
+            "description": "Maximum storage utilization threshold (0.8 = 80%)",
+            "default": 0.8
+        },
+        "weights": {
+            "type": "object",
+            "description": "Weights for Node and GPU selection"
+        },
+        "min_threshold_gpu_mem_non_model":{
+            "type": "integer",
+            "description": "Minimum GPU RAM threshold in MB to classify the process ID to be non model like GST pipelines or any other GPU tasks",
+            "default": 512
+        },
+        "max_model_per_gpu":{
+            "type": "integer",
+            "description": "Maximum number of Models to be allocated per GPU",
+            "default": 2
+        },
+        "skip_nodes":{
+            "type": "array",
+            "description": "list of nodes to skip"
+        }
+
+    },
+    "policy_settings": {
+    },
+    "policy_parameters": {
+        "min_cpu_per_instance": 5,
+        "min_memory_per_instance": 3000,
+        "min_gpu_memory_per_instance": 26000,
+        "min_storage": 26000,
+        "gpu_memory_buffer": 0.1,
+        "node_cpu_threshold": 0.8,
+        "node_memory_threshold": 0.8,
+        "node_storage_threshold": 0.8,
+        "weights": {
+            "gpu_memory": 0.4,
+            "cpu": 0.3,
+            "memory": 0.2,
+            "storage": 0.1
+        },
+        "min_threshold_gpu_mem_non_model": 512,
+        "max_model_per_gpu": 2,
+        "skip_nodes": []
+    },
+    "management_commands_schema": [
+        {
+            "name": "get_status",
+            "description": "Get current status and configuration of the resource allocator policy",
+            "parameters": {}
+        },
+        {
+            "name": "update_thresholds",
+            "description": "Update CPU and memory utilization thresholds",
+            "parameters": {
+                "min_cpu_per_instance": {
+                    "type": "number", 
+                    "description": "New cpu requirement of instance threshold"
+                },
+                "min_memory_per_instance": {
+                    "type": "number", 
+                    "description": "New memory requirement of instance threshold"
+                },
+                "min_gpu_memory_per_instance": {
+                    "type": "number", 
+                    "description": "New gpu memory requirement of instance threshold"
+                },
+                "min_storage": {
+                    "type": "number", 
+                    "description": "New storage requirement of instance threshold"
+                },
+                "gpu_memory_buffer": {
+                    "type": "number", 
+                    "description": "New buffer requirement of instance threshold"
+                },
+                "node_cpu_threshold": {
+                    "type": "number", 
+                    "description": "New CPU threhold requirement of instance threshold"
+                },
+                "node_memory_threshold": {
+                    "type": "number", 
+                    "description": "New memory threhosld requirement of instance threshold"
+                },
+                "node_storage_threshold": {
+                    "type": "number", 
+                    "description": "New storage requirement of instance threshold"
+                },
+                "min_threshold_gpu_mem_non_model": {
+                    "type": "number", 
+                    "description": "New Minimum GPU RAM threshold in MB to classify the process ID to be non model like GST pipelines or any other GPU tasks"
+                },
+                "max_model_per_gpu": {
+                    "type": "number", 
+                    "description": "Maximum number of Models to be allocated per GPU"
+                },
+                "skip_nodes":{
+                    "type": "array",
+                    "description": "list of nodes to skip"
+                }
+            }
+        }
+    ],
+    "description": "Policy for Node and GPU selection. only Reassignment policy has been implemented effectively",
+    "created_at": "2025-05-21 06:28:18",
+    "created_by": "srikanthcognitifAI",
+    "functionality_data": {},
+    "resource_estimates": {}
+}

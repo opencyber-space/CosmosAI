@@ -1,0 +1,141 @@
+{
+    "head": {
+        "templateUri": "Parser/V1",
+        "parameters": {}
+    },
+    "body": {
+        "spec": {
+            "values": {
+                "mode": "allocate",
+                "blockId": "qwen3-32b-llama-cpp-block",
+                "blockComponentURI": "model.qwen3-32b-llama_cpp:1.0.0-stable",
+                "minInstances": 1,
+                "maxInstances": 7,
+                "blockInitData": {
+                    "model_name": "unsloth/Qwen3-32B-GGUF/Qwen3-32B-Q8_0.gguf",
+                    "system_message": "You are a helpfull assistant"
+                },
+                "initSettings": {
+                    "use_gpu": true,
+                    "gpu_id": 0,
+                    "enable_metrics": true,
+                    "model_config": {
+                        "n_gpu_layers": -1,
+                        "n_threads": -1,
+                        "n_ctx": 4096,
+                        "seed": 3407,
+                        "verbose": true
+                    },
+                    "cleanup_enabled":  true,
+                    "cleanup_check_interval": 60,
+                    "cleanup_session_timeout": 600
+                },
+                "initParameters": {
+                    "temperature": 0.7,
+                    "max_tokens": 512,
+                    "top_p": 0.95
+                },
+                "policyRulesSpec": [
+                    {
+                        "values": {
+                            "name": "clusterAllocator",
+                            "policyRuleURI": "cluster-selector:2.0-stable",
+                            "parameters": {
+                                "filter": {
+                                    "clusterQuery": {
+                                        "variable": "id",
+                                        "operator": "==",
+                                        "value": "gcp-cluster-2"
+                                    }
+                                }
+                            },
+                            "settings": {
+                                "max_candidates": 2
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "resourceAllocator",
+                            "policyRuleURI": "scaletest_block_resource_allocator:1.0.0-stable",
+                            "parameters": {
+                                "min_cpu_per_instance": 5,
+                                "min_memory_per_instance": 3000,
+                                "min_gpu_memory_per_instance": 36000,
+                                "min_storage": 36000,
+                                "gpu_memory_buffer": 0.1,
+                                "node_cpu_threshold": 0.8,
+                                "node_memory_threshold": 0.8,
+                                "node_storage_threshold": 0.8,
+                                "weights": {
+                                    "gpu_memory": 0.45,
+                                    "cpu": 0.25,
+                                    "memory": 0.2,
+                                    "storage": 0.1
+                                },
+                                "min_threshold_gpu_mem_non_model": 512,
+                                "max_model_per_gpu": 2,
+                                "skip_nodes": ["wc-gpu-node3","wc-gpu-node8"]
+                            },
+                            "settings": {
+                                "selection_mode": "balanced"
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "loadBalancer",
+                            "policyRuleURI": "weightedmetricsloadbalancer:2.0-stable",
+                            "parameters": {
+                                "weights": {
+                                    "active_sessions": 0.1,
+                                    "queue_length": 0.9,
+                                    "latency": 0.0,
+                                    "requested_tokens_per_second": 0.0
+                                },
+                                "averaging_period": "average_1m",
+                                "redistribution_interval": 300,
+                                "redistribution_selection_mode": "random",
+                                "redistribution_percentage": 0.5
+                            },
+                            "settings": {
+                                "session_cache_size": 2000
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "stabilityChecker",
+                            "policyRuleURI": "health_checker:2.0-stable",
+                            "parameters": {
+                                "unhealthy_threshold": 100
+                            },
+                            "settings": {
+                                "check_interval_sec": 300
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "autoscaler",
+                            "policyRuleURI": "queuebasedautoscaler:2.0-stable",
+                            "parameters": {
+                                "queue_up_threshold": 100,
+                                "queue_down_threshold": 20,
+                                "min_replicas": 1,
+                                "max_replicas": 7,
+                                "averaging_period": "average_1m",
+                                "cooldown_seconds": 120,
+                                "allow_downscale_with_jobs": false
+                            },
+                            "settings": {
+                                "scale_up_cooldown": 45,
+                                "scale_down_cooldown": 90
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

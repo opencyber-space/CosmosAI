@@ -1,0 +1,1 @@
+curl -X DELETE http://34.58.1.86:30102/policy/queuebasedautoscaler:2.0-stable | json_pp

@@ -1,0 +1,22 @@
+inference:
+  endpoint: "http://CLUSTER2MASTER:30614/v1/infer"  # target HTTP endpoint [attached_file:2]
+  request_timeout: 1002                     # per-request timeout seconds [attached_file:2]
+  vdag_param_timeout: 1000
+  vdag_param_retries: 0
+
+logging:
+  dma_endpoint: "http://34.59.217.178:12345/create_entry"   # DMA logging endpoint [attached_file:2]
+  timezone: "Asia/Kolkata"               # timestamp timezone [attached_file:2]
+  level: INFO
+
+load:
+  rps: 5            # requests per second to emit [attached_file:2]
+  duration_seconds: null   # set N seconds OR null [attached_file:2]
+  duration_hours: 120    # set X hours OR null [attached_file:2]
+
+dataset:
+  questions_file: "questions.jsonl"  # .jsonl or .txt (one prompt per line) [attached_file:2]
+
+runner:
+  concurrent_limit: 5000             # client-side concurrency guard [attached_file:2]
+  session_prefix: "session_"         # will produce session_1, session_2, ... [attached_file:2]

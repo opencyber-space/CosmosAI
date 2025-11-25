@@ -1,0 +1,294 @@
+# Gemini and Question Generation Configuration
+gemini_api_key: "YOUR_GEMINI_API_KEY_HERE"
+questions_file: "questions.jsonl"
+reuse_questions_file: true
+# Load Testing Configuration
+blocks:
+  # magistral-small-2506-llama-cpp-block:
+  #   url: "http://x.x.x.x:8080/api"
+  #   #requestType: GRPC
+  #   requestType: HTTP
+  #   generation_config:
+  #     max_tokens: 512
+  #     temperature: 0.2
+  #     top_p: 0.95
+  #     min_p: 0.01
+  #   gpu_ram_requirement: [25-26GB]
+
+  # magistral-small-2506-vllm-block:
+  #   url: "http://x.x.x.x:8080/api"
+  #   #requestType: GRPC
+  #   requestType: HTTP
+  #   generation_config:
+  #     temperature: 0.7
+  #     repetition_penalty: 1.0
+  #     min_p: 0.01
+  #     top_k: -1
+  #     top_p: 0.95
+  #     max_tokens: 512 # Set a limit for the response length
+  #   gpu_ram_requirement: [46-47GB] #FP16
+
+  qwen3-1-7b-vllm-block:
+    url: "http://x.x.x.x:8080/api"
+    #requestType: GRPC
+    requestType: HTTP
+    generation_config:
+      temperature: 0.7
+      repetition_penalty: 1.0
+      min_p: 0.01
+      top_k: -1
+      top_p: 0.95
+      max_tokens: 512 # Set a limit for the response length
+    gpu_ram_requirement: [5-7GB] #FP16
+
+  # qwen3-32b-llama-cpp-block:
+  #   url: "http://y.y.y.y:8080/api"
+  #   #requestType: GRPC
+  #   requestType: HTTP
+  #   generation_config:
+  #     max_tokens: 512
+  #     temperature: 0.2
+  #     top_p: 0.95
+  #     min_p: 0.01
+  #   gpu_ram_requirement: [36-38GB]
+
+  # gemma3-27b-block:
+  #   url: "http://x.x.x.x:8080/api"
+  #   #requestType: GRPC
+  #   requestType: HTTP
+  #   generation_config:
+  #     max_tokens: 512
+  #     temperature: 0.2
+  #     top_p: 0.95
+  #     min_p: 0.01
+  #   gpu_ram_requirement: [80-90GB]
+
+inferenceServerURL: http://CLUSTER2MASTER:31504/v1/infer
+grpcServiceURL: CLUSTER2MASTER:31500
+
+# User Configuration
+user_config:
+  # sessions_per_block: 2
+  # requests_per_hour_per_session: 36
+  sessions_per_block: 2
+  requests_per_hour_per_session: 135
+  csv_file: user_behavior_patterns1.csv
+  # usage_patterns:
+  #   # Hour of day (0-23) -> multiplier for requests
+  #   0: 0.1  #7000 # Night - 10% activity
+  #   1: 0.1  #7000
+  #   2: 0.05 #6000
+  #   3: 0.05 #4000
+  #   4: 0.05 #2000
+  #   5: 0.1  #
+  #   6: 0.3
+  #   7: 0.5
+  #   8: 0.8
+  #   9: 1.0  # Peak hours
+  #   10: 1.0
+  #   11: 1.0
+  #   12: 0.9
+  #   13: 0.9
+  #   14: 1.0
+  #   15: 1.0  #2000per/hour
+  #   16: 0.9  #4000
+  #   17: 0.8  #7000
+  #   18: 0.7  #7000
+  #   19: 0.6  #5000
+  #   20: 0.5  #3000
+  #   21: 0.4  #2000
+  #   22: 0.3  #1000
+  #   23: 0.2  #5000
+  #   23: 0.2  #6000
+  # usage_patterns:
+  #   0: 0.9722
+  #   1: 0.8333
+  #   2: 0.5556
+  #   3: 0.2778
+  #   4: 0.2778
+  #   5: 0.4167
+  #   6: 0.4861
+  #   7: 0.5556
+  #   8: 0.6944
+  #   9: 0.5556
+  #   10: 0.4167
+  #   11: 0.2778
+  #   12: 0.1389
+  #   13: 0.2083
+  #   14: 0.2778
+  #   15: 0.5556
+  #   16: 0.9722
+  #   17: 0.1389
+  #   18: 0.6944
+  #   19: 0.4167
+  #   20: 0.2778
+  #   21: 0.1389
+  #   22: 0.6944
+  #   23: 0.83
+  # usage_patterns:
+  #   0: 0.9722
+  #   1: 0.8333
+  #   2: 0.6944
+  #   3: 0.9722
+  #   4: 0.8333
+  #   5: 0.6944
+  #   6: 0.9722
+  #   7: 0.8333
+  #   8: 0.4167
+  #   9: 0.9722
+  #   10: 0.8333
+  #   11: 0.6944
+  #   12: 0.8333
+  #   13: 0.9722
+  #   14: 0.8333
+  #   15: 0.4167
+  #   16: 0.6944
+  #   17: 0.9722
+  #   18: 0.8333
+  #   19: 0.6944
+  #   20: 0.9722
+  #   21: 0.8333
+  #   22: 0.6944
+  #   23: 0.4167
+  usage_patterns:
+    0: 0.9722
+    1: 0.9722
+    2: 0.9722
+    3: 0.9722
+    4: 0.9722
+    5: 0.9722
+    6: 0.9722
+    7: 0.9722
+    8: 0.9722
+    9: 0.9722
+    10: 0.9722
+    11: 0.9722
+    12: 0.9722
+    13: 0.9722
+    14: 0.9722
+    15: 0.9722
+    16: 0.9722
+    17: 0.9722
+    18: 0.9722
+    19: 0.9722
+    20: 0.9722
+    21: 0.9722
+    22: 0.9722
+    23: 0.9722
+  request_timeout: 1200  # seconds
+  retry_attempts: 3
+
+# Crowd Configuration
+crowd_config:
+  #users_per_hour: 100
+  users_per_hour: 200
+  # crowd_patterns:
+  #   # Hour of day (0-23) -> multiplier for user count
+  #   0: 0.1
+  #   1: 0.1
+  #   2: 0.05
+  #   3: 0.05
+  #   4: 0.05
+  #   5: 0.1
+  #   6: 0.3
+  #   7: 0.5
+  #   8: 0.8
+  #   9: 1.0
+  #   10: 1.0
+  #   11: 1.0
+  #   12: 0.9
+  #   13: 0.9
+  #   14: 1.0
+  #   15: 1.0
+  #   16: 0.9
+  #   17: 0.8
+  #   18: 0.7
+  #   19: 0.6
+  #   20: 0.5
+  #   21: 0.4
+  #   22: 0.3
+  #   23: 0.2
+  crowd_patterns:
+    0: 1.0
+    1: 1.0
+    2: 1.0
+    3: 1.0
+    4: 1.0
+    5: 1.0
+    6: 1.0
+    7: 1.0
+    8: 1.0
+    9: 1.0
+    10: 1.0
+    11: 1.0
+    12: 1.0
+    13: 1.0
+    14: 1.0
+    15: 1.0
+    16: 1.0
+    17: 1.0
+    18: 1.0
+    19: 1.0
+    20: 1.0
+    21: 1.0
+    22: 1.0
+    23: 1.0
+
+  max_concurrent_users: 1000
+  user_spawn_interval: 1  # seconds between spawning users
+  manage_user_count_sleep: 1
+
+# Database Configuration
+database:
+  enabled: true  # Enable database logging
+  type: "timescaledb"  # firestore, timescaledb, mongodb, etc.
+  enableStats: true #For enabling stats dumping in DB
+  enableRequestResponse: false #For enabling Request Response dumping in DB
+  
+  # TimescaleDB Configuration
+  timescaledb:
+    host: "x.x.x.x"
+    port: 30954
+    username: "tsdbuser"
+    database: "transactions"
+    password: "abcxyz"  # Fallback if env var not set
+    schema: "load_testing"  # Schema for our tables
+    table_prefix: "lt_"  # Prefix for table names
+    connection_pool_size: 5
+    max_overflow: 10
+    
+  # Firestore Configuration (keep existing)
+  firestore:
+    project_id: "myproject-738901"
+    credentials_path: "path/to/service-account.json"
+    collection_name: "temp"
+    email: scaletest-firestore-writer@myproject-738901.iam.gserviceaccount.com
+
+  dma_logging_end_point: "http://34.59.217.178:12345/create_entry"
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  log_file: "load_test.log"
+  console_output: true
+  timezone: "Asia/Kolkata"
+
+# Test Configuration
+test_config:
+  duration_hours: 200
+  warm_up_minutes: 5
+  cool_down_minutes: 5
+  health_check_interval: 60  # seconds
+  stats_log_interval: 60  # seconds - how often to log statistics (both cumulative and interval)
+
+DMA:
+  type: "timescaledb"
+  timescaledb:
+    name: "timescaledb"
+    user: "tsuser"
+    password: "abcxyz"
+    host: "x.x.x.x"
+    port: 30008
+    schema: timescaledb
+    database: timescaledb
+    table_name: log_entries
