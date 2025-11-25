@@ -388,10 +388,10 @@ class Block:
 
             muxer: Muxer = self.block_module.get_muxer()
             if muxer:
-                op = muxer.process_packet(job_data)
+                op = muxer.process_packet(job_data_proto)
                 if not op:
                     return
-                job_data = op
+                job_data_proto = op
 
             preprocess_start = time.time()
             ret, data = self.block_module.on_preprocess(copy.deepcopy(job_data_proto))

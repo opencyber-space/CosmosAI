@@ -599,12 +599,6 @@ class vLLMUtils:
 
 
                 return resultsToReturn
-            except RequestFailedError as e:
-                logger.error(f"Error generating tex [Request failed] {e}")
-                if attempt == MAX_RETRIES:
-                    if self.metrics:
-                        self.metrics.increment_inference_errors()
-                        return None
             except torch.cuda.OutOfMemoryError as e:
                 logger.error(f"Error generating tex [CUDA OOM] {e}")
                 if attempt == MAX_RETRIES:

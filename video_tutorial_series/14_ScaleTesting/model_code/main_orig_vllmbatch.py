@@ -130,6 +130,12 @@ class vLLMChatBlock:
             "session_timeout": init_settings.get("cleanup_session_timeout", 3600)
         }
 
+        if "hf_token" in init_settings:
+            self.hf_token = init_settings["hf_token"]
+            # Set the environment variables
+            os.environ["HUGGING_FACE_HUB_TOKEN"] = self.hf_token
+            os.environ["HF_TOKEN"] = self.hf_token
+
         self.batcher = Batcher(4)
 
         self.model_config = {
