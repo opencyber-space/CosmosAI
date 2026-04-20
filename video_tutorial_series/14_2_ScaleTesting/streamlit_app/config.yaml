@@ -1,0 +1,11 @@
+DMA:
+  type: "timescaledb"
+  timescaledb:
+    name: "timescaledb"
+    user: "TIMESCALEDB_USER"
+    password: "TIMESCALEDB_PASSOWRD"
+    host: "CLUSTER_2_MASTER_NODE"
+    port: 30008
+    schema: timescaledb
+    database: timescaledb
+    table_name: log_entries

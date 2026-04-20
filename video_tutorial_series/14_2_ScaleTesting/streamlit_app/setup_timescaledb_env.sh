@@ -1,0 +1,29 @@
+#!/bin/bash
+# TimescaleDB Environment Setup Script
+# Source this file: source setup_timescaledb_env.sh
+
+echo "Setting up TimescaleDB environment variables..."
+
+# Set TimescaleDB connection parameters
+export TIMESCALEDB_HOST="CLUSTER_2_MASTER_NODE"
+export TIMESCALEDB_PORT="30008"
+export TIMESCALEDB_USERNAME="TIMESCALEDB_USER"
+export TIMESCALEDB_DATABASE="timescaledb"
+export TIMESCALEDB_PASSWORD="TIMESCALEDB_PASSOWRD"
+
+export DMA_TIMESCALEDB_HOST="CLUSTER_2_MASTER_NODE"
+export DMA_TIMESCALEDB_PASSWORD="TIMESCALEDB_PASSOWRD"
+
+echo "Environment variables set:"
+echo "  TIMESCALEDB_HOST=$TIMESCALEDB_HOST"
+echo "  TIMESCALEDB_PORT=$TIMESCALEDB_PORT"
+echo "  TIMESCALEDB_USERNAME=$TIMESCALEDB_USERNAME"
+echo "  TIMESCALEDB_DATABASE=$TIMESCALEDB_DATABASE"
+echo "  TIMESCALEDB_PASSWORD=***"
+
+echo "  DMA_TIMESCALEDB_HOST=$DMA_TIMESCALEDB_HOST"
+echo "  DMA_TIMESCALEDB_PASSWORD=***"
+
+echo ""
+echo "You can now run your load testing with TimescaleDB integration!"
+echo "Test the connection with: python test_timescaledb.py"

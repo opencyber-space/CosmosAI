@@ -1,0 +1,171 @@
+{
+    "head": {
+        "templateUri": "Parser/V1",
+        "parameters": {}
+    },
+    "body": {
+        "spec": {
+            "values": {
+                "mode": "allocate",
+                "blockId": "qwen3-5-0-8b-vllm-block-4",
+                "blockComponentURI": "model.qwen3-5-0-8B-vllm:1.0.0-stable",
+                "minInstances": 1,
+                "maxInstances": 16,
+                "blockInitData": {
+                    "model_name": "Qwen/Qwen3.5-0.8B",
+                    "system_message": "You are a strict reviewer. You receive two lines exactly in the form:\ninput: {the user’s original input}\nresult: {previous model generated answer}\nReview the result against the input for correctness, completeness, safety, and adherence to instruction. Output using this exact three-line format and nothing else:\ninput: {the user’s original input}\nresult: {previous model generated answer}\nreviewed: {good|bad|improvementneeded|satisfactory}\nRules:\n- Echo the input and result exactly as received without edits. Only add the third line.\n- Choose exactly one label from the set. No extra words, punctuation, or explanations.\n- Keep total output within the max_tokens limit."
+                },
+                "initSettings": {
+                    "hf_token": "HFTOKEN",
+                    "use_gpu": true,
+                    "gpu_id": 0,
+                    "enable_metrics": true,
+                    "model_config": {
+                        "max_model_len": 512,
+                        "max_num_seqs": 32,
+                        "dtype": "bfloat16",
+                        "enable_prefix_caching": false,
+                        "enable_chunked_prefill": true,
+                        "enable_thinking": false,
+                        "kv_cache_dtype": "auto",
+                        "reasoning_parser": "qwen3",
+                        "gpu_memory_utilization": 0.4,
+                        "quantization": "fp8",
+                        "compilation_config": {
+                            "cudagraph_capture_sizes": [
+                                1,
+                                2,
+                                4
+                            ]
+                        }
+                    },
+                    "cleanup_enabled": true,
+                    "cleanup_check_interval": 60,
+                    "cleanup_session_timeout": 600,
+                    "mux_size": 1,
+                    "batch_size": 32
+                },
+                "initParameters": {
+                    "temperature": 1.0,
+                    "top_p": 0.95,
+                    "top_k": 20,
+                    "min_p": 0.0,
+                    "presence_penalty": 0.0,
+                    "repetition_penalty": 1.0,
+                    "max_tokens": 256
+                },
+                "policyRulesSpec": [
+                    {
+                        "values": {
+                            "name": "clusterAllocator",
+                            "policyRuleURI": "cluster-selector:2.0-stable",
+                            "parameters": {
+                                "filter": {
+                                    "clusterQuery": {
+                                        "variable": "id",
+                                        "operator": "==",
+                                        "value": "gcp-cluster-2"
+                                    }
+                                }
+                            },
+                            "settings": {
+                                "max_candidates": 2
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "resourceAllocator",
+                            "policyRuleURI": "scaletest_block_resource_allocator:1.0.0-stable",
+                            "parameters": {
+                                "min_cpu_per_instance": 5,
+                                "min_memory_per_instance": 16000,
+                                "min_gpu_memory_per_instance": 15000,
+                                "min_storage": 3000,
+                                "gpu_memory_buffer": 0.1,
+                                "node_cpu_threshold": 0.8,
+                                "node_memory_threshold": 0.8,
+                                "node_storage_threshold": 0.8,
+                                "weights": {
+                                    "gpu_memory": 0.60,
+                                    "cpu": 0.15,
+                                    "memory": 0.15,
+                                    "storage": 0.1
+                                },
+                                "min_threshold_gpu_mem_non_model": 512,
+                                "max_model_per_gpu": 2,
+                                "skip_nodes": [
+                                    "wc-gpu-node1",
+                                    "b200-node1",
+                                    "b200-node2",
+                                    "b200-node3"
+                                ]
+                            },
+                            "settings": {
+                                "selection_mode": "balanced"
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "loadBalancer",
+                            "policyRuleURI": "weightedmetricsloadbalancer:2.0-stable",
+                            "parameters": {
+                                "averaging_period": "average_1m",
+                                "tie_breaker": "round_robin",
+                                "redistribution_percentage": 0.5,
+                                "redistribution_interval": 15,
+                                "redistribution_selection_mode": "least_loaded",
+                                "selection_mode": "equal",
+                                "imbalance_threshold": 50,
+                                "overload_threshold_percentage": 0.2,
+                                "session_timeout_seconds": 1800,
+                                "metrics_interval": 60,
+                                "task_imbalance_threshold": 100
+                            },
+                            "settings": {
+                                "session_cache_size": 2000
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "stabilityChecker",
+                            "policyRuleURI": "demo_block_health_checker:1.0.0-stable",
+                            "parameters": {
+                                "failure_threshold": 10
+                            },
+                            "settings": {
+                                "check_interval_sec": 120,
+                                "GATEWAY_URL": "MANAGEMENTMASTER:30600",
+                                "call_dummy_reassign_policy": false
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "autoscaler",
+                            "policyRuleURI": "queuebasedautoscaler:2.0-stable",
+                            "parameters": {
+                                "queue_up_threshold": 100,
+                                "queue_down_threshold": 20,
+                                "min_replicas": 1,
+                                "max_replicas": 16,
+                                "averaging_period": "average_1m",
+                                "cooldown_seconds": 5,
+                                "allow_downscale_with_jobs": false,
+                                "idle_time_downscale_threshold": 600,
+                                "min_age_to_downscale": 300,
+                                "scale_down_needed": false
+                            },
+                            "settings": {
+                                "scale_up_cooldown": 45,
+                                "scale_down_cooldown": 300
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,99 @@
+{
+    "name": "demo_block_health_checker",
+    "version": "1.0.0",
+    "release_tag": "stable",
+    "metadata": {
+        "author_name": "Srikanth",
+        "author_email": "openvision.ai",
+        "organization": "openvision.ai",
+        "country": "US",
+        "license": "MIT",
+        "category": "health_check",
+        "use_case": "Track consecutive failures and call failure policy when threshold exceeded",
+        "geographic_scope": "Global",
+        "audience": [
+            "cluster_admins",
+            "infrastructure_teams",
+            "devops"
+        ],
+        "integration_notes": "Ensure the block_health_checker implementation follows the AIOSv1PolicyRule interface pattern",
+        "tested_environments": [
+            "Ubuntu 22.04",
+            "Amazon Linux 2"
+        ],
+        "execution_environment": "Python 3.10+",
+        "compliance_tags": [
+            "ISO27001",
+            "SOC2"
+        ]
+    },
+    "tags": "block,health,monitoring,failure_tracking",
+    "code": "http://MANAGEMENTMASTER:32555/demo_block_health_check_policy.zip",
+    "code_type": "zip",
+    "type": "policy",
+    "policy_input_schema": {
+        "health_check_data": {
+            "type": "object",
+            "description": "Health status data for each instance as boolean values (instance_id: True/False)",
+            "additionalProperties": {
+                "type": "boolean",
+                "description": "Health status: True for healthy, False for unhealthy"
+            }
+        }
+    },
+    "policy_output_schema": {
+        "type": "object",
+        "description": "Empty object as per block.md specification",
+        "additionalProperties": false
+    },
+    "policy_settings_schema": {
+        "GATEWAY_URL": {
+            "type": "string",
+            "description": "API URL for the failure policy server"
+        },
+        "call_dummy_reassign_policy": {
+            "type": "boolean",
+            "description": "Keep this true during test script. For production keep it as False"
+        }
+    },
+    "policy_parameters_schema": {
+        "failure_threshold": {
+            "type": "integer",
+            "description": "Number of consecutive failures before calling failure policy",
+            "default": 3,
+            "minimum": 1
+        }
+    },
+    "policy_settings": {
+        "GATEWAY_URL": "MANAGEMENTMASTER:30600",
+        "call_dummy_reassign_policy": false
+    },
+    "policy_parameters": {
+        "failure_threshold": 3
+    },
+    "management_commands_schema": [
+        {
+            "name": "get_status",
+            "description": "Get current status including failure counts and threshold",
+            "schema": {}
+        },
+        {
+            "name": "reset_counters",
+            "description": "Reset all failure counters",
+            "schema": {}
+        },
+        {
+            "name": "reset_instance",
+            "description": "Reset failure counter for a specific instance",
+            "schema": {
+                "instance_id": {
+                    "type": "string",
+                    "description": "ID of the instance to reset"
+                }
+            }
+        }
+    ],
+    "description": "Simplified block health checker policy that tracks consecutive failures and calls failure policy when threshold is exceeded. Returns empty dict as per block.md specification.",
+    "functionality_data": {},
+    "resource_estimates": {}
+}

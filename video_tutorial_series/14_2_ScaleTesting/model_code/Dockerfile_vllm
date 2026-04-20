@@ -1,0 +1,58 @@
+
+##########
+# FROM MANAGEMENTMASTER:31280/vllm_batching_aios:squashed
+
+# ARG FOLDER_NAME
+# RUN rm -rf /${FOLDER_NAME}/*
+# WORKDIR /${FOLDER_NAME}
+
+# COPY . /${FOLDER_NAME}/
+
+# RUN pip3 install nvidia-pyindex
+# #RUN pip3 install nvidia-pip
+# RUN pip3 install transformer-engine
+# #RUN pip3 install flash-attn --no-build-isolation   --> this need nvcc compilers
+# # RUN pip3 install \
+# #   https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.2/flash_attn-2.8.2+cu12torch2.7cxx11abiTRUE-cp310-cp310-linux_x86_64.whl
+
+# ENV VLLM_WORKER_MULTIPROC_METHOD=spawn
+# ENV OMP_NUM_THREADS=1
+# ENTRYPOINT [ "python3", "-u", "main_orig_vllmbatch.py"]
+
+
+###########
+# FROM MANAGEMENTMASTER:31280/vllm_batching_aios:squashed2
+
+# ARG FOLDER_NAME
+# RUN rm -rf /${FOLDER_NAME}/*
+# WORKDIR /${FOLDER_NAME}
+
+# COPY . /${FOLDER_NAME}/
+
+# RUN pip3 install "numpy<2"
+
+# ENV VLLM_WORKER_MULTIPROC_METHOD=spawn
+# ENV OMP_NUM_THREADS=1
+# ENTRYPOINT [ "python3", "-u", "main_orig_vllmbatch.py"]
+
+########################
+# FROM vllm/vllm-openai:v0.10.2
+FROM vllm/vllm-openai:v0.18.0-cu130
+
+ENV TZ=Asia/Kolkata
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+ARG FOLDER_NAME
+RUN rm -rf /${FOLDER_NAME}/*
+WORKDIR /${FOLDER_NAME}
+
+COPY . /${FOLDER_NAME}/
+
+RUN --mount=type=cache,target=/root/.cache/uv uv pip install --system -r requirements.txt
+
+#RUN pip3 install --system --ignore-installed -r requirements.txt
+
+
+ENV VLLM_WORKER_MULTIPROC_METHOD=spawn
+ENV OMP_NUM_THREADS=1
+ENTRYPOINT [ "python3", "-u", "main_orig_vllmbatch.py"]

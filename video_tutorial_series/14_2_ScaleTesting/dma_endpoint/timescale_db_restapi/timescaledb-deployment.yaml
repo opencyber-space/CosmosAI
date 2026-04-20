@@ -1,0 +1,112 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-storage
+provisioner: kubernetes.io/no-provisioner # Local PVs don't support dynamic provisioning
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: timescaledb-local-pv
+spec:
+  capacity:
+    storage: 8Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /home/shridhar.kini.g/llm_works/timescale_db_restapi # The actual path on your physical node
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - wc-cpu-node1 # REPLACE THIS with your actual node name
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: timescaledb-pvc-wc-cpu-node1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage # Must match the PV and StorageClass
+  resources:
+    requests:
+      storage: 8Gi
+---
+#---
+# This PersistentVolumeClaim requests storage for the database data.
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: timescaledb-pvc
+#  labels:
+#    app: timescaledb
+#spec:
+#  accessModes:
+#    - ReadWriteOnce
+#  resources:
+#    requests:
+#      storage: 8Gi # Request 8 GB of storage
+#
+#---
+# This is a Deployment to manage the TimescaleDB Pod.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: timescaledb-deployment-wc-cpu-node1
+  labels:
+    app: timescaledb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: timescaledb
+  template:
+    metadata:
+      labels:
+        app: timescaledb
+    spec:
+      containers:
+      - name: timescaledb
+        image: timescale/timescaledb:latest-pg16 # Use a recent TimescaleDB image
+        ports:
+        - containerPort: 5432 # TimescaleDB uses the standard PostgreSQL port
+        env:
+        - name: POSTGRES_USER
+          value: "TIMESCALEDB_USER" # Recommended to use a dedicated user
+        - name: POSTGRES_PASSWORD
+          value: "TIMESCALEDB_PASSOWRD" # Change this password
+        - name: POSTGRES_DB
+          value: "timescaledb"
+        volumeMounts:
+        - name: timescaledb-storage
+          mountPath: /var/lib/postgresql/data # Mount point for persistent storage
+      volumes:
+      - name: timescaledb-storage
+        persistentVolumeClaim:
+          claimName: timescaledb-pvc-wc-cpu-node1
+
+---
+# This Service exposes the TimescaleDB Deployment.
+apiVersion: v1
+kind: Service
+metadata:
+  name: timescaledb-service-masternode
+  labels:
+    app: timescaledb
+spec:
+  type: NodePort
+  selector:
+    app: timescaledb
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+      nodePort: 30009 # A port in the 30000-32767 range

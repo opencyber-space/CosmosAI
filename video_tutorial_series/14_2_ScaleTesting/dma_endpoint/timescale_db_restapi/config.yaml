@@ -1,0 +1,7 @@
+
+database:
+  name: "timescaledb"
+  user: "TIMESCALEDB_USER"
+  password: "TIMESCALEDB_PASSOWRD"
+  host: "CLUSTER_2_MASTER_NODE"
+  port: 30008

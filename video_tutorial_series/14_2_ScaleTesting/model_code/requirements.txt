@@ -1,0 +1,16 @@
+redis
+requests
+prometheus_client
+protobuf==3.20.3
+flask
+boto3
+kubernetes
+grpcio
+accelerate
+
+#for model downalod
+huggingface_hub
+#websockets==15.0.1
+websockets==13.1
+
+pynvml==12.0.0
