@@ -1,1 +1,1 @@
-curl -X GET http://34.58.1.86:30102/policy/scaletest_block_resource_allocator:1.0.0-stable | json_pp
+curl -X GET http://MANAGEMENTMASTER:30102/policy/scaletest_block_resource_allocator:1.0.0-stable | json_pp

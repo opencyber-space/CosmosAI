@@ -29,7 +29,7 @@ spec:
             - name: ADHOC_INSTANCE_ID
               value: "instance-2"
             - name: SEARCH_SERVER_API_URL
-              value: "http://34.58.1.86:30150"
+              value: "http://MANAGEMENTMASTER:30150"
             - name: INFERENCE_REDIS_INTERNAL_URL
               value: "localhost"
             - name: BLOCKS_DB_URL

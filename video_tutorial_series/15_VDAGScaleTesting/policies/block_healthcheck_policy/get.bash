@@ -1,1 +1,1 @@
-curl -X GET http://34.58.1.86:30102/policy/demo_block_health_checker:1.0.0-stable | json_pp
+curl -X GET http://MANAGEMENTMASTER:30102/policy/demo_block_health_checker:1.0.0-stable | json_pp

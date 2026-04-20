@@ -1,21 +1,40 @@
-!curl -X POST http://34.58.1.86:30102/policy \\
+!curl -X POST http: //MANAGEMENTMASTER:30102/policy \\
      -H "Content-Type: application/json" \\
      -d '{ \\
            "name": "autoscaler", \\
            "version": "2.0", \\
            "release_tag": "stable", \\
-           "metadata": {"author": "admin", "category": "analytics"}, \\
+           "metadata": {
+    "author": "admin",
+    "category": "analytics"
+  }, \\
            "tags": "analytics,ai", \\
-           "code": "http://34.58.1.86:32555/autoscaler.zip", \\
+           "code": "http://MANAGEMENTMASTER:32555/autoscaler.zip", \\
            "code_type": "tar.xz", \\
            "type": "policy", \\
-           "policy_input_schema": {"type": "object", "properties": {"input": {"type": "string"}}}, \\
-           "policy_output_schema": {"type": "object", "properties": {"output": {"type": "string"}}}, \\
+           "policy_input_schema": {
+    "type": "object",
+    "properties": {
+      "input": {
+        "type": "string"
+      }
+    }
+  }, \\
+           "policy_output_schema": {
+    "type": "object",
+    "properties": {
+      "output": {
+        "type": "string"
+      }
+    }
+  }, \\
            "policy_settings_schema": {}, \\ add some paramaters tat looks real as well,working,explain a bit as well
            "policy_parameters_schema": {}, \\
            "policy_settings": {}, \\
            "policy_parameters": {}, \\
            "description": "A policy for token based autoscaling.", \\
-           "functionality_data": {"strategy": "ML-based"}, \\
+           "functionality_data": {
+    "strategy": "ML-based"
+  }, \\
            "resource_estimates": {} \\
-         }'
+}'

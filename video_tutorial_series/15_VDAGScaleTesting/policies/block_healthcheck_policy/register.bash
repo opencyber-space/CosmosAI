@@ -3,4 +3,4 @@
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-curl -X POST -H "Content-Type: application/json" -d @${SCRIPT_DIR}/block_health_check_registration.json http://34.58.1.86:30102/policy | json_pp
+curl -X POST -H "Content-Type: application/json" -d @${SCRIPT_DIR}/block_health_check_registration.json http://MANAGEMENTMASTER:30102/policy | json_pp

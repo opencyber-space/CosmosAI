@@ -1,4 +1,4 @@
-curl -X POST http://34.58.1.86:30102/policy \
+curl -X POST http://MANAGEMENTMASTER:30102/policy \
      -H "Content-Type: application/json" \
      -d '{
            "name": "weightedmetricsloadbalancer",
@@ -6,7 +6,7 @@ curl -X POST http://34.58.1.86:30102/policy \
            "release_tag": "stable",
            "metadata": {"author": "admin", "category": "load-balancing"},
            "tags": "load-balancing,weighted,metrics,routing",
-           "code": "http://34.58.1.86:32555/weightedmetricsloadbalancer.zip",
+           "code": "http://MANAGEMENTMASTER:32555/weightedmetricsloadbalancer.zip",
            "code_type": "zip",
            "type": "policy",
            "policy_input_schema": {

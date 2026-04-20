@@ -1,4 +1,4 @@
-curl -X POST http://34.58.1.86:30102/policy \
+curl -X POST http://MANAGEMENTMASTER:30102/policy \
      -H "Content-Type: application/json" \
      -d '{
            "name": "queuebasedautoscaler",
@@ -6,7 +6,7 @@ curl -X POST http://34.58.1.86:30102/policy \
            "release_tag": "stable",
            "metadata": {"author": "admin", "category": "autoscaling"},
            "tags": "autoscaling,queue,load-balancing",
-           "code": "http://34.58.1.86:32555/queuebasedautoscaler.zip",
+           "code": "http://MANAGEMENTMASTER:32555/queuebasedautoscaler.zip",
            "code_type": "zip",
            "type": "policy",
            "policy_input_schema": {
