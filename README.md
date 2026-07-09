@@ -1,4 +1,6 @@
-# AIOS & AI Blueprints
+# COSMOS AI: AIGrid
+
+## AIGrid Blueprints
 
 This repository contains tutorials to get started on the following:
 1. https://github.com/OpenCyberspace/OpenOS.AI-Documentation
