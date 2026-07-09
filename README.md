@@ -58,6 +58,16 @@ Welcome to the **AIOS AI Blueprints & Video Tutorial Series**!
 
 ---
 
+## License
+
+This project is licensed under the GNU Affero General Public License v3.0 —
+
+see the [LICENSE](LICENSE) file for details.
+
+Copyright (C) 2026 OpenCyberspace.org
+
+---
+
 ## 🚧 Coming Soon
 
 - Many more tutorials on AGI Ecosystem
